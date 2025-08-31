@@ -124,15 +124,15 @@ const sendAsset = async (amount, tokenId, recipient) => {
 
 ### 5.3 Prover の起動
 - `npm i -g snarkjs`、`pip install -r requirements.txt`。
-- Email Wallet の `packages/prover/local.py` を起動（または Modal 実行）。
+- 自前Proverの場合は `services/prover/` のエントリ（例: `local.py` 等）を起動（または Modal 実行）。
 
 ### 5.4 DB の起動
 - `docker run -p 5432:5432 -e POSTGRES_PASSWORD=... -e POSTGRES_USER=emailwallet -e POSTGRES_DB=emailwallet postgres`
 - `.env` の `DATABASE_URL` を設定。
 
 ### 5.5 Relayer の起動
-- `packages/relayer/.env` をテンプレから作成、IMAP/SMTP/RPC/Prover を記入。
-- Docker でビルド→ `docker run -p 80:80 -v $(pwd)/.env:/email-wallet/packages/relayer/.env email_wallet_v1_relayer:latest`
+- `services/relayer/.env` をテンプレから作成、IMAP/SMTP/RPC/Prover を記入。
+- Docker 運用時はコンテナの期待パスに合わせて `.env` をマウント（例）: `-v $(pwd)/services/relayer/.env:/app/.env`
 
 ### 5.6 Frontend（Next.js）
 - `.env.local` に `RELAYER_API_URL` を設定。

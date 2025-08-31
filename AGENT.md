@@ -17,15 +17,15 @@
 ## ランタイム / ビルド
 - 推奨コマンド: `bun install`, `bun run dev`, `bun run build`, `bun run lint`
 - ローカル開発: ユーザー側で開発サーバを起動（CI は build/lint/test のみ）
-- .env: `.env.local`（Web）, `packages/relayer/.env`（Relayer）など用途別に分割。秘匿情報は共有しない。
+- .env: `.env.local`（Web）, `services/relayer/.env`（Relayer）など用途別に分割。秘匿情報は共有しない。
 
 ## ディレクトリ設計（ベストプラクティス/現状準拠）
 - `frontend/` … Next.js（App Router, TS）
   - `src/app/`（ルーティング）, `src/components/`, `src/lib/`, `src/styles/`
   - `.env.local` はここで管理（公開値は `NEXT_PUBLIC_`）
 - `contracts/` … Foundry（`src/`, `test/`, `script/`）
-- `packages/relayer/` … Relayer サービス（IMAP/SMTP, API, DB）
-- `packages/prover/` … Prover サービス（ZK証明生成）
+- `services/relayer/` … Relayer サービス（IMAP/SMTP, API, DB）
+- `services/prover/` … Prover サービス（ZK証明生成）
 - `packages/utils/` … 共有ユーティリティ（型/共通処理）
 - `docs/` … 設計/仕様/学習資料（本プロジェクトは `docs/product/zk-email-pay/` 配下）
 - `task/` … タスクMarkdown（Issueと相互リンク）
