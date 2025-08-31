@@ -13,7 +13,7 @@
 
 ## 0. 前提と決定事項/不足情報
 
-- 推奨チェーン: Base または OP Stack L2（MVPは Base Sepolia）。
+- 推奨チェーン: Base（MVPは Base Sepolia）。
 - 通貨: USDC（テストはUSDCテストトークン）
 - 実装方針: Email Wallet（回路/コントラクト/Relayer/Prover）の設計を活用し、Unclaimed→Claim パターンで受取。
 - ディレクトリ: `frontend/`, `contracts/`, `services/relayer/`, `services/prover/`, `docs/`, `task/`
