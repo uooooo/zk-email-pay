@@ -11,4 +11,4 @@ Structure
 - `zk-email-pay/plans/contracts.md` — contracts (Foundry) development plan
 - `zk-email-pay/plans/prover.md` — prover service development plan
 - `zk-email-pay/plans/relayer.md` — relayer service development plan
-
+- `zk-email-pay/research/` — investigations and compatibility notes

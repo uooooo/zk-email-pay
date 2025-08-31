@@ -65,6 +65,7 @@ contracts/
   - 配置順例: TokenRegistry → Oracle → (DKIMRegistry) → Core → Wallet → Handlers → Verifiers
   - 出力: `contracts/addresses/base-sepolia.json`（アドレス群）
   - 反映: `services/relayer/.env`, `frontend/.env.local` へ手動/自動書込（後者はコメントとして提示）
+  - 参考: Base での互換性・運用差分は `docs/engineering/zk-email-pay/research/base-compatibility.md` を参照
 
 6) テスト
 - `forge test -vvv` でユニットテスト
