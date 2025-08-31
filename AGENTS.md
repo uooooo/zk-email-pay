@@ -81,7 +81,7 @@
 - キー管理: Relayer の秘密鍵はKMS/HSM、ローテーション計画を持つ
 
 ## AI エージェントの使い方
-- 仕様理解: まず `docs/product/zk-email-pay/Developer-Handbook.md` と `docs/zkemail/zk-email-overview.md` を参照
+- 仕様理解: まず `docs/engineering/zk-email-pay/Developer-Handbook.md` と `docs/zkemail/zk-email-overview.md` を参照
 - 設計変更: 変更時は設計ドキュメントも更新し PR に含める
 - 外部ドキュメント: Context7 を用いて規格/依存の最新仕様を参照
 - serena MCPを使用しコンテキストを効率的に理解する

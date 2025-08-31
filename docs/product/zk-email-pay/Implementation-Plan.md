@@ -4,7 +4,11 @@
 
 参考ドキュメント（ローカル）
 - 設計一式: `docs/product/zk-email-pay/*`
-- 学習ハンドブック: `docs/product/zk-email-pay/Developer-Handbook.md`
+- 学習ハンドブック: `docs/engineering/zk-email-pay/Developer-Handbook.md`
+- 詳細開発計画（Engineering）:
+  - Contracts: `docs/engineering/zk-email-pay/plans/contracts.md`
+  - Prover: `docs/engineering/zk-email-pay/plans/prover.md`
+  - Relayer: `docs/engineering/zk-email-pay/plans/relayer.md`
 - zk-email 概説: `docs/zkemail/zk-email-overview.md`
 - Email Wallet: `docs/zkemail/zkemail-emailwallet/*`
 - Personas: `docs/user/persona.md`
@@ -18,23 +22,37 @@
 - 実装方針: Email Wallet（回路/コントラクト/Relayer/Prover）の設計を活用し、Unclaimed→Claim パターンで受取。
 - ディレクトリ: `frontend/`, `contracts/`, `services/relayer/`, `services/prover/`, `docs/`, `task/`
 
+決定事項（PoC）
+- DKIM 信頼モデル: Trusted Fetcher + キャッシュ
+  - Relayer が DNS から DKIM 公開鍵を取得して検証し、結果をキャッシュ。
+  - 将来強化: DNSSEC または オンチェーン ECDSA レジストリへの移行を検討。
+- メールプロバイダ: Gmail IMAP/SMTP + アプリパスワード
+  - セットアップ容易・可用性重視。将来は独自ドメイン + 専用送信基盤（例: SES）へ移行可。
+- Relayer の鍵管理: `.env` にホットキー（開発/PoC）
+  - まずは速度優先。本番前に KMS/HSM へ移行して漏洩リスクを低減。
+- 通知メールの From: 同じ専用 Gmail アカウント
+  - 受信側の信頼性を優先。将来は専用ドメイン + DKIM/DMARC/SPF を整備。
+
 不足情報（要確認）
 - 本番/検証用チェーン・RPC エンドポイント
 - トークンアドレス（USDC）と TokenRegistry の初期登録ポリシー
-- DKIM 公開鍵の信頼モデル（信頼済みフェッチャ/DNSSEC/独自Registry）
-- メールプロバイダと IMAP/SMTP 認証（ドメイン、アカウント、App Password）
-- Relayer 用ウォレットのデプロイ・秘密鍵管理（KMS/HSM）
-- ドメイン/送信用Fromアドレス（招待・完了通知）
+- DKIM/DNS の本番運用方針（DNSSEC への切替時期、オンチェーン移行方針）
+- メール運用の本番要件（専用ドメイン取得・送信基盤/配信レピュテーション）
+- 鍵管理の本番移行計画（KMS/HSM 選定・ローテーション）
 
 Context7 推奨参照（不足時）
 - OpenZeppelin（ERC20 周り）
 - Foundry（forge ユース）
-- wagmi/viem（FEのRPC接続）
+- wagmi/viem（FrontEndのRPC接続）
 - Base OnchainKit（UI/UX補助の最新ガイド）
+
+ドキュメント参照ポリシー
+- OpenZeppelin の公式ドキュメントは Context7 に加え、MCP Server（OpenZeppelin）からも取得可能。必要に応じて両方を活用し、参照元とバージョンを明記する。
+- Serena MCP を用いて文脈を管理し、Context7/MCP からの情報取得を効率化する。
 
 ---
 
-## 1. 契約（Foundry）
+## 1. Contract（Foundry）
 
 目的: Email Wallet のコントラクト群（Core/Handlers/Wallet/Verifiers/Registry/Oracle）を前提に、MVPで必要なアドレス群を把握し、Base Sepolia に配置する。
 
@@ -160,10 +178,12 @@ Context7 推奨参照（不足時）
 
 不足が出たら、以下の優先度で参照/依頼してください。
 - Context7 でライブラリ公式ドキュメント取得（例）
-  - OpenZeppelin（ERC20/安全な転送）
+  - OpenZeppelin（ERC20/安全な転送）— Context7 に加え、MCP Server（OpenZeppelin）でも参照可能
   - Foundry（スクリプト/テスト/デプロイ）
   - wagmi/viem（RPC・ウォレット連携）
   - Base OnchainKit（UI・組込み）
+  - 取得時は参照元とバージョンをメモし、PR/Issue にリンク
+- Serena MCP を活用して Context7/MCP サーバからの情報取得・要点要約を行う（取得ログを残す）。
 - 必要に応じ、次の資料提供をユーザーに依頼
   - 使用チェーン/トークンアドレスの確定
   - DKIM信頼モデルの選択と鍵管理方針
