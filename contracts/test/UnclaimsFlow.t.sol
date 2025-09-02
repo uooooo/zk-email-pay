@@ -76,4 +76,16 @@ contract UnclaimsFlowTest is Test {
         core.claimUnclaimed(id, hex"", hex"");
         vm.stopPrank();
     }
+
+    function test_RevertWhen_ClaimVerifierReturnsFalse() public {
+        bytes32 emailCommit = keccak256("user@example.com|salt");
+        uint64 expiry = uint64(block.timestamp + 1 days);
+        vm.startPrank(owner);
+        uint256 id = core.createUnclaimed(token, 100, expiry, emailCommit);
+        // flip mock to false
+        claimV.setResult(false);
+        vm.expectRevert(bytes("PROOF_INVALID"));
+        core.claimUnclaimed(id, hex"", hex"");
+        vm.stopPrank();
+    }
 }
