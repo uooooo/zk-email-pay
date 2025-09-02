@@ -26,7 +26,7 @@ contract TokenRegistry is Ownable {
         emit TokenRemoved(token);
     }
 
-    function isAllowed(address token) external view returns (bool) {
+    function isAllowed(address token) public view returns (bool) {
         return _allowed[token];
     }
 }
