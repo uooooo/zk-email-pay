@@ -44,12 +44,12 @@ contract UnclaimsFlowTest is Test {
         uint64 expiry = uint64(block.timestamp + 1 days);
 
         vm.startPrank(owner);
-        uint256 id = core.createUnclaimed(token, 100, expiry, emailCommit);
+        uint256 id = core.createUnclaimed(token, 100, expiry, emailCommit, 1);
         // claim with mock verifier
         core.claimUnclaimed(id, hex"", hex"");
         vm.stopPrank();
 
-        (,,,, bool used) = handler.unclaimedById(id);
+        (,,,,, bool used) = handler.unclaimedById(id);
         assertTrue(used, "should be marked used after claim");
     }
 
@@ -57,12 +57,12 @@ contract UnclaimsFlowTest is Test {
         bytes32 emailCommit = keccak256("user@example.com|salt");
         uint64 expiry = uint64(block.timestamp + 1);
         vm.startPrank(owner);
-        uint256 id = core.createUnclaimed(token, 1, expiry, emailCommit);
+        uint256 id = core.createUnclaimed(token, 1, expiry, emailCommit, 2);
         vm.warp(block.timestamp + 2);
         core.cancelUnclaimed(id);
         vm.stopPrank();
 
-        (,,,, bool used) = handler.unclaimedById(id);
+        (,,,,, bool used) = handler.unclaimedById(id);
         assertTrue(used, "should be marked used after cancel");
     }
 
@@ -70,7 +70,7 @@ contract UnclaimsFlowTest is Test {
         bytes32 emailCommit = keccak256("user@example.com|salt");
         uint64 expiry = uint64(block.timestamp + 1);
         vm.startPrank(owner);
-        uint256 id = core.createUnclaimed(token, 1, expiry, emailCommit);
+        uint256 id = core.createUnclaimed(token, 1, expiry, emailCommit, 3);
         vm.warp(block.timestamp + 2);
         vm.expectRevert(bytes("EXPIRED"));
         core.claimUnclaimed(id, hex"", hex"");
@@ -81,7 +81,7 @@ contract UnclaimsFlowTest is Test {
         bytes32 emailCommit = keccak256("user@example.com|salt");
         uint64 expiry = uint64(block.timestamp + 1 days);
         vm.startPrank(owner);
-        uint256 id = core.createUnclaimed(token, 100, expiry, emailCommit);
+        uint256 id = core.createUnclaimed(token, 100, expiry, emailCommit, 4);
         // flip mock to false
         claimV.setResult(false);
         vm.expectRevert(bytes("PROOF_INVALID"));
