@@ -44,19 +44,28 @@ contract EmailWalletCore is Ownable {
     }
 
     // Proxy helpers (owner acts as relayer in MVP tests)
-    function createUnclaimed(address token, uint256 amount, uint64 expiry, bytes32 emailCommit, uint96 nonce)
-        external
-        onlyOwner
-        returns (uint256 id)
-    {
-        id = unclaims.createUnclaimed(token, amount, expiry, emailCommit, nonce);
+    function createUnclaimed(
+        address token,
+        uint256 amount,
+        uint64 expiry,
+        bytes32 emailCommit,
+        uint96 nonce,
+        address funder
+    ) external onlyOwner returns (uint256 id) {
+        id = unclaims.createUnclaimed(token, amount, expiry, emailCommit, nonce, funder);
     }
 
     function cancelUnclaimed(uint256 id) external onlyOwner {
         unclaims.cancelUnclaimed(id);
     }
 
-    function claimUnclaimed(uint256 id, bytes calldata proof, bytes calldata publicInputs) external onlyOwner {
-        unclaims.claimUnclaimed(id, proof, publicInputs);
+    function claimUnclaimed(
+        uint256 id,
+        address recipient,
+        uint256 feeAmount,
+        bytes calldata proof,
+        bytes calldata publicInputs
+    ) external onlyOwner {
+        unclaims.claimUnclaimed(id, recipient, feeAmount, proof, publicInputs);
     }
 }
