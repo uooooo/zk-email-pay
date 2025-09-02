@@ -11,6 +11,7 @@ contract UnclaimsHandler is Ownable {
         uint256 amount;
         uint64 expiry;
         bytes32 emailCommit;
+        uint96 nonce;
         bool used;
     }
 
@@ -20,7 +21,8 @@ contract UnclaimsHandler is Ownable {
         address indexed token,
         uint256 amount,
         uint64 expiry,
-        bytes32 emailCommit
+        bytes32 emailCommit,
+        uint96 nonce
     );
     event UnclaimedCancelled(uint256 indexed id);
     event UnclaimedClaimed(uint256 indexed id);
@@ -40,7 +42,7 @@ contract UnclaimsHandler is Ownable {
         claimVerifier = v;
     }
 
-    function createUnclaimed(address token, uint256 amount, uint64 expiry, bytes32 emailCommit)
+    function createUnclaimed(address token, uint256 amount, uint64 expiry, bytes32 emailCommit, uint96 nonce)
         external
         onlyOwner
         returns (uint256 id)
@@ -48,9 +50,15 @@ contract UnclaimsHandler is Ownable {
         require(tokenRegistry.isAllowed(token), "TOKEN_NOT_ALLOWED");
         require(amount > 0, "AMOUNT_ZERO");
         id = ++nextId;
-        unclaimedById[id] =
-            Unclaimed({token: token, amount: amount, expiry: expiry, emailCommit: emailCommit, used: false});
-        emit UnclaimedCreated(id, msg.sender, token, amount, expiry, emailCommit);
+        unclaimedById[id] = Unclaimed({
+            token: token,
+            amount: amount,
+            expiry: expiry,
+            emailCommit: emailCommit,
+            nonce: nonce,
+            used: false
+        });
+        emit UnclaimedCreated(id, msg.sender, token, amount, expiry, emailCommit, nonce);
     }
 
     function cancelUnclaimed(uint256 id) external onlyOwner {
