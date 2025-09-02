@@ -52,7 +52,7 @@ Context7 推奨参照（不足時）
 
 ---
 
-## 1. Contract（Foundry）
+Contract（Foundry）
 
 目的: Email Wallet のコントラクト群（Core/Handlers/Wallet/Verifiers/Registry/Oracle）を前提に、MVPで必要なアドレス群を把握し、Base Sepolia に配置する。
 
