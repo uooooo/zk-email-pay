@@ -24,8 +24,8 @@ contract Deploy is Script {
         json = vm.serializeAddress(obj, "PriceOracle", address(priceOracle));
         json = vm.serializeAddress(obj, "DKIMRegistry", address(dkimRegistry));
 
-        // Default output path for Base Sepolia
-        string memory outPath = string(abi.encodePacked("contracts/addresses/", "base-sepolia.json"));
+        // Default output path for Base Sepolia (relative to contracts project root)
+        string memory outPath = string(abi.encodePacked("addresses/", "base-sepolia.json"));
         vm.writeJson(json, outPath);
 
         // Log to console as well

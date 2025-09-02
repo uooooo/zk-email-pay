@@ -12,28 +12,31 @@ Email Wallet を見据えた MVP コントラクト群の初期実装・配置�
 - PoC: DKIM は Trusted Fetcher + キャッシュ（Relayer 側）。将来は DNSSEC/オンチェーン Registry を想定。
 
 ## やること（Tasks）
-- [ ] Foundry セットアップ確認（solc ^0.8.24 近辺）
-- [ ] OpenZeppelin 導入（`forge install OpenZeppelin/openzeppelin-contracts`）
-- [ ] TokenRegistry 実装
+- [x] Foundry セットアップ確認（solc ^0.8.24 近辺）
+- [x] OpenZeppelin 導入（`forge install OpenZeppelin/openzeppelin-contracts`）
+- [x] TokenRegistry 実装
   - [ ] `addToken(address token)`/`removeToken(address token)`（Ownable）
   - [ ] `isAllowed(address token) view returns (bool)`
   - [ ] 変更イベント: `TokenAdded`, `TokenRemoved`
-- [ ] PriceOracle（固定/簡易）実装
+- [x] PriceOracle（固定/簡易）実装
   - [ ] `setFeePerGas(uint256 weiPerGas)`（Ownable）
   - [ ] `getFeePerGas() view returns (uint256)`
-- [ ] DKIMRegistry（Stub）実装
+- [x] DKIMRegistry（Stub）実装
   - [ ] `setDKIMPublicKey(string domain, bytes key)`（Ownable）
   - [ ] `getDKIMPublicKey(string domain) view returns (bytes)`
   - [ ] 変更イベント: `DKIMKeySet`
-- [ ] デプロイスクリプト `script/Deploy.s.sol`
+- [x] デプロイスクリプト `script/Deploy.s.sol`
   - [ ] Base Sepolia 用に 3 つのコントラクトをデプロイ
-  - [ ] `contracts/addresses/base-sepolia.json` にアドレスを出力（`vm.serializeAddress` + `vm.writeJson`）
-- [ ] 最小ユニットテスト
+  - [x] `contracts/addresses/base-sepolia.json` にアドレスを出力（`vm.serializeAddress` + `vm.writeJson`）
+- [x] 最小ユニットテスト
   - [ ] TokenRegistry: add/remove/isAllowed, onlyOwner 制御
   - [ ] PriceOracle: set/get, onlyOwner 制御
   - [ ] DKIMRegistry: set/get, onlyOwner 制御
-- [ ] README 更新（deploy 実行方法、出力パス、依存）
+- [x] README 更新（deploy 実行方法、出力パス、依存）
 - [ ] CI/Lint（任意）: `forge fmt` と `forge test`
+  
+追記
+- [x] `vm.writeJson` 書込エラー修正（`foundry.toml` の `fs_permissions` 設定 + 出力パス修正）
 
 ## 受入基準（DoD）
 - Base Sepolia で 3 契約がデプロイ可能
