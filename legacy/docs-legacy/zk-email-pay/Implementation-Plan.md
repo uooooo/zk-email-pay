@@ -19,7 +19,7 @@
 
 - 推奨チェーン: Base（MVPは Base Sepolia）。
 - 通貨: USDC（テストはUSDCテストトークン）
-- 実装方針: Email Wallet（回路/コントラクト/Relayer/Prover）の設計を活用し、Unclaimed→Claim パターンで受取。
+- 実装方針（v2）: 上流 email-wallet を採用（contracts/relayer/circuits を前提）し、当プロジェクトは UX と差分の Adapter/Wrapper に集中。POC（v1）の計画は Legacy として残置。
 - ディレクトリ: `frontend/`, `contracts/`, `services/relayer/`, `services/prover/`, `docs/`, `task/`
 
 決定事項（PoC）
@@ -40,7 +40,8 @@
 - メール運用の本番要件（専用ドメイン取得・送信基盤/配信レピュテーション）
 - 鍵管理の本番移行計画（KMS/HSM 選定・ローテーション）
 
-Context7 推奨参照（不足時）
+Context7 / 上流参照
+- email-wallet（monorepo: contracts/relayer/circuits）
 - OpenZeppelin（ERC20 周り）
 - Foundry（forge ユース）
 - wagmi/viem（FrontEndのRPC接続）
@@ -48,21 +49,21 @@ Context7 推奨参照（不足時）
 
 ドキュメント参照ポリシー
 - OpenZeppelin の公式ドキュメントは Context7 に加え、MCP Server（OpenZeppelin）からも取得可能。必要に応じて両方を活用し、参照元とバージョンを明記する。
-- Serena MCP を用いて文脈を管理し、Context7/MCP からの情報取得を効率化する。
+- Serena MCP / gitmcp を併用して上流ドキュメント・コードを取得、バージョンを明記。
 
 ---
 
 Contract（Foundry）
 
-目的: Email Wallet のコントラクト群（Core/Handlers/Wallet/Verifiers/Registry/Oracle）を前提に、MVPで必要なアドレス群を把握し、Base Sepolia に配置する。
+目的（v2）: email-wallet の `packages/contracts` を採用し、上流の deploy スクリプトで Core/Handlers/Registries/Verifiers を配置。`addresses/<network>.json` を生成し Relayer/Frontend に共有。
 
 手順
 1) Foundry セットアップ
 - `contracts/` 直下で `forge --version` が動くことを確認
 - 依存（OpenZeppelin 等）が必要なら `forge install` で導入
 
-2) デプロイ計画（MVP最小）
-- 必須: `TokenRegistry`, `AllVerifiers`（または個別 Verifier）, `DKIMRegistry`（信頼モデルに依存）, `Wallet`, `Handlers`, `EmailWalletCore`, `PriceOracle`（固定/簡易で可）
+2) デプロイ計画（上流準拠）
+- 上流 README の DefaultSetupScript を使用。RelayerHandler 登録スクリプトで relayer 情報を on-chain 登録。
 - 参考: `docs/zkemail/zkemail-emailwallet/docs.zk.email_email-wallet_contract-architecture.md`
 
 3) デプロイスクリプト
@@ -79,7 +80,7 @@ Contract（Foundry）
 
 ## 2. Prover（services/prover/）
 
-目的: DKIM 検証/抽出付きの証明を生成。Email Wallet の回路インタフェースに合わせ、ローカルで最小の証明が通る状態を作る。
+目的（v2）: 上流 circuits（email_sender/claim/account_*）に合わせて snarkjs 連携し、公開入力を上流準拠に整形。Hono サーバで `/prove/email` を提供。
 
 手順
 1) 依存準備
@@ -104,7 +105,7 @@ Contract（Foundry）
 
 ## 3. Relayer（services/relayer/）
 
-目的: API（/api/send 等）とメール受送信（IMAP/SMTP）、Prover/Contracts 連携を実装。Unclaimed の作成、返信メールでの Claim 完了までを自動化する。
+目的（v2）: API とテンプレ・契約呼出しを上流準拠に整え、Hono サーバで最小構成を提供。DKIM は Trusted Fetcher + キャッシュの PoC を維持しつつ、将来 ECDSA レジストリを検討。
 
 手順
 1) API スケルトン

@@ -1,3 +1,14 @@
+## Notice (v2)
+
+This `contracts/` tree contains Legacy (v1, POC) sources under `src/`, `test/`, `script`. For v2, we use upstream email-wallet contracts via the submodule under `vendor/email-wallet`. Addresses for our relayer/frontend live in `contracts/addresses/*.json` and are generated from upstream broadcast using `scripts/deploy/export-addresses.sh`.
+
+---
+
+# contracts-legacy-v1
+
+v1（POC）で作成した自前コントラクト/テスト/スクリプトをここに移設しました。v2（Upstream-First）では vendor/email-wallet の contracts を使用します。
+
+
 ## Foundry
 
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**

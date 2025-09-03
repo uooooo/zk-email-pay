@@ -16,7 +16,7 @@ fi
 pushd "$UPSTREAM_ROOT" >/dev/null
 if [ ! -d node_modules ]; then
   echo "Installing upstream dependencies at vendor/email-wallet (node_modules)"
-  if command -v pnpm >/dev/null 2>&1; then pnpm i; elif command -v yarn >/dev/null 2>&1; then yarn install; else npm install; fi
+  npm_config_engine_strict=false npm install
 fi
 popd >/dev/null
 

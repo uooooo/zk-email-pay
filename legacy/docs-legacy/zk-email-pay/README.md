@@ -1,6 +1,6 @@
-# zk-email-pay: メールアドレス宛にステーブルコインを送るプロダクト設計
+# zk-email-pay: メールアドレス宛にステーブルコインを送るプロダクト設計（Legacy v1）
 
-本フォルダは、本プロダクト（メールアドレスを“支払いの宛先”として機能させ、受取者がウォレット未保有でもガスレスで受け取れる体験）の技術要件・アーキテクチャ・仕様をまとめた設計ドキュメント群です。
+本フォルダは v1（POC/自前実装）時点の設計ドキュメント群です。v2（上流 email-wallet 採用）の計画は `docs/product/zk-email-pay.v2/` および `docs/engineering/zk-email-pay/plans.v2/*` を参照してください。
 
 参考資料（ローカル）:
 - zk-email 教科書: `docs/zkemail/zk-email-overview.md`
@@ -19,4 +19,3 @@
 - security.md: セキュリティ/プライバシー/脅威モデル
 - ops.md: 運用、監視、テレメトリ、設定
 - roadmap.md: 段階的実装計画
-
