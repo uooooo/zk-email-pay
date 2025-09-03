@@ -1,0 +1,20 @@
+{
+  "TokenRegistry": "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+  "ERC1967Proxy": "0xf5059a5d33d5853360d16c683c16e67980206f36",
+  "AllVerifiers": "0x5fc8d32690cc91d4c39d9d3abcbd16989f875707",
+  "ECDSAOwnedDKIMRegistry": "0x0165878a594ca255338adfa4d48449f69242eb8f",
+  "OauthCore": "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853",
+  "Wallet": "0x8a791620dd6260079bf849dc5567adc3f2fdc318",
+  "RelayerHandler": "0x610178da211fef7d417bc0e6fed39f05609ad788",
+  "ExtensionHandler": "0xa51c1fc2f0d1a1b8494ed1fe312d7c3a78ed91c0",
+  "AccountHandler": "0x9a676e781a523b5d0c0e43731313a708cb607508",
+  "UnclaimsHandler": "0x959922be3caee4b8cd9a407cc3ac1c251c2007b1",
+  "EmailWalletCore": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+  "UniswapTWAPOracle": "0xa85233c63b9ee964add6f2cffe00fd84eb32338f",
+  "TestERC20": "0x4a679253410272dd5232b3ff7cf5dbb88f295319",
+  "NFTExtension": "0xc5a5c42992decbae36851359345fe25997f5c42d",
+  "UniswapExtension": "0xe6e340d132b5f46d1e472debcd681b2abc16e57e",
+  "Safe2FAExtension": "0x84ea74d481ee0a5332c457a4d796187f6ba67feb",
+  "OauthSignupExtension": "0xa82ff9afd8f496c3d6ac40e2a0f282e47488cfc9",
+  "OauthSigninExtension": "0x851356ae760d987e095750cceb3bc6014560891c"
+}

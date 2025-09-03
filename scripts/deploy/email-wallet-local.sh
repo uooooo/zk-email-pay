@@ -23,8 +23,49 @@ pushd "$UPSTREAM_ROOT" >/dev/null
 # Ensure node_modules at monorepo root (contracts import from ../../node_modules)
 if [ ! -d node_modules ]; then
   echo "Installing upstream dependencies at vendor/email-wallet (node_modules)"
-  # Prefer npm to avoid yarn engine strict errors; disable engine-strict
-  npm_config_engine_strict=false npm install
+  if [ "${SKIP_NPM_INSTALL:-0}" = "1" ]; then
+    echo "SKIP_NPM_INSTALL=1 set; skipping install"
+  else
+    # Try Node 18 via nvm or nodebrew if available (upstream expects Node 18 for yarn)
+    if command -v bash >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then
+      # shellcheck source=/dev/null
+      . "$HOME/.nvm/nvm.sh" || true
+    fi
+    if command -v nvm >/dev/null 2>&1; then
+      if [ "${FORCE_NODE18:-1}" = "1" ]; then
+        echo "Using Node 18 via nvm (FORCE_NODE18=1)"
+        nvm install 18 >/dev/null 2>&1 || true
+        nvm use 18 || true
+      fi
+    fi
+    if command -v nodebrew >/dev/null 2>&1; then
+      if [ "${FORCE_NODE18:-1}" = "1" ]; then
+        echo "Using Node 18 via nodebrew (FORCE_NODE18=1)"
+        nodebrew use v18 >/dev/null 2>&1 || nodebrew use 18 >/dev/null 2>&1 || true
+        export PATH="$HOME/.nodebrew/current/bin:$PATH"
+      fi
+    fi
+    # Choose package manager: UPSTREAM_PM overrides, else auto (yarn if yarn.lock+Node18, otherwise npm)
+    PM="${UPSTREAM_PM:-}"
+    if [ -z "$PM" ]; then
+      if [ -f yarn.lock ] && command -v yarn >/dev/null 2>&1; then
+        PM=yarn
+      else
+        PM=npm
+      fi
+    fi
+    echo "Installing deps with $PM"
+    case "$PM" in
+      yarn)
+        YARN_IGNORE_NODE=1 yarn install || true ;;
+      pnpm)
+        pnpm i || true ;;
+      npm|*)
+        export npm_config_engine_strict=false
+        npm install --no-audit --no-fund --prefer-offline --ignore-scripts ;;
+    esac
+    [ -d node_modules ] || { echo "Install failed: node_modules not found" >&2; exit 1; }
+  fi
 fi
 
 popd >/dev/null
