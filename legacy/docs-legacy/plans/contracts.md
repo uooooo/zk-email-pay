@@ -1,9 +1,8 @@
-# Contracts Development Plan (Foundry)
+# Contracts Development Plan (Foundry) — Legacy (POC)
 
-目的
-- Email Wallet ベースの最小コントラクト群（Core/Handlers/Wallet/Registries/Verifiers/Oracle）の配置と、Base Sepolia での稼働。
-- TokenRegistry と DKIM 関連（PoC は Trusted Fetcher 前提、Registry は将来互換/ピン用途）を最小で整備。
-- フロント/Relayer/Prover と結線できるデプロイ成果物（アドレスと ABI 出力）。
+目的（POC）
+- 自前の最小 Core/Handlers/Wallet/Registries/Verifiers/Oracle による検証（現在は「レガシー計画」）。
+- v2 では上流 email-wallet 採用。詳細は `plans.v2/contracts-upstream.md` を参照。
 
 前提
 - チェーン: Base Sepolia（ChainId 84532）
@@ -37,7 +36,7 @@ contracts/
     base-sepolia.json
 ```
 
-セットアップ手順
+セットアップ手順（POC）
 1) Foundry 初期化
 - `forge --version` で実行確認
 - `forge init contracts`（既存 repo 内では手動作成も可）
