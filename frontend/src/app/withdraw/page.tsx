@@ -5,6 +5,7 @@ import { AlertBanner } from "@/components/feedback/AlertBanner";
 import { isHexAddress } from "@/lib/validators";
 import { sendRequest } from "@/lib/api/relayer";
 import { useRouter } from "next/navigation";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export default function WithdrawPage() {
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ export default function WithdrawPage() {
       });
       router.push(`/status/${requestId}`);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "送金に失敗しました");
+      setError(err instanceof Error ? err.message : ERROR_MESSAGES.FORM.SEND_FAILED);
     } finally {
       setLoading(false);
     }

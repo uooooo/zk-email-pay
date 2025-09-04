@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { AlertBanner } from "@/components/feedback/AlertBanner";
 import { claimUnclaim } from "@/lib/api/relayer";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export default function ClaimPage() {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ export default function ClaimPage() {
       });
       setOk(res.message || "クレームを受け付けました");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "クレームに失敗しました");
+      setError(err instanceof Error ? err.message : ERROR_MESSAGES.FORM.CLAIM_FAILED);
     } finally {
       setLoading(false);
     }

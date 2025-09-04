@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { AlertBanner } from "@/components/feedback/AlertBanner";
 import { createAccount, isAccountCreated } from "@/lib/api/relayer";
 import { ProgressSteps } from "@/components/status/ProgressSteps";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export default function AccountPage() {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ export default function AccountPage() {
       setCreated(res.created);
       setMessage(res.created ? "このメールは既にウォレット作成済みです" : "未作成です。作成できます。");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "確認に失敗しました");
+      setError(err instanceof Error ? err.message : ERROR_MESSAGES.FORM.ACCOUNT_CHECK_FAILED);
     }
   }
 
@@ -31,7 +32,7 @@ export default function AccountPage() {
       const { requestId } = await createAccount(email);
       setMessage(`招待メールを送信しました（Request: ${requestId}）。メールに返信してください。`);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "作成メールの送信に失敗しました");
+      setError(err instanceof Error ? err.message : ERROR_MESSAGES.FORM.ACCOUNT_CREATE_FAILED);
     } finally {
       setLoading(false);
     }

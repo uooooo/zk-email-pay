@@ -1,4 +1,6 @@
 
+import { API_CONFIG } from '../constants';
+
 function normalize(path: string): string {
   // Accept inputs like "/api/relayerEmailAddr" or "relayerEmailAddr"
   let p = path.trim();
@@ -13,10 +15,10 @@ async function http<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${base}/${normalize(path)}`.replace(/\/+$/, ""), {
     ...init,
     headers: {
-      "content-type": "application/json",
+      "content-type": API_CONFIG.DEFAULT_CONTENT_TYPE,
       ...(init?.headers ?? {}),
     },
-    cache: "no-store",
+    cache: API_CONFIG.CACHE_POLICY,
   });
   if (!res.ok) {
     const text = await res.text();

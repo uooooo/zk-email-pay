@@ -6,6 +6,7 @@ import { AlertBanner } from "@/components/feedback/AlertBanner";
 import { isEmail, isHexAddress } from "@/lib/validators";
 import { sendRequest } from "@/lib/api/relayer";
 import { useRouter } from "next/navigation";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export default function SendPage() {
   const [to, setTo] = useState("");
@@ -33,7 +34,7 @@ export default function SendPage() {
       });
       router.push(`/status/${requestId}`);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "送信に失敗しました");
+      setError(err instanceof Error ? err.message : ERROR_MESSAGES.FORM.SEND_FAILED);
     } finally {
       setLoading(false);
     }
