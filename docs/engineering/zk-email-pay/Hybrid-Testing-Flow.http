@@ -1,0 +1,110 @@
+### Hybrid Testing Flow (Relayer local, Prover Modal, Gmail SMTP/IMAP)
+#
+# Usage: VS Code REST Client, IntelliJ HTTP client, or curl via copy/paste
+# Prereqs:
+# - Relayer running on localhost:4500
+# - Prover (Modal) address configured in Relayer .env (PROVER_ADDRESS)
+# - SMTP relayer configured to Gmail, IMAP bridge to Gmail (see Hybrid-Testing-Guide.md)
+# - DKIM Oracle/Registry env set on Relayer: CANISTER_ID, WALLET_CANISTER_ID, IC_REPLICA_URL, PEM_PATH
+
+@relayer = http://127.0.0.1:4500
+@email = regist@akafuda.xyz      
+# Set this to your target user email for E2E
+
+@recipient_email = recipient@example.com
+@token_id = USDC
+@amount = 1
+
+### 1) Relayer Health
+GET {{relayer}}/api/echo
+
+### 2) Relayer Info
+GET {{relayer}}/api/relayerEmailAddr
+
+### 3) Relayer Stats
+GET {{relayer}}/api/stats
+
+### 4) Begin Account Creation (sends email to {{email}})
+POST {{relayer}}/api/createAccount
+Content-Type: application/json
+
+{
+  "email_addr": "{{email}}"
+}
+
+### 5) Check Account Created?
+# NOTE: Will remain false until you reply to the email and the IMAP bridge posts it to /api/receiveEmail,
+#       and DKIM/Prover/chain all pass. This endpoint is a quick check of DB state.
+POST {{relayer}}/api/isAccountCreated
+Content-Type: application/json
+
+{
+  "email_addr": "{{email}}"
+}
+
+### 6) Optional: Request Send (prompts email asking you to reply to confirm send)
+# Requires the account to exist in DB. If not found, relayer returns an error email to the user.
+POST {{relayer}}/api/send
+Content-Type: application/json
+
+{
+  "email_addr": "{{email}}",
+  "amount": {{amount}},
+  "token_id": "{{token_id}}",
+  "recipient_addr": "{{recipient_email}}",
+  "is_recipient_email": true
+}
+
+### 7) (Debug only) Directly POST a raw EML to /api/receiveEmail
+# This simulates the IMAP bridge and is only expected to work if your DKIM Registry is preconfigured or
+# your DKIM Oracle settings are correct. Otherwise relayer may close the connection after internal failure.
+POST {{relayer}}/api/receiveEmail
+Content-Type: text/plain
+
+Subject: Re: Email Wallet Account Creation. Code <PASTE_CODE_HEX_WITHOUT_0x_OR_WITH_0x>
+From: {{email}}
+To: <relayer_email_here>
+Message-ID: <debug-message-id@example>
+Date: Sat, 06 Sep 2025 00:00:00 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+
+This is a debug EML body. In real flow, reply from your mail client.
+
+### 8) Get Wallet Address (requires account code and DB to have user)
+# Replace ACCOUNT_CODE with the exact 0x… value you received during createAccount (the response body).
+POST {{relayer}}/api/getWalletAddress
+Content-Type: application/json
+
+{
+  "email_addr": "{{email}}",
+  "account_code": "0x<ACCOUNT_CODE_HEX>"
+}
+
+### 9) Ephemeral Signer Flow (optional, Safe / sign-in)
+# 9a) Start sign-up/in (omit or include username/ephe_addr to match your flow)
+POST {{relayer}}/api/signupOrIn
+Content-Type: application/json
+
+{
+  "email_addr": "{{email}}",
+  "username": "demo-user",
+  "ephe_addr": null,
+  "expiry_time": null,
+  "token_allowances": null
+}
+
+### 9b) Query ephemeral address activation status (example body)
+# Replace request_id with the numeric ID returned by signupOrIn, and signature with an EIP-191 sig.
+POST {{relayer}}/api/epheAddrStatus
+Content-Type: application/json
+
+{
+  "request_id": 12345,
+  "signature": "0x<signature_hex>"
+}
+
+### 10) System Health Recap
+GET {{relayer}}/api/stats
+
+# End of Flow
