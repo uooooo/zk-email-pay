@@ -9,9 +9,9 @@ export default function SendPage() {
   const [email, setEmail] = useState("");
   const [amount, setAmount] = useState("10");
   const tokenOptions = [
-    { symbol: "ETH", address: "native" },
-    { symbol: "USDC", address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" },
-    { symbol: "JPYC", address: "0x431D5dfF03120AFA4bDf332c61A6e1766eF37BDB" },
+    { symbol: "ETH", address: "native", name: "Ethereum" },
+    { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USD Coin" },
+    { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
   ] as const;
   const [token, setToken] = useState<(typeof tokenOptions)[number]["symbol"]>("ETH");
   const [recipient, setRecipient] = useState("");
@@ -156,6 +156,43 @@ export default function SendPage() {
                 </div>
               </div>
             </div>
+            
+            {/* Token Address Display */}
+            {token !== "ETH" && (
+              <div className="mt-4 p-3 rounded-lg" style={{ background: 'var(--accent-light)', border: '1px solid var(--border-soft)' }}>
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-xs font-medium mb-1" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+                      {tokenOptions.find(t => t.symbol === token)?.name} Contract Address
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <code className="text-sm font-mono" style={{ color: 'var(--foreground)' }}>
+                        {`${tokenOptions.find(t => t.symbol === token)?.address.slice(0, 6)}...${tokenOptions.find(t => t.symbol === token)?.address.slice(-4)}`}
+                      </code>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const address = tokenOptions.find(t => t.symbol === token)?.address;
+                      if (address) {
+                        window.open(`https://sepolia.basescan.org/token/${address}`, '_blank');
+                      }
+                    }}
+                    className="ml-3 p-2 rounded-full transition-colors hover:scale-110"
+                    style={{ 
+                      background: 'var(--card-bg)',
+                      border: '1px solid var(--border-soft)',
+                      color: 'var(--primary)'
+                    }}
+                    title="BaseSepolia Scanで確認"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
           <div className="divider"></div>
 
