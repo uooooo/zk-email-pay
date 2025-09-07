@@ -86,13 +86,6 @@ export default function AddressPage() {
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">一括送金</h1>
-            <button
-              onClick={() => router.push('/other')}
-              className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
-              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-            >
-              その他
-            </button>
           </div>
           <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
             複数のメールアドレスに同時に送金。効率的な一括処理。
