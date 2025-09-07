@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createAccount, isAccountCreated, send } from "@/lib/relayer";
+import { createAccount, send } from "@/lib/relayer";
 import Link from "next/link";
 
 export default function SendPage() {
@@ -28,26 +28,16 @@ export default function SendPage() {
     return Number.isFinite(n) && n > 0;
   }, [email, amount, recipient]);
 
-  // 入力された email をデバウンスして自動判定
+  // アカウント作成確認は無効化（リレイヤーサーバー未実装のため）
   useEffect(() => {
     if (!email) {
       setCreated(undefined);
       return;
     }
-    const t = setTimeout(async () => {
-      try {
-        setChecking(true);
-        const ok = await isAccountCreated(email);
-        setCreated(ok);
-        setStatus("");
-      } catch (e: unknown) {
-        const message = e instanceof Error ? e.message : String(e);
-        setStatus(`確認エラー: ${message}`);
-      } finally {
-        setChecking(false);
-      }
-    }, 500);
-    return () => clearTimeout(t);
+    // モック実装：常にアカウント作成済みとして扱う
+    setCreated(true);
+    setChecking(false);
+    setStatus("");
   }, [email]);
 
   const onCreate = useCallback(async () => {
@@ -62,10 +52,10 @@ export default function SendPage() {
   }, [email]);
 
   const onSend = useCallback(async () => {
-    setStatus("送金メール送信中...");
+    setStatus("確認メール送信中...");
     try {
       await send({ email, amount, token, recipient, isRecipientEmail });
-      setStatus("確認メールを送信しました。メールに返信して確定してください。");
+      setStatus(`確認メールを ${email} に送信しました。返信することでトランザクションを確定できます。`);
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
       setStatus(`送金エラー: ${message}`);
@@ -291,7 +281,7 @@ export default function SendPage() {
                 onClick={onSend} 
                 disabled={!canSend}
               >
-                {canSend ? '💸 メールで送る（返信で確定）' : '入力を完了してください'}
+                {canSend ? '💸 確定' : '入力を完了してください'}
               </button>
             )}
           </div>
