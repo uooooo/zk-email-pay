@@ -6,15 +6,16 @@ export function AmountField({ label, value, onChange }: { label: string; value: 
   const ok = value === "" || parseAmount(value) !== null;
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-medium">{label}</label>
+      <label className="block text-sm font-medium" style={{ color: 'var(--foreground)' }}>{label}</label>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="0.00"
         inputMode="decimal"
-        className={`w-full rounded border px-3 py-2 text-sm outline-none focus:ring ${ok ? "border-gray-300" : "border-red-400"}`}
+        className="input"
+        style={!ok ? { borderColor: '#f87171' } : {}}
       />
-      {!ok && <p className="text-xs text-red-600">正しい数値を入力してください。</p>}
+      {!ok && <p className="text-xs" style={{ color: '#dc2626' }}>正しい数値を入力してください。</p>}
     </div>
   );
 }

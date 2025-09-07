@@ -5,7 +5,19 @@ export function ProgressSteps({ steps, current }: { steps: string[]; current: nu
   return (
     <ol className="flex gap-2 text-sm">
       {steps.map((s, i) => (
-        <li key={s} className={`px-2 py-1 rounded border ${i <= current ? "bg-black text-white border-black" : "bg-white border-gray-300"}`}>
+        <li 
+          key={s} 
+          className="px-2 py-1 rounded border"
+          style={i <= current ? {
+            background: 'var(--primary)',
+            color: '#fff',
+            borderColor: 'var(--primary)'
+          } : {
+            background: 'var(--card-bg)',
+            color: 'var(--foreground)',
+            borderColor: 'var(--border-soft)'
+          }}
+        >
           {s}
         </li>
       ))}

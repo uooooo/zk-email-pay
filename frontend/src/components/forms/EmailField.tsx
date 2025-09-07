@@ -14,7 +14,7 @@ export function EmailField({
   label = "あなたのメール", 
   placeholder = "you@example.com",
   required = false,
-  className = "w-full rounded border px-3 py-2 text-sm"
+  className = "input"
 }: EmailFieldProps) {
   const [localEmail, setLocalEmail] = useState("");
   const { email: savedEmail, setEmail: setSavedEmail, isLoading: emailLoading, error } = useEmail();
@@ -42,9 +42,9 @@ export function EmailField({
 
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-medium">
+      <label className="block text-sm font-medium" style={{ color: 'var(--foreground)' }}>
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="ml-1" style={{ color: '#dc2626' }}>*</span>}
       </label>
       <input 
         className={className}
@@ -57,10 +57,10 @@ export function EmailField({
         type="email"
       />
       {savedEmail && savedEmail !== localEmail && (
-        <p className="text-xs text-gray-500">保存済み: {savedEmail}</p>
+        <p className="text-xs" style={{ color: 'var(--foreground)', opacity: 0.6 }}>保存済み: {savedEmail}</p>
       )}
       {error && (
-        <p className="text-xs text-red-500">エラー: {error}</p>
+        <p className="text-xs" style={{ color: '#dc2626' }}>エラー: {error}</p>
       )}
     </div>
   );

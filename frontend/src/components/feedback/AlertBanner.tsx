@@ -3,9 +3,35 @@ import React from "react";
 
 export function AlertBanner({ type = "error", message }: { type?: "error" | "info" | "success"; message?: string }) {
   if (!message) return null;
-  const color = type === "error" ? "bg-red-100 text-red-900 border-red-300" : type === "success" ? "bg-green-100 text-green-900 border-green-300" : "bg-blue-100 text-blue-900 border-blue-300";
+  
+  const getStyle = (type: "error" | "info" | "success") => {
+    switch (type) {
+      case "error":
+        return {
+          background: 'rgba(239, 68, 68, 0.1)',
+          borderColor: 'rgba(239, 68, 68, 0.3)',
+          color: '#dc2626'
+        };
+      case "success":
+        return {
+          background: 'rgba(34, 197, 94, 0.1)',
+          borderColor: 'rgba(34, 197, 94, 0.3)',
+          color: '#059669'
+        };
+      case "info":
+      default:
+        return {
+          background: 'var(--accent-light)',
+          borderColor: 'var(--primary)',
+          color: 'var(--foreground)'
+        };
+    }
+  };
+  
   return (
-    <div className={`border rounded px-3 py-2 text-sm ${color}`}>{message}</div>
+    <div className="border rounded px-3 py-2 text-sm" style={getStyle(type)}>
+      {message}
+    </div>
   );
 }
 

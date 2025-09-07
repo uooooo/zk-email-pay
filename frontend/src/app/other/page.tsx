@@ -32,20 +32,21 @@ export default function OtherPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen" style={{ background: 'var(--background)' }}>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-red-600 to-red-500 text-white">
+      <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
             <button
               onClick={() => router.push('/send')}
-              className="text-red-200 hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
+              className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
+              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
             >
               送金
             </button>
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">その他</h1>
           </div>
-          <p className="text-red-100 text-lg max-w-md">アカウント確認・招待メールの送信</p>
+          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>アカウント確認・招待メールの送信</p>
         </div>
       </section>
 
@@ -54,9 +55,9 @@ export default function OtherPage() {
         <div className="card shadow-xl" role="region" aria-label="other-actions">
           <div className="card-section space-y-3">
             <label className="block">
-              <span className="text-sm font-medium text-gray-700 mb-2 block">メールアドレス</span>
+              <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>メールアドレス</span>
               <input
-                className="input text-gray-900 placeholder-gray-400"
+                className="input"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -80,13 +81,20 @@ export default function OtherPage() {
             <>
               <div className="divider"></div>
               <div className="card-section">
-                <div className={`p-4 rounded-lg border text-sm font-medium ${
-                  status.includes('エラー') 
-                    ? 'bg-red-50 border-red-200 text-red-800' 
-                    : status.includes('送信されました') || status.includes('作成済みです')
-                    ? 'bg-green-50 border-green-200 text-green-800'
-                    : 'bg-blue-50 border-blue-200 text-blue-800'
-                }`}>
+                <div className={`p-4 rounded-lg border text-sm font-medium`}
+                  style={status.includes('エラー') ? {
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    borderColor: 'rgba(239, 68, 68, 0.3)',
+                    color: '#dc2626'
+                  } : status.includes('送信されました') || status.includes('作成済みです') ? {
+                    background: 'rgba(34, 197, 94, 0.1)',
+                    borderColor: 'rgba(34, 197, 94, 0.3)',
+                    color: '#059669'
+                  } : {
+                    background: 'var(--accent-light)',
+                    borderColor: 'var(--primary)',
+                    color: 'var(--foreground)'
+                  }}>
                   <div className="flex items-start gap-2">
                     <span className="text-lg">
                       {status.includes('エラー') ? '❌' : status.includes('送信されました') || status.includes('作成済みです') ? '✅' : '⏳'}

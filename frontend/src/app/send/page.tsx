@@ -81,20 +81,21 @@ export default function SendPage() {
   }, [recipient]);
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen" style={{ background: 'var(--background)' }}>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-red-600 to-red-500 text-white">
+      <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">送金</h1>
             <button
               onClick={() => router.push('/other')}
-              className="text-red-200 hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
+              className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
+              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
             >
               その他
             </button>
           </div>
-          <p className="text-red-100 text-lg max-w-md">メールで送金。返信で確定。シンプル&スマート。</p>
+          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>メールで送金。返信で確定。シンプル&スマート。</p>
         </div>
       </section>
 
@@ -104,7 +105,7 @@ export default function SendPage() {
           {/* Email row */}
           <div className="card-section space-y-3">
             <label className="block">
-              <span className="text-sm font-medium text-gray-700 mb-2 block">あなたのメール</span>
+              <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>あなたのメール</span>
               <input
                 className="input"
                 type="email"
@@ -114,12 +115,12 @@ export default function SendPage() {
                 aria-label="あなたのメールアドレス"
               />
             </label>
-            {checking && <div className="text-sm text-blue-600 flex items-center gap-2">
-              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            {checking && <div className="text-sm flex items-center gap-2" style={{ color: 'var(--primary)' }}>
+              <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}></div>
               確認中...
             </div>}
-            {!checking && created === true && <div className="text-sm text-green-600 font-medium">✓ 作成済み</div>}
-            {!checking && created === false && <div className="text-sm text-amber-600 font-medium">! 未作成（作成メールを送れます）</div>}
+            {!checking && created === true && <div className="text-sm font-medium" style={{ color: '#059669' }}>✓ 作成済み</div>}
+            {!checking && created === false && <div className="text-sm font-medium" style={{ color: '#d97706' }}>! 未作成（作成メールを送れます）</div>}
           </div>
           <div className="divider"></div>
 
@@ -127,9 +128,9 @@ export default function SendPage() {
           <div className="card-section space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
               <label className="flex-1">
-                <span className="text-sm font-medium text-gray-700 mb-2 block">金額</span>
+                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>金額</span>
                 <input
-                  className="input text-2xl sm:text-3xl font-bold tracking-wide text-gray-900 placeholder-gray-400"
+                  className="input text-2xl sm:text-3xl font-bold tracking-wide"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="10"
@@ -138,14 +139,15 @@ export default function SendPage() {
                 />
               </label>
               <div className="sm:ml-4">
-                <span className="text-sm font-medium text-gray-700 mb-2 block">トークン</span>
+                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>トークン</span>
                 <div className="flex gap-2" aria-label="トークン選択">
                   {tokenOptions.map((t) => (
                     <button
                       key={t.symbol}
                       type="button"
                       onClick={() => setToken(t.symbol)}
-                      className={`pill transition-all duration-200 hover:scale-105 ${token === t.symbol ? "pill-active" : "hover:border-red-300"}`}
+                      className={`pill transition-all duration-200 hover:scale-105 ${token === t.symbol ? "pill-active" : ""}`}
+                      style={token !== t.symbol ? { borderColor: 'var(--border-soft)' } : {}}
                       aria-pressed={token === t.symbol}
                     >
                       {t.symbol}
@@ -160,16 +162,20 @@ export default function SendPage() {
           {/* Recipient row */}
           <div className="card-section space-y-4">
             <div>
-              <span className="text-sm font-medium text-gray-700 mb-3 block">送付先</span>
-              <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden bg-gray-50" role="tablist" aria-label="送付先の種類">
+              <span className="text-sm font-medium mb-3 block" style={{ color: 'var(--foreground)' }}>送付先</span>
+              <div className="inline-flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--border-soft)', background: 'var(--accent-light)' }} role="tablist" aria-label="送付先の種類">
                 <button
                   type="button"
                   onClick={() => setIsRecipientEmail(true)}
-                  className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                    isRecipientEmail 
-                      ? "bg-red-600 text-white shadow-md" 
-                      : "bg-white text-gray-700 hover:bg-gray-50"
-                  }`}
+                  className={`px-4 py-2 text-sm font-medium transition-all duration-200`}
+                  style={isRecipientEmail ? {
+                    background: 'var(--primary)',
+                    color: '#fff',
+                    boxShadow: '0 4px 12px rgba(234, 179, 8, 0.3)'
+                  } : {
+                    background: 'var(--card-bg)',
+                    color: 'var(--foreground)'
+                  }}
                   role="tab"
                   aria-selected={isRecipientEmail}
                 >
@@ -178,11 +184,15 @@ export default function SendPage() {
                 <button
                   type="button"
                   onClick={() => setIsRecipientEmail(false)}
-                  className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                    !isRecipientEmail 
-                      ? "bg-red-600 text-white shadow-md" 
-                      : "bg-white text-gray-700 hover:bg-gray-50"
-                  }`}
+                  className={`px-4 py-2 text-sm font-medium transition-all duration-200`}
+                  style={!isRecipientEmail ? {
+                    background: 'var(--primary)',
+                    color: '#fff',
+                    boxShadow: '0 4px 12px rgba(234, 179, 8, 0.3)'
+                  } : {
+                    background: 'var(--card-bg)',
+                    color: 'var(--foreground)'
+                  }}
                   role="tab"
                   aria-selected={!isRecipientEmail}
                 >
@@ -191,7 +201,7 @@ export default function SendPage() {
               </div>
             </div>
             <input
-              className={`input text-gray-900 placeholder-gray-400 ${
+              className={`input ${
                 !isRecipientEmail ? "font-mono" : ""
               }`}
               value={recipient}
@@ -204,13 +214,20 @@ export default function SendPage() {
             <>
               <div className="divider"></div>
               <div className="card-section">
-                <div className={`p-4 rounded-lg border text-sm font-medium ${
-                  status.includes('エラー') 
-                    ? 'bg-red-50 border-red-200 text-red-800' 
-                    : status.includes('送信しました') || status.includes('送信されました')
-                    ? 'bg-green-50 border-green-200 text-green-800'
-                    : 'bg-blue-50 border-blue-200 text-blue-800'
-                }`}>
+                <div className={`p-4 rounded-lg border text-sm font-medium`}
+                  style={status.includes('エラー') ? {
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    borderColor: 'rgba(239, 68, 68, 0.3)',
+                    color: '#dc2626'
+                  } : status.includes('送信しました') || status.includes('送信されました') ? {
+                    background: 'rgba(34, 197, 94, 0.1)',
+                    borderColor: 'rgba(34, 197, 94, 0.3)',
+                    color: '#059669'
+                  } : {
+                    background: 'var(--accent-light)',
+                    borderColor: 'var(--primary)',
+                    color: 'var(--foreground)'
+                  }}>
                   <div className="flex items-start gap-2">
                     <span className="text-lg">
                       {status.includes('エラー') ? '❌' : status.includes('送信') ? '✅' : '⏳'}
