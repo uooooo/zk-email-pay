@@ -106,12 +106,12 @@ export default function SendPage() {
                 aria-label="あなたのメールアドレス"
               />
             </label>
-            {checking && <div className="text-sm flex items-center gap-2" style={{ color: 'var(--primary)' }}>
+            {/* {checking && <div className="text-sm flex items-center gap-2" style={{ color: 'var(--primary)' }}>
               <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}></div>
               確認中...
             </div>}
             {!checking && created === true && <div className="text-sm font-medium" style={{ color: '#059669' }}>✓ 作成済み</div>}
-            {!checking && created === false && <div className="text-sm font-medium" style={{ color: '#d97706' }}>! 未作成（作成メールを送れます）</div>}
+            {!checking && created === false && <div className="text-sm font-medium" style={{ color: '#d97706' }}>! 未作成（作成メールを送れます）</div>} */}
           </div>
           <div className="divider"></div>
 
