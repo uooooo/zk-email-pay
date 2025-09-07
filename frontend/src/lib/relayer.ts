@@ -84,7 +84,7 @@ export async function send(params: SendParams): Promise<string> {
             <div style="background: #f3f4f6; border-radius: 8px; padding: 15px; margin: 20px 0;">
               <p style="margin: 0; font-weight: bold;">返信時の件名（重要）:</p>
               <code style="background: white; padding: 10px; border-radius: 4px; display: block; margin-top: 5px; font-size: 14px;">
-                Send ${params.amount} ${params.token} to ${params.recipient}
+                confirm
               </code>
               <p style="margin: 10px 0 0 0; font-size: 12px; color: #666;">
                 ⚠️ 件名を変更すると送金が実行されません
