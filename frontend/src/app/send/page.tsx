@@ -311,7 +311,7 @@ export default function SendPage() {
               textDecoration: 'none'
             }}
           >
-            戻る
+            アドレスをお持ちの方はこちらへ
           </Link>
         </div>
       </section>
