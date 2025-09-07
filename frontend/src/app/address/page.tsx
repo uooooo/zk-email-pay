@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useState, useEffect } from "react";
 import { send } from "@/lib/relayer";
 import Link from "next/link";
+import { ethers } from "ethers";
 
 export default function AddressPage() {
-  const router = useRouter();
-  const [senderEmail, setSenderEmail] = useState("");
+  const [senderEmail] = useState("example@user.com"); // Fixed sender email
   const [recipients, setRecipients] = useState<string[]>([""]);
   const [amount, setAmount] = useState("10");
   const tokenOptions = [
@@ -18,6 +17,11 @@ export default function AddressPage() {
   const [token, setToken] = useState<(typeof tokenOptions)[number]["symbol"]>("ETH");
   const [status, setStatus] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
+  const [balance, setBalance] = useState<string>("");
+  const [estimatedGas, setEstimatedGas] = useState<string>("");
 
   const addRecipient = () => {
     setRecipients([...recipients, ""]);
@@ -41,8 +45,7 @@ export default function AddressPage() {
   };
 
   const canSend = () => {
-    if (!senderEmail || !amount || recipients.length === 0) return false;
-    if (!isValidEmail(senderEmail)) return false;
+    if (!amount || recipients.length === 0) return false;
     
     const validRecipients = recipients.filter(email => email.trim() !== "" && isValidEmail(email.trim()));
     if (validRecipients.length === 0) return false;
@@ -51,14 +54,136 @@ export default function AddressPage() {
     return Number.isFinite(n) && n > 0;
   };
 
-  const onBulkSend = useCallback(async () => {
+  // Update balance when wallet is connected
+  const updateBalance = async (provider: ethers.BrowserProvider, address: string) => {
+    try {
+      const balance = await provider.getBalance(address);
+      setBalance(ethers.formatEther(balance));
+    } catch (error) {
+      console.error('Failed to get balance:', error);
+    }
+  };
+
+  // Check if wallet is already connected
+  useEffect(() => {
+    const checkWalletConnection = async () => {
+      if (typeof window !== 'undefined' && window.ethereum) {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' }) as string[];
+          if (accounts.length > 0) {
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            setProvider(provider);
+            setWalletAddress(accounts[0]);
+            setWalletConnected(true);
+            await updateBalance(provider, accounts[0]);
+          }
+        } catch (error) {
+          console.error('Failed to check wallet connection:', error);
+        }
+      }
+    };
+    checkWalletConnection();
+  }, []);
+
+  const connectWallet = async () => {
+    if (typeof window === 'undefined' || !window.ethereum) {
+      setStatus('MetaMaskがインストールされていません。');
+      return;
+    }
+
+    try {
+      setStatus('ウォレット接続中...');
+      const accounts = await window.ethereum.request({ 
+        method: 'eth_requestAccounts' 
+      }) as string[];
+      
+      if (accounts.length > 0) {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        setProvider(provider);
+        setWalletAddress(accounts[0]);
+        setWalletConnected(true);
+        await updateBalance(provider, accounts[0]);
+        setStatus('ウォレットが接続されました。');
+      }
+    } catch (error) {
+      console.error('Wallet connection failed:', error);
+      setStatus('ウォレット接続に失敗しました。');
+    }
+  };
+
+  const burnTokensAndSend = async () => {
+    if (!walletConnected || !provider) {
+      await connectWallet();
+      return;
+    }
+
     if (!canSend()) return;
     
     setIsLoading(true);
-    setStatus("一括送信中...");
+    setStatus('トランザクション準備中...');
     
     try {
+      const signer = await provider.getSigner();
       const validRecipients = recipients.filter(email => email.trim() !== "" && isValidEmail(email.trim()));
+      const totalAmount = ethers.parseEther((Number(amount) * validRecipients.length).toString());
+      
+      // Check balance before proceeding
+      const currentBalance = await provider.getBalance(walletAddress);
+      
+      if (token === "ETH") {
+        // Estimate gas for the transaction
+        // TODO: Replace with actual burn contract address when available
+        // Current address is a placeholder that will fail in production
+        const burnContractAddress = "0x0000000000000000000000000000000000000000";
+        
+        setStatus('ガス代を見積もり中...');
+        const gasEstimate = await provider.estimateGas({
+          to: burnContractAddress,
+          value: totalAmount,
+          data: "0x"
+        });
+        
+        const feeData = await provider.getFeeData();
+        const gasPrice = feeData.gasPrice || ethers.parseUnits("20", "gwei");
+        const gasCost = gasEstimate * gasPrice;
+        const totalCost = totalAmount + gasCost;
+        
+        setEstimatedGas(ethers.formatEther(gasCost));
+        
+        // Check if balance is sufficient
+        if (currentBalance < totalCost) {
+          const requiredETH = ethers.formatEther(totalCost);
+          const availableETH = ethers.formatEther(currentBalance);
+          const shortfallETH = ethers.formatEther(totalCost - currentBalance);
+          
+          setStatus(`残高不足です。必要: ${requiredETH} ETH, 利用可能: ${availableETH} ETH, 不足額: ${shortfallETH} ETH`);
+          setIsLoading(false);
+          return;
+        }
+        
+        setStatus('署名を求めています...');
+        
+        const tx = await signer.sendTransaction({
+          to: burnContractAddress,
+          value: totalAmount,
+          gasLimit: gasEstimate,
+          gasPrice: gasPrice
+        });
+        
+        setStatus('トランザクション送信中...');
+        await tx.wait();
+        setStatus(`トランザクション完了: ${tx.hash}`);
+        
+        // Update balance after transaction
+        await updateBalance(provider, walletAddress);
+      } else {
+        // For ERC20 tokens, you would need the contract ABI
+        setStatus('ERC20トークンのburn機能は実装中です。');
+        return;
+      }
+      
+      // After successful burn, send emails
+      setStatus('メール送信中...');
       const promises = validRecipients.map(recipient => 
         send({ 
           email: senderEmail, 
@@ -71,13 +196,23 @@ export default function AddressPage() {
       
       await Promise.all(promises);
       setStatus(`${validRecipients.length}件のメールが送信されました。各メールに返信して確定してください。`);
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e);
-      setStatus(`一括送信エラー: ${message}`);
+      
+    } catch (error: unknown) {
+      console.error('Transaction failed:', error);
+      if (error && typeof error === 'object' && 'code' in error && error.code === 4001) {
+        setStatus('トランザクションがキャンセルされました。');
+      } else {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        setStatus(`トランザクションエラー: ${message}`);
+      }
     } finally {
       setIsLoading(false);
     }
-  }, [senderEmail, amount, token, recipients]);
+  };
+
+  const onBulkSend = useCallback(async () => {
+    await burnTokensAndSend();
+  }, [walletConnected, provider, amount, token, recipients, senderEmail]);
 
   return (
     <main className="min-h-screen" style={{ background: 'var(--background)' }}>
@@ -96,22 +231,6 @@ export default function AddressPage() {
       {/* Form card */}
       <section className="container-narrow px-4 -mt-6 relative z-10">
         <div className="card shadow-xl" role="region" aria-label="bulk-send-form">
-          {/* Sender Email row */}
-          <div className="card-section space-y-3">
-            <label className="block">
-              <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>あなたのメール</span>
-              <input
-                className="input"
-                type="email"
-                value={senderEmail}
-                onChange={(e) => setSenderEmail(e.target.value)}
-                placeholder="you@example.com"
-                aria-label="あなたのメールアドレス"
-              />
-            </label>
-          </div>
-          <div className="divider"></div>
-
           {/* Amount + Token row */}
           <div className="card-section space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
@@ -275,13 +394,45 @@ export default function AddressPage() {
           
           <div className="divider"></div>
           <div className="card-section">
-            <button 
-              className="btn btn-primary w-full py-4 text-base font-semibold" 
-              onClick={onBulkSend} 
-              disabled={!canSend() || isLoading}
-            >
-              {isLoading ? '送信中...' : canSend() ? '📧 一括送信（各メールに返信で確定）' : '入力を完了してください'}
-            </button>
+            {!walletConnected ? (
+              <button 
+                className="btn btn-primary w-full py-4 text-base font-semibold" 
+                onClick={connectWallet}
+                disabled={isLoading}
+              >
+                {isLoading ? '接続中...' : '🔗 ウォレットを接続'}
+              </button>
+            ) : (
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <div className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+                    接続済み: {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                  </div>
+                  {balance && (
+                    <div className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+                      残高: {parseFloat(balance).toFixed(4)} ETH
+                    </div>
+                  )}
+                  {estimatedGas && (
+                    <div className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+                      予想ガス代: {parseFloat(estimatedGas).toFixed(6)} ETH
+                    </div>
+                  )}
+                  {balance && amount && recipients.filter(email => email.trim() !== "" && isValidEmail(email.trim())).length > 0 && (
+                    <div className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+                      必要合計: {(Number(amount) * recipients.filter(email => email.trim() !== "" && isValidEmail(email.trim())).length + (estimatedGas ? parseFloat(estimatedGas) : 0.001)).toFixed(4)} ETH
+                    </div>
+                  )}
+                </div>
+                <button 
+                  className="btn btn-primary w-full py-4 text-base font-semibold" 
+                  onClick={onBulkSend} 
+                  disabled={!canSend() || isLoading}
+                >
+                  {isLoading ? '処理中...' : canSend() ? '🔥 トークンをBurnして一括送信' : '入力を完了してください'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </section>
