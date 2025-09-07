@@ -223,7 +223,7 @@ export default function AddressPage() {
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">一括送金</h1>
           </div>
           <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-            複数のメールアドレスに同時に送金。効率的な一括処理。
+            ウォレットから複数のメールアドレス宛にトークンを送金することができます。
           </p>
         </div>
       </section>
