@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createAccount, isAccountCreated } from "@/lib/relayer";
+import Link from "next/link";
 
 export default function OtherPage() {
   const router = useRouter();
@@ -105,6 +106,24 @@ export default function OtherPage() {
               </div>
             </>
           )}
+        </div>
+      </section>
+      
+      {/* Link to home */}
+      <section className="container-narrow px-4 mt-6">
+        <div className="text-center">
+          <Link 
+            href="/address"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
+            style={{
+              background: 'var(--card-bg)',
+              border: '2px solid var(--border-soft)',
+              color: 'var(--foreground)',
+              textDecoration: 'none'
+            }}
+          >
+            アドレスをお持ちの方はこちらへ
+          </Link>
         </div>
       </section>
     </main>
