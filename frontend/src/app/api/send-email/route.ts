@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 
     // NodemailerでGmail SMTP使用
     
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: gmailUser,
