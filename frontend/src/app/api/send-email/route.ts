@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       to: to,
       subject: subject,
       html: html,
-      replyTo: 'relayer@zkemail.example.com'
+      replyTo: 'zkemailpay@gmail.com'
     };
 
     const result = await transporter.sendMail(mailOptions);

@@ -71,7 +71,7 @@ export async function send(params: SendParams): Promise<string> {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="mailto:relayer@zkemail.example.com?subject=${encodeURIComponent(`Send ${params.amount} ${params.token} to ${params.recipient}`)}&body=${encodeURIComponent(`この送金を実行してください。\n\n送金詳細:\n- 金額: ${params.amount} ${params.token}\n- 受信者: ${params.recipient}\n- 送金者: ${params.email}\n\n確認済み`)}" 
+              <a href="mailto:zkemailpay@gmail.com?subject=${encodeURIComponent(`confirm`)}&body=${encodeURIComponent(`Send ${params.amount} ${params.token} to ${params.recipient}\nこの送金を実行してください。\n\n送金詳細:\n- 金額: ${params.amount} ${params.token}\n- 受信者: ${params.recipient}\n- 送金者: ${params.email}\n\n確認済み`)}" 
                  style="display: inline-block; background: #eab308; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
                 🚀 送金を実行する
               </a>
@@ -103,8 +103,8 @@ export async function send(params: SendParams): Promise<string> {
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
             <p style="color: #999; font-size: 12px; text-align: center;">
               ZK Email システム<br>
-              relayer@zkemail.example.com<br>
-              <a href="https://zkemail.example.com" style="color: #eab308;">詳細について</a>
+              zkemailpay@gmail.com<br>
+              <a href="https://zk-email-pay.vercel.app/send" style="color: #eab308;">送金ページへ</a>
             </p>
           </div>
         `
