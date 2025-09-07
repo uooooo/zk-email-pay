@@ -132,13 +132,13 @@ export default function AddressPage() {
       
       if (token === "ETH") {
         // Estimate gas for the transaction
-        // TODO: Replace with actual burn contract address when available
+        // TODO: Replace with actual contract address when available
         // Current address is a placeholder that will fail in production
-        const burnContractAddress = "0x0000000000000000000000000000000000000000";
+        const contractAddress = "0x0000000000000000000000000000000000000000";
         
         setStatus('ガス代を見積もり中...');
         const gasEstimate = await provider.estimateGas({
-          to: burnContractAddress,
+          to: contractAddress,
           value: totalAmount,
           data: "0x"
         });
@@ -164,25 +164,25 @@ export default function AddressPage() {
         setStatus('署名を求めています...');
         
         const tx = await signer.sendTransaction({
-          to: burnContractAddress,
+          to: contractAddress,
           value: totalAmount,
           gasLimit: gasEstimate,
           gasPrice: gasPrice
         });
         
-        setStatus('トランザクション送信中...');
+        setStatus('送信処理中...');
         await tx.wait();
-        setStatus(`トランザクション完了: ${tx.hash}`);
+        setStatus(`送金処理完了: ${tx.hash}`);
         
         // Update balance after transaction
         await updateBalance(provider, walletAddress);
       } else {
         // For ERC20 tokens, you would need the contract ABI
-        setStatus('ERC20トークンのburn機能は実装中です。');
+        setStatus('ERC20トークンの送金機能は実装中です。');
         return;
       }
       
-      // After successful burn, send emails
+      // After successful transaction, send emails
       setStatus('メール送信中...');
       const promises = validRecipients.map(recipient => 
         send({ 
@@ -200,10 +200,10 @@ export default function AddressPage() {
     } catch (error: unknown) {
       console.error('Transaction failed:', error);
       if (error && typeof error === 'object' && 'code' in error && error.code === 4001) {
-        setStatus('トランザクションがキャンセルされました。');
+        setStatus('送金がキャンセルされました。');
       } else {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        setStatus(`トランザクションエラー: ${message}`);
+        setStatus(`送金エラー: ${message}`);
       }
     } finally {
       setIsLoading(false);
@@ -429,7 +429,7 @@ export default function AddressPage() {
                   onClick={onBulkSend} 
                   disabled={!canSend() || isLoading}
                 >
-                  {isLoading ? '処理中...' : canSend() ? '🔥 トークンをBurnして一括送信' : '入力を完了してください'}
+                  {isLoading ? '処理中...' : canSend() ? '💸 一括送信' : '入力を完了してください'}
                 </button>
               </div>
             )}
