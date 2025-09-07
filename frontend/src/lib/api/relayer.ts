@@ -30,38 +30,159 @@ async function http<T>(path: string, init?: RequestInit): Promise<T> {
   return (await res.text()) as unknown as T;
 }
 
-export async function createAccount(email_addr: string): Promise<{ requestId: string }> {
+// 🔄 メール生成API（実際の処理はユーザーのメール返信が必要）
+export async function createAccountRequest(email_addr: string): Promise<{ 
+  accountCode: string; 
+  message: string;
+  requiresEmailReply: true;
+}> {
   const body = JSON.stringify({ email_addr });
-  const text = await http<string>("createAccount", { method: "POST", body });
-  return { requestId: text };
+  const accountCode = await http<string>("createAccount", { method: "POST", body });
+  return { 
+    accountCode, 
+    message: "確認メールを送信しました。メールに返信してアカウントを作成してください。",
+    requiresEmailReply: true 
+  };
 }
 
+// ✅ 完結API（即座に結果を返す）
 export async function isAccountCreated(email_addr: string): Promise<{ created: boolean }> {
   const body = JSON.stringify({ email_addr });
   const created = await http<boolean>("isAccountCreated", { method: "POST", body });
   return { created };
 }
 
+// 🔄 メール生成API（実際の送金はユーザーのメール返信が必要）
 export async function sendRequest(params: {
   email_addr: string;
-  amount: string | number; // decimal string or number
-  token_id: string; // symbol or address as expected by server
-  recipient_addr: string; // email or 0x
+  amount: string | number;
+  token_id: string;
+  recipient_addr: string;
   is_recipient_email: boolean;
-}): Promise<{ requestId: number }> {
-  const body = JSON.stringify({ ...params, amount: typeof params.amount === "string" ? Number(params.amount) : params.amount });
+}): Promise<{ 
+  requestId: number;
+  message: string;
+  requiresEmailReply: true;
+}> {
+  const body = JSON.stringify({ 
+    ...params, 
+    amount: typeof params.amount === "string" ? Number(params.amount) : params.amount 
+  });
   const id = await http<number>("send", { method: "POST", body });
-  return { requestId: id };
+  return { 
+    requestId: id,
+    message: "確認メールを送信しました。メールに返信して送金を実行してください。",
+    requiresEmailReply: true
+  };
 }
 
+// ⚠️ セキュリティリスクAPI（DKIM認証をバイパス - 使用注意）
 export async function claimUnclaim(payload: {
   email_address: string;
-  random: string; // 0x...
+  random: string;
   expiry_time: number;
   is_fund: boolean;
   tx_hash: string;
-}): Promise<{ ok: boolean; message: string }> {
+}): Promise<{ 
+  ok: boolean; 
+  message: string;
+  warning: string;
+}> {
   const body = JSON.stringify(payload);
   const text = await http<string>("unclaim", { method: "POST", body });
-  return { ok: true, message: text };
+  return { 
+    ok: true, 
+    message: text,
+    warning: "⚠️ この機能はDKIM認証をバイパスしています。randomの値を正しく管理してください。"
+  };
+}
+
+// 🔄 メール生成API（NFT転送の確認メール送信）
+export async function nftTransferRequest(params: {
+  email_addr: string;
+  nft_id: number;
+  nft_addr: string;
+  recipient_addr: string;
+  is_recipient_email: boolean;
+}): Promise<{ 
+  requestId: number;
+  message: string;
+  requiresEmailReply: true;
+}> {
+  const body = JSON.stringify(params);
+  const id = await http<number>("nftTransfer", { method: "POST", body });
+  return { 
+    requestId: id,
+    message: "NFT転送の確認メールを送信しました。メールに返信して転送を実行してください。",
+    requiresEmailReply: true
+  };
+}
+
+// ✅ 完結API（ephemeral address登録 + メール送信）
+export async function signupOrSignIn(params: {
+  email_addr: string;
+  ephe_addr?: string;
+  username?: string;
+  expiry_time?: number;
+  token_allowances?: Array<[number, string]>;
+}): Promise<{ 
+  requestId: number;
+  message: string;
+  onChainRegistration: boolean;
+  requiresEmailReply: boolean;
+}> {
+  const body = JSON.stringify(params);
+  const id = await http<number>("signupOrIn", { method: "POST", body });
+  return { 
+    requestId: id,
+    message: params.ephe_addr ? 
+      "Ephemeral addressをオンチェーン登録し、確認メールを送信しました。" :
+      "確認メールを送信しました。",
+    onChainRegistration: !!params.ephe_addr,
+    requiresEmailReply: true
+  };
+}
+
+// ✅ 完結API（直接トランザクション実行）
+export async function executeEphemeralTx(params: {
+  wallet_addr: string;
+  tx_nonce: string;
+  ephe_addr: string;
+  ephe_addr_nonce: string;
+  target: string;
+  eth_value: string;
+  data: string;
+  token_amount: string;
+  signature: string;
+}): Promise<{ 
+  txHash: string;
+  message: string;
+}> {
+  const body = JSON.stringify(params);
+  const txHash = await http<string>("executeEphemeralTx", { method: "POST", body });
+  return { 
+    txHash,
+    message: "Ephemeral transactionを実行しました。"
+  };
+}
+
+// ✅ 完結API（DB操作のみ）
+export async function addSafeOwner(params: {
+  wallet_addr: string;
+  safe_addr: string;
+}): Promise<{ message: string }> {
+  const body = JSON.stringify(params);
+  await http<void>("addSafeOwner", { method: "POST", body });
+  return { message: "Safe ownerを追加しました。" };
+}
+
+// ✅ 完結API（統計情報取得）
+export async function getStats(): Promise<{
+  onboarding_tokens_distributed: number;
+  onboarding_tokens_left: number;
+}> {
+  return await http<{
+    onboarding_tokens_distributed: number;
+    onboarding_tokens_left: number;
+  }>("stats", { method: "GET" });
 }
