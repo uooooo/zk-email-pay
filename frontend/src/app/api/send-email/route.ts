@@ -34,17 +34,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // NodemailerでGmail SMTP使用（より詳細な設定）
+    // NodemailerでGmail SMTP使用（SSL/TLS直接接続）
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // STARTTLS
+      service: 'gmail',
       auth: {
         user: gmailUser,
         pass: gmailPassword
-      },
-      tls: {
-        rejectUnauthorized: false
       }
     });
 
