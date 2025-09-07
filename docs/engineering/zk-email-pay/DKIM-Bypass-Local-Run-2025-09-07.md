@@ -84,6 +84,20 @@ DKIM DEBUG (bypass) signer=0xf39f…2266, signed_msg=SET:selector=20230601;domai
 cast call <DKIM_REGISTRY> isDKIMPublicKeyHashValid gmail.com 0x0ea9... → true
 ```
 
+### Verification（アカウント作成/送金）
+
+```
+# アカウント作成確認
+POST /api/isAccountCreated {"email_addr":"aotohash@gmail.com"} → true
+
+# 送金リクエスト（メール送信）
+POST /api/send {"email_addr":"aotohash@gmail.com","amount":1,"token_id":"TEST","recipient_addr":"naitoukouta0219@gmail.com","is_recipient_email":true}
+→ SMTP 200（message_id が返却）、返信後に相手側メールで受領を確認
+
+# 参考: /api/stats にてオンボーディング配布カウンタ確認可
+GET /api/stats → {"onboarding_tokens_distributed":...,"onboarding_tokens_left":...}
+```
+
 ## 補足: Submodule 変更の扱い
 
 - `vendor/email-wallet` は Git submodule（上流: `zkemail/email-wallet`）。今回は Relayer 側への小改修（ログ/フォールバック）をローカルに加えている。
