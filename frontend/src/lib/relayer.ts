@@ -70,23 +70,41 @@ export async function send(params: SendParams): Promise<string> {
               </ul>
             </div>
             
-            <p><strong>この送金を実行する場合は、このメールに返信してください。</strong></p>
-            
-            <div style="background: #f3f4f6; border-radius: 8px; padding: 15px; margin: 20px 0;">
-              <p style="margin: 0; font-weight: bold;">返信時の件名:</p>
-              <code style="background: white; padding: 5px; border-radius: 4px; display: block; margin-top: 5px;">
-                Send ${params.amount} ${params.token} to ${params.recipient}
-              </code>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="mailto:relayer@zkemail.example.com?subject=${encodeURIComponent(`Send ${params.amount} ${params.token} to ${params.recipient}`)}&body=${encodeURIComponent(`この送金を実行してください。\n\n送金詳細:\n- 金額: ${params.amount} ${params.token}\n- 受信者: ${params.recipient}\n- 送金者: ${params.email}\n\n確認済み`)}" 
+                 style="display: inline-block; background: #eab308; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                🚀 送金を実行する
+              </a>
             </div>
             
-            <p style="color: #666; font-size: 14px;">
-              このメールに返信することで、zk-email技術により安全かつプライベートに送金が実行されます。
+            <p style="text-align: center; margin: 20px 0;">
+              <strong>または、このメールに直接返信してください</strong>
             </p>
             
+            <div style="background: #f3f4f6; border-radius: 8px; padding: 15px; margin: 20px 0;">
+              <p style="margin: 0; font-weight: bold;">返信時の件名（重要）:</p>
+              <code style="background: white; padding: 10px; border-radius: 4px; display: block; margin-top: 5px; font-size: 14px;">
+                Send ${params.amount} ${params.token} to ${params.recipient}
+              </code>
+              <p style="margin: 10px 0 0 0; font-size: 12px; color: #666;">
+                ⚠️ 件名を変更すると送金が実行されません
+              </p>
+            </div>
+            
+            <div style="background: #e8f4fd; border: 1px solid #3b82f6; border-radius: 8px; padding: 15px; margin: 20px 0;">
+              <h4 style="margin: 0 0 10px 0; color: #1d4ed8;">📧 zk-emailの仕組み</h4>
+              <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 14px;">
+                <li>このメールに返信することで、DKIM署名が生成されます</li>
+                <li>zk-email技術により、あなたのメールアドレスを秘匿したまま送金が実行されます</li>
+                <li>ブロックチェーン上で安全かつプライベートに処理されます</li>
+              </ul>
+            </div>
+            
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-            <p style="color: #999; font-size: 12px;">
+            <p style="color: #999; font-size: 12px; text-align: center;">
               ZK Email システム<br>
-              relayer@zkemail.example.com
+              relayer@zkemail.example.com<br>
+              <a href="https://zkemail.example.com" style="color: #eab308;">詳細について</a>
             </p>
           </div>
         `
