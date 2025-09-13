@@ -1,0 +1,127 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: EmailWalletCore
+    network: base-sepolia
+    source:
+      address: "0x83A1b3958D49195D3F62C44B42e7a41336Bc3ffc"
+      startBlock: 6567424
+      abi: EmailWalletCore
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - EmailOpHandled
+      abis:
+        - name: EmailWalletCore
+          file: ../contracts/artifacts/Events.sol/EmailWalletEvents.json
+      eventHandlers:
+        - event: EmailOpHandled(indexed bool,indexed uint256,indexed
+            bytes32,bytes32,bytes32,address,bytes)
+          handler: handleEmailOpHandled
+      file: ./src/email-wallet-core.ts
+  - kind: ethereum
+    name: RelayerHandler
+    network: base-sepolia
+    source:
+      address: "0xCd575A01f3Fc5684982255e844CCa8ddCed63957"
+      startBlock: 6567424
+      abi: RelayerHandler
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - RelayerConfigUpdated
+        - RelayerRegistered
+      abis:
+        - name: RelayerHandler
+          file: ../contracts/artifacts/Events.sol/EmailWalletEvents.json
+      eventHandlers:
+        - event: RelayerConfigUpdated(indexed address,string)
+          handler: handleRelayerConfigUpdated
+        - event: RelayerRegistered(indexed address,string,string)
+          handler: handleRelayerRegistered
+      file: ./src/relayer-handler.ts
+  - kind: ethereum
+    name: AccountHandler
+    network: base-sepolia
+    source:
+      address: "0x59BF4862Bd50DaC6F9bF82b435ED3A6A179a58f7"
+      startBlock: 6567424
+      abi: AccountHandler
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AccountCreated
+        - AccountInitialized
+        - AccountTransported
+      abis:
+        - name: AccountHandler
+          file: ../contracts/artifacts/Events.sol/EmailWalletEvents.json
+      eventHandlers:
+        - event: AccountCreated(indexed bytes32,bytes)
+          handler: handleAccountCreated
+      file: ./src/account-handler.ts
+  - kind: ethereum
+    name: UnclaimsHandler
+    network: base-sepolia
+    source:
+      address: "0x8fa7adD319bA82aA899DF7caC4a6Ac99F14839de"
+      startBlock: 6567424
+      abi: UnclaimsHandler
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - UnclaimedFundClaimed
+        - UnclaimedFundRegistered
+        - UnclaimedFundVoided
+        - UnclaimedStateClaimed
+        - UnclaimedStateRegistered
+        - UnclaimedStateVoided
+      abis:
+        - name: UnclaimsHandler
+          file: ../contracts/artifacts/Events.sol/EmailWalletEvents.json
+      eventHandlers:
+        - event: UnclaimedFundClaimed(indexed uint256,indexed bytes32,address,uint256,address)
+          handler: handleUnclaimedFundClaimed
+        - event: UnclaimedFundRegistered(indexed uint256,indexed
+            bytes32,address,uint256,address,uint256,uint256,string)
+          handler: handleUnclaimedFundRegistered
+        - event: UnclaimedFundVoided(indexed uint256,indexed bytes32,address,uint256,address)
+          handler: handleUnclaimedFundVoided
+        - event: UnclaimedStateClaimed(indexed uint256,indexed bytes32,address)
+          handler: handleUnclaimedStateClaimed
+        - event: UnclaimedStateRegistered(indexed uint256,indexed
+            bytes32,address,address,uint256,bytes,uint256,string)
+          handler: handleUnclaimedStateRegistered
+        - event: UnclaimedStateVoided(indexed uint256,indexed bytes32,address)
+          handler: handleUnclaimedStateVoided
+      file: ./src/unclaims-handler.ts
+  - kind: ethereum
+    name: ExtensionHandler
+    network: base-sepolia
+    source:
+      address: "0x4B134222fC292edF71D7f31FE1D9D9cD571A663E"
+      startBlock: 6567424
+      abi: ExtensionHandler
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ExtensionPublished
+      abis:
+        - name: ExtensionHandler
+          file: ../contracts/artifacts/Events.sol/EmailWalletEvents.json
+      eventHandlers:
+        - event: ExtensionPublished(indexed string,indexed address,string[][],uint256)
+          handler: handleExtensionPublished
+      file: ./src/extension-handler.ts

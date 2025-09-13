@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "packages/relayer",
+    "packages/scripts",
+]
+exclude = ["node_modules/*"]
+resolver = "2"

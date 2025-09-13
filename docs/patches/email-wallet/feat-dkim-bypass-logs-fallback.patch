@@ -1,0 +1,123 @@
+From 23eb316f6fd479944a7bd1bf4fbc5dd895f0dc5b Mon Sep 17 00:00:00 2001
+From: akafuda <aoto0630@keio.jp>
+Date: Sun, 7 Sep 2025 12:29:45 +0900
+Subject: [PATCH] feat(relayer): add SMTP debug and safe receiveEmail fallback
+ (DKIM bypass local)
+
+---
+ .gitignore                                    |  4 ++-
+ packages/relayer/src/modules/mail.rs          | 18 +++++++---
+ .../src/modules/web_server/rest_api.rs        | 34 ++++++++++++++++++-
+ 3 files changed, 49 insertions(+), 7 deletions(-)
+
+diff --git a/.gitignore b/.gitignore
+index 815b21e..98f7328 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -45,6 +45,8 @@ sql_database.db
+ packages/prover/build/*
+ packages/prover/params/*.zkey
+ packages/prover/__pycache__/*
++packages/prover/params.zip
++**/.env.localdev
+ 
+ # Subgraphs
+ packages/subgraph/build
+@@ -69,4 +71,4 @@ packages/oauth-sdk/.env
+ packages/oauth-sdk/dist
+ 
+ secrets.yml
+-relayer.prod.yml
+\ No newline at end of file
++relayer.prod.yml
+diff --git a/packages/relayer/src/modules/mail.rs b/packages/relayer/src/modules/mail.rs
+index 5b30b22..ba094bd 100644
+--- a/packages/relayer/src/modules/mail.rs
++++ b/packages/relayer/src/modules/mail.rs
+@@ -407,6 +407,13 @@ pub async fn send_email(email: EmailMessage) -> Result<()> {
+ 
+     // Send POST request to email server
+     let client = reqwest::Client::new();
++    // Debug: log outgoing email summary
++    println!(
++        "SMTP DEBUG request to={} to={} subject={}",
++        smtp_server,
++        email.to,
++        email.subject
++    );
+     let response = client
+         .post(smtp_server)
+         .json(&email)
+@@ -414,11 +421,12 @@ pub async fn send_email(email: EmailMessage) -> Result<()> {
+         .await
+         .map_err(|e| anyhow!("Failed to send email: {}", e))?;
+ 
+-    if !response.status().is_success() {
+-        return Err(anyhow!(
+-            "Failed to send email: {}",
+-            response.text().await.unwrap_or_default()
+-        ));
++    let status = response.status();
++    let resp_text = response.text().await.unwrap_or_default();
++    println!("SMTP DEBUG response status={} body={}", status, resp_text);
++
++    if !status.is_success() {
++        return Err(anyhow!("Failed to send email: {}", resp_text));
+     }
+ 
+     Ok(())
+diff --git a/packages/relayer/src/modules/web_server/rest_api.rs b/packages/relayer/src/modules/web_server/rest_api.rs
+index b74d6e1..15312a5 100644
+--- a/packages/relayer/src/modules/web_server/rest_api.rs
++++ b/packages/relayer/src/modules/web_server/rest_api.rs
+@@ -16,6 +16,7 @@ use relayer_utils::{
+     cryptos::{AccountCode, AccountSalt, PaddedEmailAddr},
+     ParsedEmail, LOG,
+ };
++use regex::Regex;
+ use serde::{Deserialize, Serialize};
+ use serde_json::Value;
+ use serde_json::Number;
+@@ -419,7 +420,38 @@ pub async fn delete_safe_owner_api_fn(payload: String) -> Result<()> {
+ }
+ 
+ pub async fn receive_email_api_fn(email: String) -> Result<()> {
+-    let parsed_email = ParsedEmail::new_from_raw_email(&email).await.unwrap();
++    let parsed = ParsedEmail::new_from_raw_email(&email).await;
++    // Fallback extract From header in case parsing fails (e.g., missing DKIM header)
++    let fallback_from = || -> Option<String> {
++        let re_angle = Regex::new(r"(?mi)^From:\s*.*<([^>]+)>").ok()?;
++        if let Some(c) = re_angle.captures(&email) {
++            return Some(c.get(1)?.as_str().to_string());
++        }
++        let re_plain = Regex::new(r"(?mi)^From:\s*([^\r\n<>]+@[^\r\n<>]+)").ok()?;
++        if let Some(c) = re_plain.captures(&email) {
++            return Some(c.get(1)?.as_str().trim().to_string());
++        }
++        None
++    };
++
++    if parsed.is_err() {
++        let err = parsed.err().unwrap();
++        error!(LOG, "Failed to parse email: {}", err);
++        if let Some(addr) = fallback_from() {
++            // Notify user with a helpful error instead of panicking the worker
++            tokio::spawn(async move {
++                let _ = handle_email_event(EmailWalletEvent::Error {
++                    email_addr: addr,
++                    error_subject: "Invalid email".to_string(),
++                    error: format!("{}", err),
++                })
++                .await;
++            });
++        }
++        return Ok(());
++    }
++
++    let parsed_email = parsed.unwrap();
+     let from_addr = parsed_email.get_from_addr().unwrap();
+     tokio::spawn(async move {
+         match handle_email_event(EmailWalletEvent::Ack {
+-- 
+2.39.5 (Apple Git-154)
+
