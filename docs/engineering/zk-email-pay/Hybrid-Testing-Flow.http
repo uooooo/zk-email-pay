@@ -8,10 +8,10 @@
 # - DKIM Oracle/Registry env set on Relayer: CANISTER_ID, WALLET_CANISTER_ID, IC_REPLICA_URL, PEM_PATH
 
 @relayer = http://127.0.0.1:4500
-@email = regist@akafuda.xyz      
+@email = aotohash@gmail.com      
 # Set this to your target user email for E2E
 
-@recipient_email = recipient@example.com
+@recipient_email = naitoukouta0219@gmail.com
 @token_id = USDC
 @amount = 1
 
