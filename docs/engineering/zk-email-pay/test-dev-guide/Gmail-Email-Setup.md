@@ -53,7 +53,7 @@ RELAYER_ENDPOINT=http://<relayer-host>:4500/api/receiveEmail
 ```
 - 起動（compose の imap サービスを使用）
 ```
-cd vendor/email-wallet
+cd email-wallet
 docker compose up -d imap
 ```
 

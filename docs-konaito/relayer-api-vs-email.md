@@ -1,15 +1,15 @@
 ---
 title: Email Wallet Relayer — APIでできること vs メールでのみ可能なこと
-description: vendor/email-wallet（特にRelayer）の機能サマリと、フロントエンド経由のAPI/メール起点の役割分担を整理
+description: email-wallet（特にRelayer）の機能サマリと、フロントエンド経由のAPI/メール起点の役割分担を整理
 updated: 2025-09-06
 ---
 
 # Email Wallet Relayer — API か メールか
 
-本ドキュメントは `/vendor/email-wallet`（特に `packages/relayer`）を対象に、
+本ドキュメントは `/email-wallet`（特に `packages/relayer`）を対象に、
 フロントエンド（Next.js）から叩けるHTTP APIで「できること」と、メール送信（返信）によってのみ最終的に成立する処理を整理します。
 
-- 実装位置: `vendor/email-wallet/packages/relayer`
+- 実装位置: `email-wallet/packages/relayer`
 - Webサーバ: Axum（Rust）
 - 既定ポート: `.env` の `WEB_SERVER_ADDRESS`（例: `127.0.0.1:4500`）
 - 参考ファイル: `src/modules/web_server/server.rs`, `src/modules/web_server/rest_api.rs`, `src/core.rs`, `src/modules/mail.rs`, `src/modules/claimer.rs`

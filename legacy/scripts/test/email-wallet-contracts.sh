@@ -5,7 +5,7 @@ set -euo pipefail
 # Unit tests (no FFI) and optional integration tests (with circuits).
 
 ROOT_DIR=$(cd "$(dirname "$0")/../.." && pwd)
-UPSTREAM_ROOT="$ROOT_DIR/vendor/email-wallet"
+UPSTREAM_ROOT="$ROOT_DIR/email-wallet"
 UPSTREAM_DIR="$UPSTREAM_ROOT/packages/contracts"
 
 if [ ! -d "$UPSTREAM_DIR" ]; then
@@ -15,7 +15,7 @@ fi
 
 pushd "$UPSTREAM_ROOT" >/dev/null
 if [ ! -d node_modules ]; then
-  echo "Installing upstream dependencies at vendor/email-wallet (node_modules)"
+  echo "Installing upstream dependencies at email-wallet (node_modules)"
   # Support nvm/nodebrew and UPSTREAM_PM override similar to deploy script
   if command -v bash >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then . "$HOME/.nvm/nvm.sh" || true; fi
   if command -v nvm >/dev/null 2>&1 && [ "${FORCE_NODE18:-1}" = "1" ]; then nvm install 18 >/dev/null 2>&1 || true; nvm use 18 || true; fi

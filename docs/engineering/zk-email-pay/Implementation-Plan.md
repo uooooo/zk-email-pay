@@ -28,7 +28,7 @@
 
 ### デプロイ手順
 1) **Contracts デプロイ**
-- `vendor/email-wallet/packages/contracts/` で `DefaultSetupScript.s.sol` 実行
+- `email-wallet/packages/contracts/` で `DefaultSetupScript.s.sol` 実行
 - 全コントラクト（Core/Handlers/Registries/Verifiers）を一括デプロイ
 - アドレスを `addresses/<network>.json` に記録
 

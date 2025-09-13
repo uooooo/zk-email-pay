@@ -22,7 +22,7 @@ upstream zkemail/email-wallet を直接採用し、完全なシステム（contr
 ## 実装タスク
 
 ### Phase 1: Infrastructure Setup
-- [x] **Submodule Integration**: `vendor/email-wallet` 追加完了
+- [x] **Submodule Integration**: `email-wallet` 追加完了
 - [x] **Documentation Overhaul**: 新方針反映
   - [x] Implementation-Plan.md 更新
   - [x] Local-Development-Guide.md 作成 
@@ -74,7 +74,7 @@ upstream zkemail/email-wallet を直接採用し、完全なシステム（contr
 ## 受入基準（DoD）
 
 ### M1: Local Environment
-- [ ] vendor/email-wallet でローカル完全動作
+- [ ] email-wallet でローカル完全動作
 - [ ] メール送信→受取の e2e 成功
 - [ ] health check & debugging 可能
 

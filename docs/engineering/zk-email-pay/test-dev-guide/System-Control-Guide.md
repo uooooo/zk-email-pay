@@ -10,7 +10,7 @@ email-wallet ローカル開発環境の停止・再起動・状態確認の完�
 echo "=== Email Wallet System Status ==="
 
 # 実行場所の確認
-cd /Users/uooooo/Documents/zk-email-pay/vendor/email-wallet/packages/relayer
+cd /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/relayer
 
 # Docker Services 状況
 echo "--- Docker Services ---"
@@ -53,7 +53,7 @@ pkill -f anvil || echo "No anvil process found"
 
 # 4. Docker Services 停止（重要: 正しいパスでdocker-compose.yamlを指定）
 echo "Stopping Docker Services..."
-cd /Users/uooooo/Documents/zk-email-pay/vendor/email-wallet/packages/relayer
+cd /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/relayer
 docker compose -f ../../docker-compose.yaml down -v
 
 # 5. 確認: すべて停止済み
@@ -73,7 +73,7 @@ echo "=== Starting Complete Email Wallet System ==="
 
 # Phase 1: Infrastructure Services（Docker）
 echo "Phase 1: Starting Infrastructure..."
-cd /Users/uooooo/Documents/zk-email-pay/vendor/email-wallet/packages/relayer
+cd /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/relayer
 docker compose -f ../../docker-compose.yaml up --build -d
 echo "Waiting for Docker services..."
 sleep 15
@@ -115,7 +115,7 @@ echo "🎉 System startup complete!"
 
 ```bash
 # 実行場所を確認
-cd /Users/uooooo/Documents/zk-email-pay/vendor/email-wallet/packages/relayer
+cd /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/relayer
 
 echo "=== Basic API Tests ==="
 
@@ -144,15 +144,15 @@ docker compose -f ../../docker-compose.yaml ps
 
 ```bash
 # Relayer 詳細ログ（フォアグラウンド実行）
-cd /Users/uooooo/Documents/zk-email-pay/vendor/email-wallet/packages/relayer
+cd /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/relayer
 RUST_LOG=debug cargo run --release
 
 # Prover 詳細ログ（フォアグラウンド実行）
-cd /Users/uooooo/Documents/zk-email-pay/vendor/email-wallet/packages/prover
+cd /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/prover
 python3 -u local.py
 
 # Docker Services ログ
-cd /Users/uooooo/Documents/zk-email-pay/vendor/email-wallet/packages/relayer
+cd /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/relayer
 docker compose -f ../../docker-compose.yaml logs -f
 ```
 
@@ -162,7 +162,7 @@ docker compose -f ../../docker-compose.yaml logs -f
 
 ```bash
 # 1. システム状態確認
-cd /Users/uooooo/Documents/zk-email-pay/vendor/email-wallet/packages/relayer
+cd /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/relayer
 docker compose -f ../../docker-compose.yaml ps
 curl -s http://localhost:4500/api/echo && echo " ✅ System Ready"
 
@@ -208,7 +208,7 @@ curl -X POST http://localhost:8080/prove/email_sender -H "Content-Type: applicat
 
 ## 🧭 現在のローカル構成（Anvil / Hybrid テスト）
 
-- 注意: `vendor/email-wallet/packages/relayer/.env` の `CORE_CONTRACT_ADDRESS` は EmailWalletCore の「proxy」アドレスを指定すること。
+- 注意: `email-wallet/packages/relayer/.env` の `CORE_CONTRACT_ADDRESS` は EmailWalletCore の「proxy」アドレスを指定すること。
 
 契約アドレス（最新 / anvil 再デプロイ 2025-09-07）
 

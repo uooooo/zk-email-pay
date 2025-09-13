@@ -127,7 +127,7 @@ console.log(`0x${hash}`);
 
 #### core.rs の修正
 ```rust
-// vendor/email-wallet/packages/relayer/src/core.rs
+// email-wallet/packages/relayer/src/core.rs
 
 #[named]
 pub async fn handle_email(email: String) -> Result<(EmailWalletEvent, bool)> {
@@ -144,7 +144,7 @@ pub async fn handle_email(email: String) -> Result<(EmailWalletEvent, bool)> {
 
 #### config.rs の修正
 ```rust
-// vendor/email-wallet/packages/relayer/src/config.rs
+// email-wallet/packages/relayer/src/config.rs
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -170,7 +170,7 @@ impl Config {
 
 #### 依存関係の削除
 ```toml
-# vendor/email-wallet/packages/relayer/Cargo.toml
+# email-wallet/packages/relayer/Cargo.toml
 
 [dependencies]
 # IC関連依存を削除
@@ -228,7 +228,7 @@ services:
 
 #### メール受信時の自動チェック
 ```rust
-// vendor/email-wallet/packages/relayer/src/core.rs
+// email-wallet/packages/relayer/src/core.rs
 
 #[named]
 pub async fn handle_email(email: String) -> Result<(EmailWalletEvent, bool)> {

@@ -14,7 +14,7 @@
 ### A. テストネット（実運用想定）
 - IMAP: Gmail/Workspace, Outlook, Mailgun/SendGrid IMAP 等
 - 認証: アプリパスワード or OAuth2
-- Relayer IMAP ブリッジ: `relayer-imap` コンテナ（vendor/email-wallet/docker-compose.yaml）
+- Relayer IMAP ブリッジ: `relayer-imap` コンテナ（email-wallet/docker-compose.yaml）
 - Relayer API: `WEB_SERVER_ADDRESS=0.0.0.0:4500`
 - DKIM: Oracle/Registry 設定（canister/レジストリ）
 
@@ -28,7 +28,7 @@
 
 起動（compose を使う場合）
 ```
-cd vendor/email-wallet
+cd email-wallet
 # .env に上記を反映
 # relayer は別途起動（cargo or compose）
 docker compose up -d imap

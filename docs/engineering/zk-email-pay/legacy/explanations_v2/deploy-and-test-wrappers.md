@@ -8,11 +8,11 @@
 - `scripts/test/email-wallet-contracts.sh`
 
 ## 1) scripts/deploy/email-wallet-local.sh
-目的: vendor/email-wallet（上流 monorepo）の packages/contracts で DefaultSetupScript を実行できるようにする。上流が `../../node_modules` に依存するため、monorepo 直下で `node_modules` を自動インストールします。
+目的: email-wallet（上流 monorepo）の packages/contracts で DefaultSetupScript を実行できるようにする。上流が `../../node_modules` に依存するため、monorepo 直下で `node_modules` を自動インストールします。
 
 主要処理
 - `set -euo pipefail`: エラー/未定義変数/パイプ失敗で停止
-- `UPSTREAM_ROOT=vendor/email-wallet` / `UPSTREAM_DIR=.../packages/contracts`
+- `UPSTREAM_ROOT=email-wallet` / `UPSTREAM_DIR=.../packages/contracts`
 - node_modules が無ければ `pnpm i` / `yarn install` / `npm install` を選択実行
 - `forge script script/DefaultSetupScript.s.sol:Deploy --rpc-url ... --chain-id ... --broadcast` を呼び出し
 
@@ -46,7 +46,7 @@ CHAIN_ID=31337 NETWORK=local scripts/deploy/export-addresses.sh
 目的: 上流 packages/contracts のテストをこのリポジトリから実行
 
 主要処理
-- vendor/email-wallet の `node_modules` を自動インストール
+- email-wallet の `node_modules` を自動インストール
 - `forge build --skip test --skip script`
 - ユニットテスト: `forge test --no-match-test "testIntegration"`
 - 統合テスト（回路+FFI が必要）: `RUN_INTEGRATION=1` で `forge test --match-test 'testIntegration_' --ffi`

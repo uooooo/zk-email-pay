@@ -24,7 +24,7 @@
 
 ## 2. DB（Docker）
 ```
-cd vendor/email-wallet
+cd email-wallet
 docker compose up -d db
 ```
 - 接続文字列（ローカル実行の Relayer 用）:
@@ -34,7 +34,7 @@ docker compose up -d db
 ```
 pip install modal
 modal token new
-modal run vendor/email-wallet/packages/prover/modal_server.py
+modal run email-wallet/packages/prover/modal_server.py
 ```
 - 実行ログに表示される Modal のURLを控える（例: `https://<modal-app>.modal.run`）
 - Relayer の `.env` の `PROVER_ADDRESS` に設定（例: `PROVER_ADDRESS=https://<modal-app>.modal.run`）
@@ -42,8 +42,8 @@ modal run vendor/email-wallet/packages/prover/modal_server.py
 ## 4. Gmail（SMTP/IMAP）
 ### 送信（SMTP）
 - 方式A: relayer-smtp を Gmail に中継
-  - `vendor/email-wallet/docker-compose.yaml` の `smtp` サービスを使用
-  - `vendor/email-wallet/.env`（compose読み込み）例:
+  - `email-wallet/docker-compose.yaml` の `smtp` サービスを使用
+  - `email-wallet/.env`（compose読み込み）例:
     ```
     SMTP_INTERNAL_SERVER_HOST=0.0.0.0
     SMTP_INTERNAL_SERVER_PORT=3000
@@ -61,8 +61,8 @@ modal run vendor/email-wallet/packages/prover/modal_server.py
   - 既存のローカルHTTPブリッジ（Mailpit-Setup.md参照）を Gmail 向けに変更
 
 ### 受信（IMAP）
-- `vendor/email-wallet/docker-compose.yaml` の `imap` サービスを使用
-- `vendor/email-wallet/packages/relayer/.env` 例:
+- `email-wallet/docker-compose.yaml` の `imap` サービスを使用
+- `email-wallet/packages/relayer/.env` 例:
   ```
   IMAP_DOMAIN_NAME=imap.gmail.com
   IMAP_PORT=993
@@ -75,7 +75,7 @@ modal run vendor/email-wallet/packages/prover/modal_server.py
 - 代替: Gmail inbound webhook → 独自アダプタで `/api/receiveEmail` にPOST
 
 ## 5. Relayer（ローカル）
-`vendor/email-wallet/packages/relayer/.env` 主な値:
+`email-wallet/packages/relayer/.env` 主な値:
 ```
 CORE_CONTRACT_ADDRESS=<from deployment>
 PRIVATE_KEY=0x...
@@ -86,9 +86,9 @@ DATABASE_URL=postgresql://emailWallet:...@127.0.0.1:5432/emailWallet
 RELAYER_EMAIL_ADDR=test@your-domain.com
 RELAYER_HOSTNAME=your-domain.com
 WEB_SERVER_ADDRESS=0.0.0.0:4500
-CIRCUITS_DIR_PATH=/absolute/path/vendor/email-wallet/packages/circuits
-INPUT_FILES_DIR_PATH=/absolute/path/vendor/email-wallet/packages/relayer/input_files
-EMAIL_TEMPLATES_PATH=/absolute/path/vendor/email-wallet/packages/relayer/eml_templates/
+CIRCUITS_DIR_PATH=/absolute/path/email-wallet/packages/circuits
+INPUT_FILES_DIR_PATH=/absolute/path/email-wallet/packages/relayer/input_files
+EMAIL_TEMPLATES_PATH=/absolute/path/email-wallet/packages/relayer/eml_templates/
 ONBOARDING_TOKEN_ADDR=<TestERC20>
 FEE_PER_GAS=0
 # IC / DKIM Oracle
@@ -99,7 +99,7 @@ PEM_PATH=./.ic.pem
 ```
 起動:
 ```
-cd vendor/email-wallet/packages/relayer
+cd email-wallet/packages/relayer
 cargo run --release
 ```
 

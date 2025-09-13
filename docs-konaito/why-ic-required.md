@@ -18,7 +18,7 @@ Email Walletは、メールの真正性をDKIMシグネチャのZK証明で検�
 リレイヤーは新しいメールを受信するたびに `check_and_update_dkim()` を実行：
 
 ```rust
-// vendor/email-wallet/packages/relayer/src/core.rs:25
+// email-wallet/packages/relayer/src/core.rs:25
 check_and_update_dkim(&email, &parsed_email).await?;
 ```
 
@@ -31,7 +31,7 @@ check_and_update_dkim(&email, &parsed_email).await?;
 新しいDKIM鍵の検証・署名のために、Internet Computer上のDKIM Oracleを使用：
 
 ```rust
-// vendor/email-wallet/packages/relayer/src/core.rs:517-536
+// email-wallet/packages/relayer/src/core.rs:517-536
 let pem_path = env::var(PEM_PATH_KEY).unwrap_or_else(|_| ".ic.pem".to_string());
 let ic_replica_url = env::var(IC_REPLICA_URL_KEY).map_err(|e| anyhow!("Failed to read IC_REPLICA_URL_KEY: {}", e))?;
 let ic_agent = DkimOracleClient::gen_agent(&pem_path, &ic_replica_url)?;

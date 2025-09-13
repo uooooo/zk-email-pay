@@ -13,7 +13,7 @@ This note documents what we changed, why errors occurred, and a reproducible pat
 
 - Instrumented relayer to print DKIM details just before registry update:
   - Logs include `DKIM DEBUG oracle.selector`, `oracle.domain`, `oracle.public_key_hash`, `oracle.signature`, and the final `signed_msg` string.
-  - File: `vendor/email-wallet/packages/relayer/src/core.rs`
+  - File: `email-wallet/packages/relayer/src/core.rs`
 
 - Added a dev bypass to skip IC DKIM oracle and sign locally:
   - `DKIM_BYPASS_LOCAL_SIGN=true` signs the message with `DKIM_LOCAL_SIGNER_PK` (defaults to relayer `PRIVATE_KEY`).
@@ -24,7 +24,7 @@ This note documents what we changed, why errors occurred, and a reproducible pat
   - `cast call <AccountHandler> "defaultDkimRegistry()(address)"` and `cast call <Registry> "signer()(address)"` show expected signer.
 
 - Brought up local dependencies:
-  - Postgres and SMTP via `vendor/email-wallet/docker-compose.yaml`.
+  - Postgres and SMTP via `email-wallet/docker-compose.yaml`.
   - Local prover Flask at `:8080`.
 
 ## Why The Original Errors Happened
@@ -46,11 +46,11 @@ This note documents what we changed, why errors occurred, and a reproducible pat
 ## Repro Steps (Local Hybrid Test)
 
 1) Contracts (local, anvil)
-- Ensure `vendor/email-wallet/packages/contracts/.env` is set for local dev.
+- Ensure `email-wallet/packages/contracts/.env` is set for local dev.
 - Deploy via DefaultSetupScript. Use the Core proxy printed in the logs.
 
 2) Relayer config
-- `vendor/email-wallet/packages/relayer/.env` (key items):
+- `email-wallet/packages/relayer/.env` (key items):
   - `CORE_CONTRACT_ADDRESS=<EmailWalletCore proxy>`
   - `WEB_SERVER_ADDRESS=0.0.0.0:4500`
   - `PROVER_ADDRESS=http://127.0.0.1:8080`
@@ -60,15 +60,15 @@ This note documents what we changed, why errors occurred, and a reproducible pat
 
 3) Services
 - Start DB + SMTP:
-  - `cd vendor/email-wallet && docker compose up -d db smtp`
+  - `cd email-wallet && docker compose up -d db smtp`
 - Start prover:
-  - `cd vendor/email-wallet/packages/prover`
+  - `cd email-wallet/packages/prover`
   - `npm install -g snarkjs@latest` (one‑time)
   - `unzip -o params.zip -d params` (one‑time)
   - `python3 -u local.py`
 
 4) Relayer
-- `cd vendor/email-wallet/packages/relayer && cargo run --release`
+- `cd email-wallet/packages/relayer && cargo run --release`
 - Health: `curl http://localhost:4500/api/echo` → `Hello, world!`
 
 5) Flow
@@ -97,7 +97,7 @@ If these pass, you are calling the Core proxy (not the implementation).
 
 ## Appendix: Key Files
 
-- Relayer DKIM flow: `vendor/email-wallet/packages/relayer/src/core.rs`
-- Web server routes: `vendor/email-wallet/packages/relayer/src/modules/web_server/server.rs`
-- Prover (local): `vendor/email-wallet/packages/prover/local.py`, `core.py`, `circom_proofgen.sh`
+- Relayer DKIM flow: `email-wallet/packages/relayer/src/core.rs`
+- Web server routes: `email-wallet/packages/relayer/src/modules/web_server/server.rs`
+- Prover (local): `email-wallet/packages/prover/local.py`, `core.py`, `circom_proofgen.sh`
 
