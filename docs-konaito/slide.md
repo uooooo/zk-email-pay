@@ -35,7 +35,7 @@ paginate: true
 
 ## アーキテクチャ
 
-![Relayer Infrastructure](../../../vendor/email-wallet/docs/images/RelayerInfra.png)
+![Relayer Infrastructure](../../../email-wallet/docs/images/RelayerInfra.png)
 
 - 参考  
   - Deepwiki: https://deepwiki.com/zkemail/email-wallet/  

@@ -54,7 +54,7 @@ npm install -g snarkjs@latest
 
 ```bash
 # プロジェクトルートで確認
-ls vendor/email-wallet/packages/
+ls email-wallet/packages/
 # 必須出力: circuits  contracts  prover  relayer
 ```
 
@@ -71,7 +71,7 @@ ls vendor/email-wallet/packages/
 #### 1. Circuits ビルド
 
 ```bash
-cd vendor/email-wallet/packages/circuits
+cd email-wallet/packages/circuits
 yarn install
 yarn build
 
@@ -91,13 +91,13 @@ anvil --host 0.0.0.0 --port 8545 --accounts 10 --mnemonic "test test test test t
 
 **Step 2b: Contracts 環境設定**
 ```bash
-cd vendor/email-wallet/packages/contracts
+cd email-wallet/packages/contracts
 
 # .env ファイル作成
 cp .env.sample .env
 ```
 
-**`.env` ファイル設定**（vendor/email-wallet/packages/contracts/.env）:
+**`.env` ファイル設定**（email-wallet/packages/contracts/.env）:
 ```bash
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 RPC_URL=http://127.0.0.1:8545
@@ -144,13 +144,13 @@ forge script script/RegisterRelayer.s.sol --rpc-url $RPC_URL --broadcast
 #### 3. Docker Services 起動（PostgreSQL + SMTP + IMAP）
 
 ```bash
-cd vendor/email-wallet/packages/relayer
+cd email-wallet/packages/relayer
 
 # .env ファイル作成
 cp .env.example .env
 ```
 
-**重要**: 以下の `.env` ファイルを**正確に**設定してください（vendor/email-wallet/packages/relayer/.env）:
+**重要**: 以下の `.env` ファイルを**正確に**設定してください（email-wallet/packages/relayer/.env）:
 
 ```bash
 # Contract addresses (Phase 1 でメモしたアドレスを記入)
@@ -192,9 +192,9 @@ PROVER_ADDRESS=http://0.0.0.0:8080
 WEB_SERVER_ADDRESS=0.0.0.0:4500
 
 # Paths (絶対パス必須 - 以下を実際のパスに変更)
-CIRCUITS_DIR_PATH=/Users/$(whoami)/Documents/zk-email-pay/vendor/email-wallet/packages/circuits
-INPUT_FILES_DIR_PATH=/Users/$(whoami)/Documents/zk-email-pay/vendor/email-wallet/packages/relayer/input_files
-EMAIL_TEMPLATES_PATH=/Users/$(whoami)/Documents/zk-email-pay/vendor/email-wallet/packages/relayer/eml_templates/
+CIRCUITS_DIR_PATH=/Users/$(whoami)/Documents/zk-email-pay/email-wallet/packages/circuits
+INPUT_FILES_DIR_PATH=/Users/$(whoami)/Documents/zk-email-pay/email-wallet/packages/relayer/input_files
+EMAIL_TEMPLATES_PATH=/Users/$(whoami)/Documents/zk-email-pay/email-wallet/packages/relayer/eml_templates/
 
 # Other
 RELAYER_EMAIL_ADDR=test@localhost
@@ -222,7 +222,7 @@ docker compose logs imap  # IMAP logs
 
 **選択肢A: Local Prover（推奨・簡単）**
 ```bash
-cd vendor/email-wallet/packages/prover
+cd email-wallet/packages/prover
 
 # Python 依存関係インストール
 pip install -r requirements.txt
@@ -258,7 +258,7 @@ modal run python packages/prover/local.py
 #### 5. Relayer Service 起動
 
 ```bash
-cd vendor/email-wallet/packages/relayer
+cd email-wallet/packages/relayer
 
 # Relayer ビルド（初回のみ・時間がかかる場合あり）
 cargo build --release
@@ -356,13 +356,13 @@ curl -X POST http://localhost:3000/api/sendEmail \
 各サービスのログを別ターミナルで監視:
 ```bash
 # Terminal 1: Relayer ログ
-cd vendor/email-wallet/packages/relayer && RUST_LOG=info cargo run --release
+cd email-wallet/packages/relayer && RUST_LOG=info cargo run --release
 
 # Terminal 2: Prover ログ  
-cd vendor/email-wallet/packages/prover && python3 local.py
+cd email-wallet/packages/prover && python3 local.py
 
 # Terminal 3: Docker サービスログ
-cd vendor/email-wallet/packages/relayer && docker compose logs -f
+cd email-wallet/packages/relayer && docker compose logs -f
 ```
 
 ## 🔧 トラブルシューティング
@@ -378,7 +378,7 @@ cd vendor/email-wallet/packages/relayer && docker compose logs -f
 ps aux | grep anvil  # anvil プロセス確認
 kill -9 $(ps aux | grep anvil | awk '{print $2}')  # anvil 強制終了
 anvil --host 0.0.0.0 --port 8545  # anvil 再起動
-cd vendor/email-wallet/packages/contracts
+cd email-wallet/packages/contracts
 forge clean && forge build --skip test --skip script
 ```
 
@@ -407,19 +407,19 @@ lsof -ti:5432 | xargs kill -9  # Port 5432
 ```bash
 # 症状: "Contract call failed" 
 # 解決手順:
-cd vendor/email-wallet/packages/contracts
+cd email-wallet/packages/contracts
 cast call $CORE_CONTRACT_ADDRESS "owner()" --rpc-url http://127.0.0.1:8545
 # ✅ 期待値: 正常なアドレス返却
 
 # .env ファイルのアドレス再確認
-grep CORE_CONTRACT_ADDRESS vendor/email-wallet/packages/relayer/.env
+grep CORE_CONTRACT_ADDRESS email-wallet/packages/relayer/.env
 ```
 
 **5. Prover connection timeouts**
 ```bash
 # 症状: "Prover not responding"
 # 解決手順:
-cd vendor/email-wallet/packages/prover
+cd email-wallet/packages/prover
 python3 -c "import flask; print('Flask OK')"  # Flask 確認
 curl -v http://localhost:8080/  # 詳細接続テスト
 ```
@@ -439,7 +439,7 @@ docker compose logs db | tail -20  # DB ログ確認
 # 症状: yarn build が遅い/失敗
 # 解決手順:
 node --version  # 必須: v18.x
-cd vendor/email-wallet/packages/circuits
+cd email-wallet/packages/circuits
 yarn cache clean && yarn install --frozen-lockfile
 yarn build --verbose  # 詳細ログ付きビルド
 ```
@@ -450,9 +450,9 @@ yarn build --verbose  # 詳細ログ付きビルド
 # 解決手順:
 # 絶対パス確認・修正
 export ZK_EMAIL_ROOT="/Users/$(whoami)/Documents/zk-email-pay"
-echo "CIRCUITS_DIR_PATH=$ZK_EMAIL_ROOT/vendor/email-wallet/packages/circuits"
-echo "INPUT_FILES_DIR_PATH=$ZK_EMAIL_ROOT/vendor/email-wallet/packages/relayer/input_files"  
-echo "EMAIL_TEMPLATES_PATH=$ZK_EMAIL_ROOT/vendor/email-wallet/packages/relayer/eml_templates/"
+echo "CIRCUITS_DIR_PATH=$ZK_EMAIL_ROOT/email-wallet/packages/circuits"
+echo "INPUT_FILES_DIR_PATH=$ZK_EMAIL_ROOT/email-wallet/packages/relayer/input_files"  
+echo "EMAIL_TEMPLATES_PATH=$ZK_EMAIL_ROOT/email-wallet/packages/relayer/eml_templates/"
 ```
 
 ### **デバッグコマンド集**
@@ -482,9 +482,9 @@ netstat -tulnp | grep -E ":4500|:8080|:8545|:5432|:3000|:993"
 ```bash
 # ⚠️ 警告: 全データが削除されます
 echo "Stopping all services..."
-cd vendor/email-wallet/packages/relayer
+cd email-wallet/packages/relayer
 docker compose down -v
-cd vendor/email-wallet/packages/contracts  
+cd email-wallet/packages/contracts  
 forge clean
 
 echo "Killing all processes..."

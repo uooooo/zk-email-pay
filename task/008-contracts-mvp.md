@@ -15,7 +15,7 @@
 - **対象**: packages/contracts の完全なシステム（Core/Handlers/Registries/Verifiers）
 
 ### 新実装タスク
-- [x] **Submodule 追加**: `vendor/email-wallet` として upstream を追加
+- [x] **Submodule 追加**: `email-wallet` として upstream を追加
 - [x] **ドキュメント更新**: Implementation-Plan.md を新方針に変更  
 - [ ] **デプロイ実行**: `DefaultSetupScript.s.sol` でシステム全体をデプロイ
 - [ ] **設定出力**: `addresses/<network>.json` でアドレス管理
@@ -28,7 +28,7 @@
 
 ## 新受入基準（DoD）
 - [x] **方針転換**: Legacy実装の deprecate、upstream 採用決定
-- [ ] **Local デプロイ**: vendor/email-wallet で anvil 環境構築
+- [ ] **Local デプロイ**: email-wallet で anvil 環境構築
 - [ ] **Base Sepolia**: upstream システムの testnet デプロイ  
 - [ ] **ドキュメント**: Local-Development-Guide.md での手順整備
 

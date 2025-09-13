@@ -15,7 +15,7 @@ Relayer (cargo) --POST /api/sendEmail--> relayer-smtp (docker) --SMTP--> Mailpit
 ## 前提
 
 - Relayer はローカルで `cargo run --release` で起動
-- `vendor/email-wallet` を vendor としてそのまま利用（コード変更なし）
+- `email-wallet` を vendor としてそのまま利用（コード変更なし）
 - Anvil, Contracts, Prover は Local-Development-Guide に従って起動済み
 
 ## 1) Mailpit を起動
@@ -29,9 +29,9 @@ docker run --rm --name mailpit -p 587:1025 -p 8025:8025 axllent/mailpit
 
 ## 2) relayer-smtp を Mailpit に中継する
 
-`vendor/email-wallet/docker-compose.yaml` の `smtp` サービスを使います。compose は `vendor/email-wallet/.env` を読み込みます。
+`email-wallet/docker-compose.yaml` の `smtp` サービスを使います。compose は `email-wallet/.env` を読み込みます。
 
-`vendor/email-wallet/.env` に最低限の値を設定:
+`email-wallet/.env` に最低限の値を設定:
 
 ```dotenv
 # relayer-smtp (HTTPサーバ) 自身の待受
@@ -51,7 +51,7 @@ SMTP_MESSAGE_ID_DOMAIN=localhost
 起動（smtp のみ）:
 
 ```bash
-cd vendor/email-wallet
+cd email-wallet
 # DBは別で必要なら: docker compose up -d db
 # SMTPブリッジのみ起動
 docker compose up -d smtp
@@ -68,7 +68,7 @@ curl -s http://127.0.0.1:3000/api/ping
 
 Relayer（ローカルで `cargo run` する方）の `.env` を設定:
 
-`vendor/email-wallet/packages/relayer/.env`:
+`email-wallet/packages/relayer/.env`:
 
 ```dotenv
 # …既存設定に加え…

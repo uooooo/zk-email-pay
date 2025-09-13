@@ -6,7 +6,7 @@ set -euo pipefail
 #   RPC_URL, PRIVATE_KEY, RELAYER_HANDLER, RELAYER_EMAIL, RELAYER_HOSTNAME
 
 ROOT_DIR=$(cd "$(dirname "$0")/../.." && pwd)
-UPSTREAM_DIR="$ROOT_DIR/vendor/email-wallet/packages/contracts"
+UPSTREAM_DIR="$ROOT_DIR/email-wallet/packages/contracts"
 
 : "${RPC_URL:?RPC_URL is required}"
 : "${PRIVATE_KEY:?PRIVATE_KEY is required}"

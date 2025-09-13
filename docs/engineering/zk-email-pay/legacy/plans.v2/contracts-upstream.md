@@ -6,7 +6,7 @@
 
 手順（案）
 1) 追加方法の選択
-- A: submodule `vendor/email-wallet` → `packages/contracts` を参照
+- A: submodule `email-wallet` → `packages/contracts` を参照
 - B: `forge install zkemail/email-wallet`（monorepo構成のため A 推奨）
 2) remappings 設定
 - `foundry.toml` に remappings を追加し、import を上流に合わせる

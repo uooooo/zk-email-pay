@@ -88,7 +88,7 @@ npm install -g @foundry-rs/foundry
 
 #### 1.2 デプロイ設定
 ```bash
-cd vendor/email-wallet/packages/contracts
+cd email-wallet/packages/contracts
 cp .env.sample .env
 ```
 
@@ -109,7 +109,7 @@ RELAYER_HOSTNAME=yourdomain.com
 
 #### 2.1 コントラクト群の一括デプロイ
 ```bash
-cd vendor/email-wallet/packages/contracts
+cd email-wallet/packages/contracts
 
 # ビルド
 forge build --skip test --skip script
@@ -168,7 +168,7 @@ dfx ledger create-canister <principal> --amount <icp_amount>
 
 #### 4.1 Docker環境構築
 ```bash
-cd vendor/email-wallet/packages/relayer
+cd email-wallet/packages/relayer
 
 # 環境変数設定
 cp .env.sample .env

@@ -1,6 +1,6 @@
-# Submodule Fork & Push (vendor/email-wallet)
+# Submodule Fork & Push (email-wallet)
 
-目的: サブモジュール `vendor/email-wallet` のローカル変更をフォーク先に push し、親リポの submodule ポインタ更新へつなげる。
+目的: サブモジュール `email-wallet` のローカル変更をフォーク先に push し、親リポの submodule ポインタ更新へつなげる。
 
 ## 変更内容（サブモジュール内）
 
@@ -17,7 +17,7 @@
 2. 端末で以下を実行:
 
 ```bash
-cd vendor/email-wallet
+cd email-wallet
 git remote add fork https://github.com/uooooo/email-wallet.git   # フォークURLに置換
 git push -u fork feat/dkim-bypass-logs-fallback
 ```
@@ -28,7 +28,7 @@ git push -u fork feat/dkim-bypass-logs-fallback
 ## 手順 B: gh CLI でフォーク（任意）
 
 ```bash
-cd vendor/email-wallet
+cd email-wallet
 gh repo fork zkemail/email-wallet --remote=fork --clone=false
 git push -u fork feat/dkim-bypass-logs-fallback
 ```
@@ -38,7 +38,7 @@ git push -u fork feat/dkim-bypass-logs-fallback
 - パッチファイルを同梱: `docs/patches/email-wallet/feat-dkim-bypass-logs-fallback.patch`
 
 ```bash
-cd vendor/email-wallet
+cd email-wallet
 git checkout -b feat/dkim-bypass-logs-fallback
 git am ../../docs/patches/email-wallet/feat-dkim-bypass-logs-fallback.patch
 git push -u fork feat/dkim-bypass-logs-fallback
@@ -51,9 +51,9 @@ git push -u fork feat/dkim-bypass-logs-fallback
 フォーク側にブランチを push 後、親リポで submodule ポインタを更新:
 
 ```bash
-cd vendor/email-wallet
+cd email-wallet
 git fetch fork && git checkout feat/dkim-bypass-logs-fallback
-cd ..; git add vendor/email-wallet
+cd ..; git add email-wallet
 git commit -m "chore(submodule): point submodule to fork email-wallet@feat/dkim-bypass-logs-fallback"
 git push
 ```

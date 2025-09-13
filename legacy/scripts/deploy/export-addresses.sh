@@ -7,7 +7,7 @@ set -euo pipefail
 #   or: scripts/deploy/export-addresses.sh 31337 local
 
 ROOT_DIR=$(cd "$(dirname "$0")/../.." && pwd)
-UPSTREAM_BROADCAST_BASE="$ROOT_DIR/vendor/email-wallet/packages/contracts/broadcast/DefaultSetupScript.s.sol"
+UPSTREAM_BROADCAST_BASE="$ROOT_DIR/email-wallet/packages/contracts/broadcast/DefaultSetupScript.s.sol"
 
 CHAIN_ID="${1:-${CHAIN_ID:-}}"
 NETWORK="${2:-${NETWORK:-}}"

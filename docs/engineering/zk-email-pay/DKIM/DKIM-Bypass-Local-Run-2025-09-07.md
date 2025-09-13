@@ -11,11 +11,11 @@
   - Onboarding token (TEST): `0x4A679253410272dd5232B3Ff7cF5dbB88f295319`
 - Relayer: cargo run (localhost:4500)
 - Prover: Flask local (localhost:8080)
-- SMTP: vendor/email-wallet `relayer-smtp` (localhost:3000 → Gmail)
-- IMAP: vendor/email-wallet `relayer-imap` (Gmail → /api/receiveEmail)
+- SMTP: email-wallet `relayer-smtp` (localhost:3000 → Gmail)
+- IMAP: email-wallet `relayer-imap` (Gmail → /api/receiveEmail)
 
 ## 主要な.env
-- `vendor/email-wallet/packages/relayer/.env`
+- `email-wallet/packages/relayer/.env`
   - `CORE_CONTRACT_ADDRESS=0x3Aa5ebB10DC797CAC828524e59A333d0A371443c`
   - `PROVER_ADDRESS=http://127.0.0.1:8080`
   - `SMTP_SERVER=http://127.0.0.1:3000/api/sendEmail`
@@ -97,15 +97,6 @@ POST /api/send {"email_addr":"aotohash@gmail.com","amount":1,"token_id":"TEST","
 # 参考: /api/stats にてオンボーディング配布カウンタ確認可
 GET /api/stats → {"onboarding_tokens_distributed":...,"onboarding_tokens_left":...}
 ```
-
-## 補足: Submodule 変更の扱い
-
-- `vendor/email-wallet` は Git submodule（上流: `zkemail/email-wallet`）。今回は Relayer 側への小改修（ログ/フォールバック）をローカルに加えている。
-- ベストプラクティス:
-  1. submodule リポジトリをフォーク（例: `uooooo/email-wallet`）。
-  2. フォークを submodule に `git remote add fork ...` で追加し、フォーク側にブランチ push。
-  3. 親リポジトリは submodule のコミットを更新して push（PR で追従）。
-- 今回は親リポジトリのブランチ push に留め、submodule 変更はローカル改修として維持。フォーク作成後に submodule 側の push/PR へ切り出し可能。
 
 
 ## 実行ログ (抜粋)

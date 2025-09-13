@@ -13,5 +13,8 @@
 **/.env.localdev
 
 # Prover params/zkeys (large/binary)
-vendor/email-wallet/packages/prover/params.zip
-vendor/email-wallet/packages/prover/*.zkey
+# Prover params/zkeys (large/binary)
+email-wallet/packages/prover/params.zip
+email-wallet/packages/prover/*.zkey
+email-wallet/packages/prover/params.zip
+email-wallet/packages/prover/*.zkey

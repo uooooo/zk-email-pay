@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # Wrapper to run upstream email-wallet contracts deploy (local/anvil) from this repo.
-# Requires submodule at vendor/email-wallet and Foundry installed.
+# Requires submodule at email-wallet and Foundry installed.
 
 ROOT_DIR=$(cd "$(dirname "$0")/../.." && pwd)
-UPSTREAM_ROOT="$ROOT_DIR/vendor/email-wallet"
+UPSTREAM_ROOT="$ROOT_DIR/email-wallet"
 UPSTREAM_DIR="$UPSTREAM_ROOT/packages/contracts"
 
 if [ ! -d "$UPSTREAM_DIR" ]; then
@@ -22,7 +22,7 @@ pushd "$UPSTREAM_ROOT" >/dev/null
 
 # Ensure node_modules at monorepo root (contracts import from ../../node_modules)
 if [ ! -d node_modules ]; then
-  echo "Installing upstream dependencies at vendor/email-wallet (node_modules)"
+  echo "Installing upstream dependencies at email-wallet (node_modules)"
   if [ "${SKIP_NPM_INSTALL:-0}" = "1" ]; then
     echo "SKIP_NPM_INSTALL=1 set; skipping install"
   else

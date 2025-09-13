@@ -1,10 +1,10 @@
 # Upstream Contracts Overview — email-wallet/packages/contracts（v2）
 
 目的
-- 本プロジェクト（v2）が採用する upstream（vendor/email-wallet）のコントラクト群について、関係する主要ファイルと設計・コードの要点（文法的な観点含む）を短時間で把握できるようにまとめます。
+- 本プロジェクト（v2）が採用する upstream（email-wallet）のコントラクト群について、関係する主要ファイルと設計・コードの要点（文法的な観点含む）を短時間で把握できるようにまとめます。
 
 参照元
-- vendor/email-wallet/packages/contracts
+- email-wallet/packages/contracts
 - デプロイスクリプト/ブロードキャスト: `script/*.s.sol`, `broadcast/DefaultSetupScript.s.sol/<chainId>/`
 
 ---
@@ -77,7 +77,7 @@
 
 ## Import 解決（なぜ node_modules が必要か）
 - 上流は Yarn Workspaces を使い、`packages/contracts` から `../../node_modules` を参照します。
-- 本プロジェクトのラッパーは `vendor/email-wallet/` 直下でパッケージをインストールし、Foundry の import を解決させています。
+- 本プロジェクトのラッパーは `email-wallet/` 直下でパッケージをインストールし、Foundry の import を解決させています。
 
 ---
 

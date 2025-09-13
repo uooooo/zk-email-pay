@@ -28,7 +28,7 @@ Email Walletリレイヤーは、メールとブロックチェーン間の橋�
 `.env.sample`を`.env`にコピーして編集：
 
 ```bash
-cd vendor/email-wallet/packages/relayer
+cd email-wallet/packages/relayer
 cp .env.sample .env
 ```
 
@@ -83,7 +83,7 @@ IMAP_PORT=993
 Internet Computer用のPEMファイルを配置：
 ```bash
 # .ic.pemファイルをrelayerディレクトリに配置
-cp /path/to/your/.ic.pem vendor/email-wallet/packages/relayer/.ic.pem
+cp /path/to/your/.ic.pem email-wallet/packages/relayer/.ic.pem
 ```
 
 **重要**: このPEMファイルは以下の目的で使用されます：
@@ -95,7 +95,7 @@ cp /path/to/your/.ic.pem vendor/email-wallet/packages/relayer/.ic.pem
 
 ルートディレクトリから：
 ```bash
-cd vendor/email-wallet
+cd email-wallet
 docker compose up --build -d
 ```
 
