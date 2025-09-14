@@ -66,7 +66,7 @@ export default function FaucetPage() {
   return (
     <main className="min-h-screen" style={{ background: 'var(--background)' }}>
       {/* Hero */}
-      <section className="text-white" style={{ background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' }}>
+      <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 USDC Faucet</h1>

@@ -127,7 +127,7 @@ function BalanceContent() {
   if (loading) {
     return (
       <main className="min-h-screen" style={{ background: 'var(--background)' }}>
-        <section className="text-white" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
+        <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
           <div className="container-narrow px-4 py-8 sm:py-12">
             <div className="flex items-center gap-8 mb-4">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 Wallet</h1>
@@ -193,7 +193,7 @@ function BalanceContent() {
   return (
     <main className="min-h-screen" style={{ background: 'var(--background)' }}>
       {/* Hero */}
-      <section className="text-white" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
+      <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 Wallet</h1>
