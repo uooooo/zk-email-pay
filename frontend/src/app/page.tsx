@@ -58,7 +58,7 @@ export default function Home() {
 
           {/* Wallet Check Card */}
           <Link 
-            href="/wallet"
+            href="/balance/get"
             className="card hover:scale-105 transition-all duration-200 block"
             style={{ textDecoration: 'none', color: 'inherit' }}
           >
