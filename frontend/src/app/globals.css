@@ -69,7 +69,7 @@ body {
   background: var(--card-bg); 
   border: 1px solid var(--border-soft); 
   border-radius: 1.5rem; 
-  box-shadow: 0 10px 25px rgba(234, 179, 8, 0.08), 0 4px 10px rgba(234, 179, 8, 0.04); 
+  box-shadow: 0 10px 25px rgba(255, 85, 68, 0.08), 0 4px 10px rgba(255, 85, 68, 0.04); 
   overflow: hidden;
 }
 .card-section { padding: 1.5rem; }
@@ -89,7 +89,7 @@ body {
 }
 .input:focus { 
   border-color: var(--primary); 
-  box-shadow: 0 0 0 4px rgba(234, 179, 8, 0.15); 
+  box-shadow: 0 0 0 4px rgba(255, 85, 68, 0.15); 
   transform: translateY(-1px);
 }
 .input:hover:not(:focus) {
@@ -118,11 +118,11 @@ body {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
   color: #fff; 
   border-color: var(--primary); 
-  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 85, 68, 0.3);
 }
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
-  box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 85, 68, 0.4);
   transform: translateY(-2px);
 }
 .btn-ghost { 
@@ -148,16 +148,16 @@ body {
 .pill:hover {
   border-color: var(--primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(234, 179, 8, 0.15);
+  box-shadow: 0 4px 8px rgba(255, 85, 68, 0.15);
 }
 .pill-active { 
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
   color: #fff; 
   border-color: var(--primary); 
-  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 85, 68, 0.3);
 }
 .pill-active:hover {
-  box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 85, 68, 0.4);
 }
 
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
