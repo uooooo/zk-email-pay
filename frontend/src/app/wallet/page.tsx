@@ -26,13 +26,12 @@ export default function WalletPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
-  const [accountCode, setAccountCode] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // URLパラメータから email と accountCode を取得して自動入力
+  // URLパラメータから email と accountCode を取得してウォレット確認を自動実行
   useEffect(() => {
     const emailParam = searchParams.get('email');
     const accountCodeParam = searchParams.get('accountCode');
@@ -40,13 +39,10 @@ export default function WalletPage() {
     if (emailParam) {
       setEmail(emailParam);
     }
-    if (accountCodeParam) {
-      setAccountCode(accountCodeParam);
-    }
 
     // 両方のパラメータが設定されている場合は自動で残高確認を実行
     if (emailParam && accountCodeParam) {
-      setStatus("URLパラメータからアカウント情報を取得しました。残高を確認中...");
+      setStatus("復旧メールからアカウント情報を取得しました。残高を確認中...");
       // 少し遅延を入れて自動実行
       const timer = setTimeout(() => {
         handleGetWalletAddressAuto(emailParam, accountCodeParam);
@@ -82,42 +78,19 @@ export default function WalletPage() {
     }
   }, []);
 
-  const handleGetWalletAddress = useCallback(async () => {
-    if (!email || !accountCode) {
-      setStatus("メールアドレスとアカウントコードを入力してください");
-      return;
-    }
 
-    setLoading(true);
-    setStatus("ウォレットアドレス取得中...");
-
-    try {
-      const address = await getWalletAddress(email, accountCode);
-      setWalletAddress(address);
-      setStatus(`✅ ウォレットアドレス: ${address}`);
-      
-      // 資産チェック開始
-      await checkBalances(address);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      setStatus(`❌ エラー: ${message}`);
-    } finally {
-      setLoading(false);
-    }
-  }, [email, accountCode]);
-
-  const handleRecoverAccountCode = useCallback(async () => {
+  const handleSendBalanceCheckEmail = useCallback(async () => {
     if (!email) {
       setStatus("メールアドレスを入力してください");
       return;
     }
 
     setLoading(true);
-    setStatus("アカウントコード復旧メール送信中...");
+    setStatus("残高確認メール送信中...");
 
     try {
       await recoverAccountCode(email);
-      setStatus(`✅ ${email} にアカウントコード復旧メールを送信しました`);
+      setStatus(`✅ ${email} に残高確認メールを送信しました。メールのリンクから残高を確認できます。`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       setStatus(`❌ エラー: ${message}`);
@@ -196,7 +169,7 @@ export default function WalletPage() {
             </button>
           </div>
           <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-            EmailWalletの残高と資産状況を確認できます
+            メールアドレスを入力して残高確認メールを受け取り、メール内のリンクから資産状況を確認できます
           </p>
         </div>
       </section>
@@ -204,7 +177,7 @@ export default function WalletPage() {
       {/* Form card */}
       <section className="container-narrow px-4 -mt-6 relative z-10">
         <div className="card shadow-xl" role="region" aria-label="wallet-check">
-          {/* Email and Account Code */}
+          {/* Email Input */}
           <div className="card-section space-y-4">
             <div>
               <label className="block">
@@ -219,52 +192,35 @@ export default function WalletPage() {
                 />
                 {searchParams.get('email') && (
                   <div className="text-xs mt-1" style={{ color: 'var(--foreground)', opacity: 0.6 }}>
-                    復旧メールのリンクからメールアドレスが自動入力されました
+                    残高確認メールのリンクからメールアドレスが自動入力されました
                   </div>
                 )}
-              </label>
-            </div>
-            
-            <div>
-              <label className="block">
-                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>アカウントコード</span>
-                <input
-                  className="input font-mono"
-                  type="text"
-                  value={accountCode}
-                  onChange={(e) => setAccountCode(e.target.value)}
-                  placeholder="0x123..."
-                  disabled={loading}
-                />
-                <div className="text-xs mt-1" style={{ color: 'var(--foreground)', opacity: 0.6 }}>
-                  {searchParams.get('accountCode') ? 
-                    "復旧メールのリンクからアカウントコードが自動入力されました" : 
-                    "アカウント作成時に受信したメールに記載されています"
-                  }
-                </div>
               </label>
             </div>
           </div>
 
           <div className="divider"></div>
 
-          {/* Action Buttons */}
+          {/* Action Button */}
           <div className="card-section">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button 
-                className="btn btn-primary flex-1" 
-                onClick={handleGetWalletAddress}
-                disabled={loading || !email || !accountCode}
-              >
-                {loading ? "処理中..." : "💰 残高を確認"}
-              </button>
-              <button 
-                className="btn btn-ghost flex-1" 
-                onClick={handleRecoverAccountCode}
-                disabled={loading || !email}
-              >
-                🔑 アカウントコード復旧
-              </button>
+            <button 
+              className="btn btn-primary w-full py-4 text-base font-semibold" 
+              onClick={handleSendBalanceCheckEmail}
+              disabled={loading || !email}
+            >
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin mr-2"
+                    style={{ borderColor: '#fff', borderTopColor: 'transparent' }}>
+                  </div>
+                  処理中...
+                </>
+              ) : (
+                "📧 残高確認メールを送る"
+              )}
+            </button>
+            <div className="text-xs mt-2 text-center" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+              メールに記載されたリンクから資産状況を確認できます
             </div>
           </div>
 
