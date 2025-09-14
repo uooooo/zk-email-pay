@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { getWalletAddress } from "@/lib/relayer";
 import { ethers } from "ethers";
 import Link from "next/link";
@@ -24,12 +24,12 @@ interface TokenBalance {
 
 export default function BalancePage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Base Sepoliaで確認するトークン一覧
   const tokenAddresses = [
@@ -37,8 +37,16 @@ export default function BalancePage() {
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
   ];
 
+  // クライアントサイドでのみsearchParamsを使用
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // URLパラメータから email と accountCode を取得してウォレット確認を自動実行
   useEffect(() => {
+    if (!mounted) return;
+
+    const searchParams = new URLSearchParams(window.location.search);
     const emailParam = searchParams.get('email');
     const accountCodeParam = searchParams.get('accountCode');
     
@@ -59,7 +67,7 @@ export default function BalancePage() {
       // パラメータがない場合はメール送信ページにリダイレクト
       router.push('/balance/get');
     }
-  }, [searchParams, router]);
+  }, [mounted, router]);
 
   // URLパラメータからの自動実行用関数
   const handleGetWalletAddressAuto = useCallback(async (emailParam: string, accountCodeParam: string) => {
