@@ -71,7 +71,7 @@ export async function getRelayerEmailAddr(): Promise<string> {
 export async function getWalletAddress(email: string, accountCode: string): Promise<string> {
   return postJson<string>("/api/getWalletAddress", {
     email_addr: email,
-    account_code: accountCode
+    account_code: "0x"+accountCode
   });
 }
 
