@@ -1,0 +1,1003 @@
+   Compiling relayer v1.1.0 (/Users/uooooo/Documents/zk-email-pay/email-wallet/packages/relayer)
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `AccountCreatedFilter` in the type namespace is first re-exported here
+...
+22 | pub use events::*;
+   |         --------- but the name `AccountCreatedFilter` in the type namespace is also re-exported here
+   |
+   = note: `#[warn(ambiguous_glob_reexports)]` on by default
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `AdminChangedFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `AdminChangedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `BeaconUpgradedFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `BeaconUpgradedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `InitializedFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `InitializedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `OwnershipTransferredFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `OwnershipTransferredFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `UpgradedFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UpgradedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `EmailNullifiersCall` in the type namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+19 | pub use email_wallet_core::*;
+   |         -------------------- but the name `EmailNullifiersCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `EmailNullifiersCall` in the value namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+19 | pub use email_wallet_core::*;
+   |         -------------------- but the name `EmailNullifiersCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `EmailValidityDurationCall` in the type namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+19 | pub use email_wallet_core::*;
+   |         -------------------- but the name `EmailValidityDurationCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `EmailValidityDurationCall` in the value namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+19 | pub use email_wallet_core::*;
+   |         -------------------- but the name `EmailValidityDurationCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `InitializeCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `InitializeCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `IsDKIMPublicKeyHashValidCall` in the type namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+   |         ---------------------------- but the name `IsDKIMPublicKeyHashValidCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `OwnerCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `OwnerCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `OwnerCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `OwnerCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `ProxiableUUIDCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `ProxiableUUIDCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `ProxiableUUIDCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `ProxiableUUIDCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `RelayerHandlerCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `RelayerHandlerCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `RelayerHandlerCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `RelayerHandlerCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `RenounceOwnershipCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `RenounceOwnershipCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `RenounceOwnershipCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `RenounceOwnershipCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `TransferOwnershipCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `TransferOwnershipCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `UpgradeToCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UpgradeToCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `UpgradeToAndCallCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UpgradeToAndCallCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `VerifierCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `VerifierCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `VerifierCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `VerifierCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `EmailNullifiersReturn` in the type namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+19 | pub use email_wallet_core::*;
+   |         -------------------- but the name `EmailNullifiersReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `EmailNullifiersReturn` in the value namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+19 | pub use email_wallet_core::*;
+   |         -------------------- but the name `EmailNullifiersReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `EmailValidityDurationReturn` in the type namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+19 | pub use email_wallet_core::*;
+   |         -------------------- but the name `EmailValidityDurationReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `EmailValidityDurationReturn` in the value namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+19 | pub use email_wallet_core::*;
+   |         -------------------- but the name `EmailValidityDurationReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `IsDKIMPublicKeyHashValidReturn` in the type namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+   |         ---------------------------- but the name `IsDKIMPublicKeyHashValidReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `IsDKIMPublicKeyHashValidReturn` in the value namespace is first re-exported here
+18 | pub use ecdsa_owned_dkim_registry::*;
+   |         ---------------------------- but the name `IsDKIMPublicKeyHashValidReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `OwnerReturn` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `OwnerReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `OwnerReturn` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `OwnerReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `ProxiableUUIDReturn` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `ProxiableUUIDReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `ProxiableUUIDReturn` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `ProxiableUUIDReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `RelayerHandlerReturn` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `RelayerHandlerReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `RelayerHandlerReturn` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `RelayerHandlerReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `VerifierReturn` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `VerifierReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:17:9
+   |
+17 | pub use account_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^ the name `VerifierReturn` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `VerifierReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `EmailOpHandledFilter` in the type namespace is first re-exported here
+...
+22 | pub use events::*;
+   |         --------- but the name `EmailOpHandledFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `AccountHandlerCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `AccountHandlerCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `AccountHandlerCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `AccountHandlerCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `MaxFeePerGasCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `MaxFeePerGasCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `MaxFeePerGasCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `MaxFeePerGasCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `UnclaimedFundClaimGasCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedFundClaimGasCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `UnclaimedFundClaimGasCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedFundClaimGasCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `UnclaimedStateClaimGasCall` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedStateClaimGasCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `UnclaimedStateClaimGasCall` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedStateClaimGasCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `AccountHandlerReturn` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `AccountHandlerReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `AccountHandlerReturn` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `AccountHandlerReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `MaxFeePerGasReturn` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `MaxFeePerGasReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `MaxFeePerGasReturn` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `MaxFeePerGasReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `UnclaimedFundClaimGasReturn` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedFundClaimGasReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `UnclaimedFundClaimGasReturn` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedFundClaimGasReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `UnclaimedStateClaimGasReturn` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedStateClaimGasReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:19:9
+   |
+19 | pub use email_wallet_core::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `UnclaimedStateClaimGasReturn` in the value namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedStateClaimGasReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `ApprovalFilter` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `ApprovalFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TransferFilter` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TransferFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `AllowanceCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `AllowanceCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `ApproveCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `ApproveCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `BalanceOfCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `BalanceOfCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `DecimalsCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `DecimalsCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `DecimalsCall` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `DecimalsCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `DecreaseAllowanceCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `DecreaseAllowanceCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `IncreaseAllowanceCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `IncreaseAllowanceCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `NameCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `NameCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `NameCall` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `NameCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `SymbolCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `SymbolCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `SymbolCall` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `SymbolCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TotalSupplyCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TotalSupplyCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TotalSupplyCall` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TotalSupplyCall` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TransferCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TransferCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TransferFromCall` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TransferFromCall` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `AllowanceReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `AllowanceReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `AllowanceReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `AllowanceReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `ApproveReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `ApproveReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `ApproveReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `ApproveReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `BalanceOfReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `BalanceOfReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `BalanceOfReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `BalanceOfReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `DecimalsReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `DecimalsReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `DecimalsReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `DecimalsReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `DecreaseAllowanceReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `DecreaseAllowanceReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `DecreaseAllowanceReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `DecreaseAllowanceReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `IncreaseAllowanceReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `IncreaseAllowanceReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `IncreaseAllowanceReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `IncreaseAllowanceReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `NameReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `NameReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `NameReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `NameReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `SymbolReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `SymbolReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `SymbolReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `SymbolReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TotalSupplyReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TotalSupplyReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TotalSupplyReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TotalSupplyReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TransferReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TransferReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TransferReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TransferReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TransferFromReturn` in the type namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TransferFromReturn` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:20:9
+   |
+20 | pub use erc20::*;
+   |         ^^^^^^^^ the name `TransferFromReturn` in the value namespace is first re-exported here
+...
+28 | pub use test_erc20::*;
+   |         ------------- but the name `TransferFromReturn` in the value namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `ExtensionPublishedFilter` in the type namespace is first re-exported here
+23 | pub use extension_handler::*;
+   |         -------------------- but the name `ExtensionPublishedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `RelayerConfigUpdatedFilter` in the type namespace is first re-exported here
+...
+27 | pub use relayer_handler::*;
+   |         ------------------ but the name `RelayerConfigUpdatedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `RelayerRegisteredFilter` in the type namespace is first re-exported here
+...
+27 | pub use relayer_handler::*;
+   |         ------------------ but the name `RelayerRegisteredFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `UnclaimedFundClaimedFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedFundClaimedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `UnclaimedFundRegisteredFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedFundRegisteredFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `UnclaimedFundVoidedFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedFundVoidedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `UnclaimedStateClaimedFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedStateClaimedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `UnclaimedStateRegisteredFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedStateRegisteredFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:22:9
+   |
+22 | pub use events::*;
+   |         ^^^^^^^^^ the name `UnclaimedStateVoidedFilter` in the type namespace is first re-exported here
+...
+30 | pub use unclaims_handler::*;
+   |         ------------------- but the name `UnclaimedStateVoidedFilter` in the type namespace is also re-exported here
+
+warning: ambiguous glob re-exports
+  --> packages/relayer/src/abis/mod.rs:23:9
+   |
+23 | pub use extension_handler::*;
+   |         ^^^^^^^^^^^^^^^^^^^^ the name `InitializeCall` in the value namespace is first re-exported here
+...
+29 | pub use token_registry::*;
+   |         ----------------- but the name `InitializeCall` in the value namespace is also re-exported here
+
+warning: use of deprecated struct `ic_agent::agent::http_transport::ReqwestTransport`: use the AgentBuilder methods
+ --> packages/relayer/src/modules/dkim_oracle.rs:4:38
+  |
+4 | use ic_agent::agent::http_transport::ReqwestTransport;
+  |                                      ^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated struct `ic_agent::agent::http_transport::ReqwestTransport`: use the AgentBuilder methods
+  --> packages/relayer/src/modules/dkim_oracle.rs:54:25
+   |
+54 |         let transport = ReqwestTransport::create(replica_url)?;
+   |                         ^^^^^^^^^^^^^^^^
+
+warning: use of deprecated function `base64::decode`: Use Engine::decode
+   --> packages/relayer/src/modules/web_server/rest_api.rs:198:21
+    |
+198 |             base64::decode(nft_uri.split(",").nth(1).expect("Invalid base64 string"))
+    |                     ^^^^^^
+
+warning: use of deprecated function `base64::decode`: Use Engine::decode
+   --> packages/relayer/src/utils/utils.rs:246:33
+    |
+246 |                         base64::decode(token_uri.split(",").nth(1).expect("Invalid base64 string"))
+    |                                 ^^^^^^
+
+warning: use of deprecated associated function `ic_agent::agent::http_transport::ReqwestTransport::create`: Use AgentBuilder::with_url
+  --> packages/relayer/src/modules/dkim_oracle.rs:54:43
+   |
+54 |         let transport = ReqwestTransport::create(replica_url)?;
+   |                                           ^^^^^^
+
+warning: use of deprecated method `ic_agent::agent::http_transport::reqwest_transport::<impl ic_agent::agent::AgentBuilder>::with_transport`: Use the dedicated methods on AgentBuilder
+  --> packages/relayer/src/modules/dkim_oracle.rs:59:14
+   |
+59 |             .with_transport(transport)
+   |              ^^^^^^^^^^^^^^
+
+warning: `relayer` (lib) generated 111 warnings
+    Finished `release` profile [optimized] target(s) in 48.02s
+warning: the following packages contain code that will be rejected by a future version of Rust: sqlx-core v0.6.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+     Running `/Users/uooooo/Documents/zk-email-pay/email-wallet/target/release/relayer`
+
+thread 'tokio-runtime-worker' panicked at /Users/uooooo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hyper-0.14.32/src/server/server.rs:81:13:
+error binding to 0.0.0.0:4501: error creating server listener: Address already in use (os error 48)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    SMTP DEBUG request to=http://127.0.0.1:3000/api/sendEmail to=zkemailpay@gmail.com subject=Re: Re: Re: Email Wallet Account Creation. Code 0ef516d0fd1698ee1eab87af492a63fa6c1d8049a57e205cc004a5f55fe88532
+SMTP DEBUG response status=200 OK body={"message_id":"<b2d5fc02-5e33-4951-a263-73339e37b99f@gmail.com>","status":"success"}
+
+thread 'tokio-runtime-worker' panicked at /Users/uooooo/.cargo/git/checkouts/dkim-98060548ca7daa07/4eb01fe/src/lib.rs:356:10:
+No DKIM-Signature header
+Pending hash: 0x8277d2b69c68887a620b9595f3281a903cdf1ee2a7e10b140b2ee40f606f5e71
+Pending hash: 0xbf3c48f0cbc988a23fb869304a42bdc7a7551ffc3d12a3833db9ed02b89b37b1
+SMTP DEBUG request to=http://127.0.0.1:3000/api/sendEmail to=zkemailpay@gmail.com subject=Your Email Wallet Account is created.
+SMTP DEBUG response status=200 OK body={"message_id":"<e30652e2-b7f1-41f9-b16a-712ca2309fa5@gmail.com>","status":"success"}
+
+thread 'tokio-runtime-worker' panicked at /Users/uooooo/.cargo/git/checkouts/dkim-98060548ca7daa07/4eb01fe/src/lib.rs:356:10:
+No DKIM-Signature header

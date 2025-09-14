@@ -41,8 +41,13 @@ services:
     build:
       context: .
       dockerfile: IMAP.Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
-      - RELAYER_ENDPOINT=http://relayer:4500/api/receiveEmail
+      # If you run relayer outside Docker on your host, override via
+      #   export RELAYER_ENDPOINT=http://host.docker.internal:4500/api/receiveEmail
+      # and then: docker compose up -d imap
+      - RELAYER_ENDPOINT=${RELAYER_ENDPOINT:-http://relayer:4500/api/receiveEmail}
       - IMAP_LOGIN_ID=${IMAP_LOGIN_ID}
       - IMAP_LOGIN_PASSWORD=${IMAP_LOGIN_PASSWORD}
       - IMAP_DOMAIN_NAME=${IMAP_DOMAIN_NAME}

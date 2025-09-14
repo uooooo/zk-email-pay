@@ -178,7 +178,9 @@ SAFE_API_ENDPOINT=https://safe-transaction-base-sepolia.safe.global/api
 Run relayer:
 ```bash
 cd email-wallet/packages/relayer
-cargo run --release   # API at http://127.0.0.1:4500
+# Bind to all interfaces if IMAP (in Docker) must reach it from host
+# e.g. in .env set WEB_SERVER_ADDRESS=0.0.0.0:4500 (or 4501)
+cargo run --release   # API at http://0.0.0.0:4500 (or your chosen port)
 ```
 
 ---
@@ -233,3 +235,8 @@ Check Gmail for `Email Wallet Account Creation. Code <hex>`.
 - Relayer: `email-wallet/packages/relayer/README.md`
 - Flow internals: `docs/engineering/zk-email-pay/Email-Wallet-Create-Account-Flow.md`
 - DKIM fallback behavior: `docs/engineering/zk-email-pay/DKIM/DKIM-Bypass-Create-Account-Flow.md`
+ - IMAP → Relayer when relayer runs outside Docker
+   - Ensure IMAP container posts to your host relayer:
+     - export RELAYER_ENDPOINT=http://host.docker.internal:4500/api/receiveEmail
+     - docker compose up -d imap
+   - If you use a custom port (e.g., 4501), reflect that in both `WEB_SERVER_ADDRESS` and `RELAYER_ENDPOINT`.

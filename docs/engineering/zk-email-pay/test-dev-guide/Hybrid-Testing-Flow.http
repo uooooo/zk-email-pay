@@ -7,7 +7,7 @@
 # - SMTP relayer configured to Gmail, IMAP bridge to Gmail (see Hybrid-Testing-Guide.md)
 # - DKIM Oracle/Registry env set on Relayer: CANISTER_ID, WALLET_CANISTER_ID, IC_REPLICA_URL, PEM_PATH
 
-@relayer = http://127.0.0.1:4500
+@relayer = http://127.0.0.1:4501
 @email = aotohash@gmail.com      
 # Set this to your target user email for E2E
 

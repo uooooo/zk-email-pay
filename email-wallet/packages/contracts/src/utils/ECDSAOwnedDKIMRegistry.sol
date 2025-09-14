@@ -32,16 +32,16 @@ contract ECDSAOwnedDKIMRegistry is IDKIMRegistry {
         bytes32 publicKeyHash,
         bytes memory signature
     ) public {
-        require(bytes(selector).length != 0, "Invalid selector");
         require(bytes(domainName).length != 0, "Invalid domain name");
         require(publicKeyHash != bytes32(0), "Invalid public key hash");
         require(isDKIMPublicKeyHashValid(domainName, publicKeyHash) == false, "publicKeyHash is already set");
         require(dkimRegistry.revokedDKIMPublicKeyHashes(publicKeyHash) == false, "publicKeyHash is revoked");
 
-        string memory signedMsg = computeSignedMsg(SET_PREFIX, selector, domainName, publicKeyHash);
-        bytes32 digest = bytes(signedMsg).toEthSignedMessageHash();
-        address recoveredSigner = digest.recover(signature);
-        require(recoveredSigner == signer, "Invalid signature");
+        // Accept both legacy (with selector) and oracle (without selector) formats
+        require(
+            _verifySig(SET_PREFIX, selector, domainName, publicKeyHash, signature),
+            "Invalid signature"
+        );
 
         dkimRegistry.setDKIMPublicKeyHash(domainName, publicKeyHash);
     }
@@ -52,16 +52,16 @@ contract ECDSAOwnedDKIMRegistry is IDKIMRegistry {
         bytes32 publicKeyHash,
         bytes memory signature
     ) public {
-        require(bytes(selector).length != 0, "Invalid selector");
         require(bytes(domainName).length != 0, "Invalid domain name");
         require(publicKeyHash != bytes32(0), "Invalid public key hash");
         require(isDKIMPublicKeyHashValid(domainName, publicKeyHash) == true, "publicKeyHash is not set");
         require(dkimRegistry.revokedDKIMPublicKeyHashes(publicKeyHash) == false, "publicKeyHash is already revoked");
 
-        string memory signedMsg = computeSignedMsg(REVOKE_PREFIX, selector, domainName, publicKeyHash);
-        bytes32 digest = bytes(signedMsg).toEthSignedMessageHash();
-        address recoveredSigner = digest.recover(signature);
-        require(recoveredSigner == signer, "Invalid signature");
+        // Accept both legacy (with selector) and oracle (without selector) formats
+        require(
+            _verifySig(REVOKE_PREFIX, selector, domainName, publicKeyHash, signature),
+            "Invalid signature"
+        );
 
         dkimRegistry.revokeDKIMPublicKeyHash(publicKeyHash);
     }
@@ -83,5 +83,41 @@ contract ECDSAOwnedDKIMRegistry is IDKIMRegistry {
                 uint256(publicKeyHash).toHexString(),
                 ";"
             );
+    }
+
+    /// @dev Oracle-format message (without selector)
+    function computeSignedMsgV2(
+        string memory prefix,
+        string memory domainName,
+        bytes32 publicKeyHash
+    ) public pure returns (string memory) {
+        return string.concat(
+            prefix,
+            "domain=",
+            domainName,
+            ";public_key_hash=",
+            uint256(publicKeyHash).toHexString(),
+            ";"
+        );
+    }
+
+    function _verifySig(
+        string memory prefix,
+        string memory selector,
+        string memory domainName,
+        bytes32 publicKeyHash,
+        bytes memory signature
+    ) internal view returns (bool) {
+        // Legacy format (with selector)
+        string memory msg1 = computeSignedMsg(prefix, selector, domainName, publicKeyHash);
+        bytes32 digest1 = bytes(msg1).toEthSignedMessageHash();
+        address rec1 = digest1.recover(signature);
+        if (rec1 == signer) return true;
+
+        // Oracle format (without selector)
+        string memory msg2 = computeSignedMsgV2(prefix, domainName, publicKeyHash);
+        bytes32 digest2 = bytes(msg2).toEthSignedMessageHash();
+        address rec2 = digest2.recover(signature);
+        return rec2 == signer;
     }
 }
