@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getWalletAddress } from "@/lib/relayer";
 import { ethers } from "ethers";
 import Link from "next/link";
@@ -22,14 +22,14 @@ interface TokenBalance {
   address: string;
 }
 
-export default function BalancePage() {
+function BalanceContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   // Base Sepoliaで確認するトークン一覧
   const tokenAddresses = [
@@ -37,16 +37,8 @@ export default function BalancePage() {
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
   ];
 
-  // クライアントサイドでのみsearchParamsを使用
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // URLパラメータから email と accountCode を取得してウォレット確認を自動実行
   useEffect(() => {
-    if (!mounted) return;
-
-    const searchParams = new URLSearchParams(window.location.search);
     const emailParam = searchParams.get('email');
     const accountCodeParam = searchParams.get('accountCode');
     
@@ -67,7 +59,7 @@ export default function BalancePage() {
       // パラメータがない場合はメール送信ページにリダイレクト
       router.push('/balance/get');
     }
-  }, [mounted, router]);
+  }, [searchParams, router]);
 
   // URLパラメータからの自動実行用関数
   const handleGetWalletAddressAuto = useCallback(async (emailParam: string, accountCodeParam: string) => {
@@ -321,5 +313,42 @@ export default function BalancePage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function BalancePage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen" style={{ background: 'var(--background)' }}>
+        <section className="text-white" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
+          <div className="container-narrow px-4 py-8 sm:py-12">
+            <div className="flex items-center gap-8 mb-4">
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 ウォレット残高</h1>
+            </div>
+            <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
+              読み込み中...
+            </p>
+          </div>
+        </section>
+        <section className="container-narrow px-4 -mt-6 relative z-10">
+          <div className="card shadow-xl">
+            <div className="card-section">
+              <div className="flex items-center justify-center py-12">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
+                    style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}>
+                  </div>
+                  <p style={{ color: 'var(--foreground)' }}>
+                    ページを読み込んでいます...
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    }>
+      <BalanceContent />
+    </Suspense>
   );
 }
