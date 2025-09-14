@@ -14,9 +14,9 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Home", icon: "🏠" },
   { href: "/send", label: "Send", icon: "💸" },
-  { href: "/faucet", label: "USDC Faucet", icon: "💰" },
   { href: "/balance/get", label: "Balance Email", icon: "📧" },
   { href: "/balance", label: "Balance View", icon: "💼" },
+  { href: "/faucet", label: "USDC Faucet", icon: "💰" },
 ];
 
 const NAV_DAPPS: NavItem[] = [
@@ -161,7 +161,7 @@ Dapps (Wallet Connected)
               </h2>
               <div
                 className="w-16 h-1 mx-auto rounded-full mb-4"
-                style={{ background: "var(--primary)" }}
+                style={{ background: "#4f46e5" }}
               ></div>
 
               <ul className="space-y-2">
@@ -177,7 +177,8 @@ Dapps (Wallet Connected)
                           active ? "pill-active" : "pill"
                         }`}
                         style={
-                          active ? {} : { borderColor: "var(--border-soft)" }
+                          active ? {} : { borderColor: "#4f46e5" }
+                          // #4f46e5この色にしたい
                         }
                       >
                         <span className="text-2xl w-8 text-center" aria-hidden>
