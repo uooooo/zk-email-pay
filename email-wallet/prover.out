@@ -1,0 +1,4 @@
+entered zk email path: /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/prover
+NODE_OPTIONS='--max-old-space-size=644000' snarkjs wc /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/prover/params/account_creation.wasm /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/prover/build/input_account_creation_2828513448703000477.json /Users/uooooo/Documents/zk-email-pay/email-wallet/packages/prover/build/witness_account_creation_2828513448703000477.wtns
+✓ Finished witness generation with js! 0
+✓ Finished slow proofgen! Status: 0

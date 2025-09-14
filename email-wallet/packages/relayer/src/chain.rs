@@ -370,13 +370,10 @@ impl ChainClient {
         // Mutex is used to prevent nonce conflicts.
         let mut mutex = SHARED_MUTEX.lock().await;
         *mutex += 1;
-
-        let call = self.ecdsa_owned_dkim_registry.set_dkim_public_key_hash(
-            selector,
-            domain_name,
-            public_key_hash,
-            signature,
-        );
+        // Always resolve the current default registry from AccountHandler in case it was updated
+        let current_registry_addr = self.account_handler.default_dkim_registry().call().await?;
+        let registry = ECDSAOwnedDKIMRegistry::new(current_registry_addr, self.client.clone());
+        let call = registry.set_dkim_public_key_hash(selector, domain_name, public_key_hash, signature);
         let tx = call.send().await?;
         let receipt = tx
             .log()

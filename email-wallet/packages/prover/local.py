@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 from flask import Flask, request, jsonify
+import os
 import random
 import sys
 from core import (
@@ -80,4 +81,8 @@ def prove_email_sender():
 if __name__ == "__main__":
     from waitress import serve
 
-    serve(app, host="0.0.0.0", port=8080)
+    # Allow overriding the listen port via env to avoid conflicts
+    # Prefer PROVER_PORT, then PORT, else default to 8080
+    port = int(os.environ.get("PROVER_PORT") or os.environ.get("PORT") or 8080)
+    host = os.environ.get("PROVER_HOST", "0.0.0.0")
+    serve(app, host=host, port=port)
