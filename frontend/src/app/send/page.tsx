@@ -18,7 +18,7 @@ export default function SendPage() {
   const [recipient, setRecipient] = useState("");
   const [isRecipientEmail, setIsRecipientEmail] = useState(true);
   const [status, setStatus] = useState<string>("");
-  const [checking, setChecking] = useState(false);
+  const [, setChecking] = useState(false);
   const [created, setCreated] = useState<undefined | boolean>(undefined);
   // Relayerメールへの明示誘導は廃止（メールアプリボタン非表示）
 

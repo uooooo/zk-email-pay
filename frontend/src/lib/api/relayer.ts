@@ -40,6 +40,7 @@ export async function createAccountRequest(email_addr: string): Promise<{
   const accountCode = await http<string>("createAccount", { method: "POST", body });
   return { 
     accountCode, 
+    
     message: "確認メールを送信しました。メールに返信してアカウントを作成してください。",
     requiresEmailReply: true 
   };
