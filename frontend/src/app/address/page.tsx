@@ -17,7 +17,7 @@ const ERC20_ABI = [
 
 export default function AddressWalletPage() {
   const router = useRouter();
-  const [recipientEmail, setRecipientEmail] = useState("naitoukouta0219@gmail.com");
+  const [recipientEmail, setRecipientEmail] = useState("");
   const [amount, setAmount] = useState("10");
   const tokenOptions = useMemo(() => [
     { symbol: "ETH", address: "native", name: "Ethereum", decimals: 18 },

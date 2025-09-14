@@ -9,7 +9,7 @@ const ERC20_ABI = [
   "function allowance(address owner, address spender) view returns (uint256)",
   "function decimals() view returns (uint8)",
   "function symbol() view returns (string)"
-];;
+];
 
 export async function POST(request: NextRequest) {
   console.log('=== RegisterUnclaimedFund API Called ===');
@@ -75,6 +75,8 @@ export async function POST(request: NextRequest) {
     console.log('Starting provider initialization...');
     
     // プロバイダー設定とウォレット作成
+    // WARNING: In production, consider using secure key management (AWS KMS, HashiCorp Vault)
+    // or implementing a separate signing service with rate limiting
     const provider = new ethers.JsonRpcProvider(rpcUrl);
     const wallet = new ethers.Wallet(adminPrivateKey, provider);
 
