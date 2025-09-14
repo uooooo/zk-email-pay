@@ -2,7 +2,7 @@
 
 import { useCallback, useState, useEffect } from "react";
 import { recoverAccountCode } from "@/lib/relayer";
-import { saveEmail, getSavedEmail } from "@/lib/localStorage";
+import { getSavedEmail } from "@/lib/localStorage";
 
 export default function BalanceGetPage() {
   const [email, setEmail] = useState("");

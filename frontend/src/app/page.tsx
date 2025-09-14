@@ -1,12 +1,16 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { createAccount, isAccountCreated } from "@/lib/relayer";
 import { saveEmail, getSavedEmail } from "@/lib/localStorage";
 
-export default function OtherPage() {
+export default function WelcomePage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<string>("");
+  const [checking, setChecking] = useState(false);
+  const [created, setCreated] = useState<undefined | boolean>(undefined);
 
   // Load saved email on component mount
   useEffect(() => {
@@ -16,22 +20,43 @@ export default function OtherPage() {
     }
   }, []);
 
-
-  async function onCheck() {
-    setStatus("Checking...");
-    try {
-      const ok = await isAccountCreated(email);
-      setStatus(ok ? "This email has a wallet already created" : "Not created (can send creation email)");
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e);
-      setStatus(`Check error: ${message}`);
+  // Account creation check (using relayer API) - same logic as send page
+  useEffect(() => {
+    if (!email) {
+      setCreated(undefined);
+      return;
     }
-  }
+    
+    setChecking(true);
+    import('@/lib/relayer').then(({ isAccountCreated }) => {
+      isAccountCreated(email)
+        .then((exists) => {
+          setCreated(exists);
+          setChecking(false);
+          setStatus("");
+        })
+        .catch((error) => {
+          console.warn('Account check failed:', error);
+          // Treat as created in case of error (fallback)
+          setCreated(true);
+          setChecking(false);
+          setStatus("");
+        });
+    });
+  }, [email]);
+
 
   async function onInvite() {
+    if (created === true) {
+      // Account already exists, save email and redirect to send page
+      saveEmail(email);
+      router.push('/send');
+      return;
+    }
+    
+    // Account doesn't exist, create it
     setStatus("Sending creation email...");
     try {
-      // Call actual relayer's createAccount
       const requestId = await createAccount(email);
       setStatus(`✅ Account creation request sent. Invitation email will be sent to ${email}. Request ID: ${requestId}`);
     } catch (e: unknown) {
@@ -46,15 +71,15 @@ export default function OtherPage() {
       <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Other</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Welcome</h1>
           </div>
-          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Account verification & invitation email sending</p>
+          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Enter your email address and we&apos;ll send you an invitation to get started with EmailWallet</p>
         </div>
       </section>
 
       {/* Form card */}
       <section className="container-narrow px-4 -mt-6 relative z-10">
-        <div className="card shadow-xl" role="region" aria-label="other-actions">
+        <div className="card shadow-xl" role="region" aria-label="welcome-form">
           <div className="card-section space-y-3">
             <label className="block">
               <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>Email Address</span>
@@ -67,15 +92,18 @@ export default function OtherPage() {
                 aria-label="Email address"
               />
             </label>
+            {checking && <div className="text-sm flex items-center gap-2" style={{ color: 'var(--primary)' }}>
+              <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}></div>
+              Checking...
+            </div>}
+            {!checking && created === true && <div className="text-sm font-medium" style={{ color: '#059669' }}>✓ Already created</div>}
+            {!checking && created === false && <div className="text-sm font-medium" style={{ color: '#d97706' }}>! Not created (can send creation email)</div>}
           </div>
           <div className="divider"></div>
           <div className="card-section">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button className="btn btn-ghost flex-1" onClick={onCheck}>
-                🔍 Check Account
-              </button>
-              <button className="btn btn-primary flex-1" onClick={onInvite}>
-                🎯 Receive Invitation Email
+            <div className="flex flex-col gap-3">
+              <button className="btn btn-primary w-full py-4 text-base font-semibold" onClick={onInvite}>
+                {created === true ? '🚀 Go to Send Page' : '🎯 Send Me an Invitation'}
               </button>
             </div>
           </div>

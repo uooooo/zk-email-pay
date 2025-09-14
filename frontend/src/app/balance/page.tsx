@@ -41,16 +41,6 @@ function BalanceContent() {
     const newBalances: TokenBalance[] = [];
 
     try {
-      // ETH balance check
-      const ethBalance = await provider.getBalance(address);
-      newBalances.push({
-        symbol: "ETH",
-        name: "Ethereum",
-        balance: ethers.formatEther(ethBalance),
-        decimals: 18,
-        address: "native"
-      });
-
       // ERC20 token balance check
       for (const token of tokenAddresses) {
         try {
@@ -259,18 +249,14 @@ function BalanceContent() {
                 <div key={index} className="flex items-center justify-between p-4 rounded-lg hover:opacity-80 transition-opacity cursor-pointer" 
                   style={{ background: 'var(--accent-light)', border: '1px solid var(--border-soft)' }}
                   onClick={() => {
-                    if (token.address !== 'native') {
-                      window.open(`https://sepolia.basescan.org/token/${token.address}`, '_blank');
-                    } else {
-                      window.open(`https://sepolia.basescan.org/address/${walletAddress}`, '_blank');
-                    }
+                    window.open(`https://sepolia.basescan.org/token/${token.address}`, '_blank');
                   }}
                   title={`View ${token.name} details`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
                       style={{ background: 'var(--primary)', color: '#fff' }}>
-                      {token.symbol === 'ETH' ? '⟠' : token.symbol === 'USDC' ? '💰' : token.symbol === 'JPYC' ? '¥' : '🪙'}
+                      {token.symbol === 'USDC' ? '💰' : token.symbol === 'JPYC' ? '¥' : '🪙'}
                     </div>
                     <div>
                       <div className="font-semibold text-base">{token.symbol}</div>

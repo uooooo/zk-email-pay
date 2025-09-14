@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useEffect } from "react";
-import { saveEmail, getSavedEmail } from "@/lib/localStorage";
+import { getSavedEmail } from "@/lib/localStorage";
 
 export default function FaucetPage() {
   const [email, setEmail] = useState("");
@@ -206,7 +206,7 @@ export default function FaucetPage() {
             </h3>
             <div className="space-y-2 text-sm" style={{ color: 'var(--foreground)', opacity: 0.8 }}>
               <div>1. Enter your email address above</div>
-              <div>2. Click the "Claim USDC" button</div>
+              <div>2. Click the &quot;Claim USDC&quot; button</div>
               <div>3. A claim notification will be sent via email</div>
               <div>4. Reply to the email to claim your USDC</div>
             </div>

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
-import { saveEmail, getSavedEmail, saveWalletAddress, getSavedWalletAddress } from "@/lib/localStorage";
+import { getSavedEmail, saveWalletAddress } from "@/lib/localStorage";
 
 // ERC20 ABI (minimal)
 const ERC20_ABI = [
@@ -18,11 +18,10 @@ export default function AddressWalletPage() {
   const [recipientEmail, setRecipientEmail] = useState("");
   const [amount, setAmount] = useState("10");
   const tokenOptions = useMemo(() => [
-    { symbol: "ETH", address: "native", name: "Ethereum", decimals: 18 },
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USDC", decimals: 6 },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC", decimals: 18 },
   ] as const, []);
-  const [token, setToken] = useState<"ETH" | "USDC" | "JPYC">("USDC");
+  const [token, setToken] = useState<"USDC" | "JPYC">("USDC");
   const [status, setStatus] = useState<string>("");
   
   // Wallet related state
@@ -149,15 +148,9 @@ export default function AddressWalletPage() {
 
     try {
       const provider = new ethers.BrowserProvider(window.ethereum!);
-      
-      if (selectedToken.symbol === 'ETH') {
-        const balance = await provider.getBalance(walletAddress);
-        setBalance(ethers.formatEther(balance));
-      } else {
-        const contract = new ethers.Contract(selectedToken.address, ERC20_ABI, provider);
-        const balance = await contract.balanceOf(walletAddress);
-        setBalance(ethers.formatUnits(balance, selectedToken.decimals));
-      }
+      const contract = new ethers.Contract(selectedToken.address, ERC20_ABI, provider);
+      const balance = await contract.balanceOf(walletAddress);
+      setBalance(ethers.formatUnits(balance, selectedToken.decimals));
     } catch (error) {
       console.error('Balance fetch error:', error);
       setBalance('0');
@@ -186,7 +179,7 @@ export default function AddressWalletPage() {
         body: JSON.stringify({
           senderAddress: walletAddress,
           amount: parseFloat(amount),
-          tokenAddress: selectedToken.symbol === 'ETH' ? 'native' : selectedToken.address,
+          tokenAddress: selectedToken.address,
           recipientEmail: recipientEmail,
           expiryTime: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30 days later
         }),
@@ -351,7 +344,7 @@ export default function AddressWalletPage() {
                 </div>
                 
                 {/* Token Address Display */}
-                {token !== "ETH" && (
+                {selectedToken && (
                   <div className="mt-4 p-3 rounded-lg" style={{ background: 'var(--accent-light)', border: '1px solid var(--border-soft)' }}>
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -451,7 +444,7 @@ export default function AddressWalletPage() {
                 <div>2. Relayer registers as UnclaimedFund</div>
                 <div>3. Send claim notification email to recipient</div>
                 <div>4. Recipient replies to email to claim</div>
-                <div>5. Relayer transfers tokens to recipient's EmailWallet</div>
+                <div>5. Relayer transfers tokens to recipient&apos;s EmailWallet</div>
               </div>
             </div>
           </div>
