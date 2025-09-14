@@ -1,8 +1,14 @@
 "use client";
 import React from "react";
-import { parseAmount } from "@/lib/validators";
 
 export function AmountField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  const parseAmount = (input: string): number | null => {
+    const v = input.trim();
+    if (!/^\d+(?:\.\d+)?$/.test(v)) return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+  
   const ok = value === "" || parseAmount(value) !== null;
   return (
     <div className="space-y-1">

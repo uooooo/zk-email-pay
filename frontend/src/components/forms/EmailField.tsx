@@ -1,44 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
-import { useEmail } from "@/lib/contexts/EmailContext";
+import React from "react";
 
 interface EmailFieldProps {
   label?: string;
   placeholder?: string;
   required?: boolean;
   className?: string;
+  value: string;
+  onChange: (value: string) => void;
 }
 
 export function EmailField({ 
   label = "あなたのメール", 
   placeholder = "you@example.com",
   required = false,
-  className = "input"
+  className = "input",
+  value,
+  onChange
 }: EmailFieldProps) {
-  const [localEmail, setLocalEmail] = useState("");
-  const { email: savedEmail, setEmail: setSavedEmail, isLoading: emailLoading, error } = useEmail();
-  
-  // 保存されたメールアドレスがある場合は初期化
-  React.useEffect(() => {
-    if (savedEmail && !localEmail) {
-      setLocalEmail(savedEmail);
-    }
-  }, [savedEmail, localEmail]);
-
-  // 現在入力されているメールアドレス（保存済みまたはローカル入力）
-  const currentEmail = localEmail || savedEmail || "";
-
-  // フィールドからフォーカスが離れたときに保存
-  const handleBlur = async () => {
-    if (localEmail && localEmail !== savedEmail) {
-      try {
-        await setSavedEmail(localEmail);
-      } catch (err) {
-        console.error('Failed to save email:', err);
-      }
-    }
-  };
+  const isValid = value === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
   return (
     <div className="space-y-1">
@@ -48,40 +29,16 @@ export function EmailField({
       </label>
       <input 
         className={className}
-        value={currentEmail} 
-        onChange={(e) => setLocalEmail(e.target.value)} 
-        onBlur={handleBlur}
+        value={value} 
+        onChange={(e) => onChange(e.target.value)} 
         placeholder={placeholder}
-        disabled={emailLoading}
         required={required}
         type="email"
+        style={!isValid ? { borderColor: '#f87171' } : {}}
       />
-      {savedEmail && savedEmail !== localEmail && (
-        <p className="text-xs" style={{ color: 'var(--foreground)', opacity: 0.6 }}>保存済み: {savedEmail}</p>
-      )}
-      {error && (
-        <p className="text-xs" style={{ color: '#dc2626' }}>エラー: {error}</p>
+      {!isValid && (
+        <p className="text-xs" style={{ color: '#dc2626' }}>有効なメールアドレスを入力してください</p>
       )}
     </div>
   );
-}
-
-// メールアドレスの値を取得するためのフック
-export function useCurrentEmail() {
-  const { email: savedEmail } = useEmail();
-  const [localEmail, setLocalEmail] = useState("");
-  
-  React.useEffect(() => {
-    if (savedEmail && !localEmail) {
-      setLocalEmail(savedEmail);
-    }
-  }, [savedEmail, localEmail]);
-
-  const currentEmail = localEmail || savedEmail || "";
-  
-  return {
-    email: currentEmail,
-    setEmail: setLocalEmail,
-    hasEmail: !!currentEmail
-  };
 }
