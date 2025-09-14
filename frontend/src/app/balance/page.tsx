@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect, Suspense } from "react";
+import { useCallback, useState, useEffect, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getWalletAddress } from "@/lib/relayer";
 import { ethers } from "ethers";
@@ -31,45 +31,12 @@ function BalanceContent() {
   const [error, setError] = useState("");
 
   // Base Sepoliaで確認するトークン一覧
-  const tokenAddresses = [
+  const tokenAddresses = useMemo(() => [
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USD Coin" },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
-  ];
+  ], []);
 
-  // URLパラメータから email と accountCode を取得してウォレット確認を自動実行
-  useEffect(() => {
-    const emailParam = searchParams.get('email');
-    const accountCodeParam = searchParams.get('accountCode');
-
-    // 両方のパラメータが設定されている場合は自動で残高確認を実行
-    if (emailParam && accountCodeParam) {
-      handleGetWalletAddress(emailParam, accountCodeParam);
-    } else {
-      // パラメータがない場合はメール送信ページにリダイレクト
-      router.push('/balance/get');
-    }
-  }, [searchParams, router]);
-
-  // ウォレットアドレス取得と残高確認
-  const handleGetWalletAddress = useCallback(async (emailParam: string, accountCodeParam: string) => {
-    setLoading(true);
-    setError("");
-
-    try {
-      const address = await getWalletAddress(emailParam, accountCodeParam);
-      setWalletAddress(address);
-      
-      // 資産チェック開始
-      await checkBalances(address);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      setError(`ウォレット情報の取得に失敗しました: ${message}`);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const checkBalances = async (address: string) => {
+  const checkBalances = useCallback(async (address: string) => {
     const provider = new ethers.JsonRpcProvider("https://sepolia.base.org");
     const newBalances: TokenBalance[] = [];
 
@@ -119,7 +86,40 @@ function BalanceContent() {
       console.error("Balance check failed:", error);
       setError("残高の取得に失敗しました");
     }
-  };
+  }, [tokenAddresses]);
+
+  // ウォレットアドレス取得と残高確認
+  const handleGetWalletAddress = useCallback(async (emailParam: string, accountCodeParam: string) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const address = await getWalletAddress(emailParam, accountCodeParam);
+      setWalletAddress(address);
+      
+      // 資産チェック開始
+      await checkBalances(address);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setError(`ウォレット情報の取得に失敗しました: ${message}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [checkBalances]);
+
+  // URLパラメータから email と accountCode を取得してウォレット確認を自動実行
+  useEffect(() => {
+    const emailParam = searchParams.get('email');
+    const accountCodeParam = searchParams.get('accountCode');
+
+    // 両方のパラメータが設定されている場合は自動で残高確認を実行
+    if (emailParam && accountCodeParam) {
+      handleGetWalletAddress(emailParam, accountCodeParam);
+    } else {
+      // パラメータがない場合はメール送信ページにリダイレクト
+      router.push('/balance/get');
+    }
+  }, [searchParams, router, handleGetWalletAddress]);
 
   if (loading) {
     return (
