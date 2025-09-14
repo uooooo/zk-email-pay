@@ -21,7 +21,7 @@ export default function Home() {
 
       {/* Services */}
       <section className="container-narrow px-4 -mt-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Faucet Card */}
           <Link 
             href="/faucet"
@@ -52,6 +52,23 @@ export default function Home() {
               </h3>
               <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
                 メールアドレスで暗号通貨を送金
+              </p>
+            </div>
+          </Link>
+
+          {/* Wallet Check Card */}
+          <Link 
+            href="/wallet"
+            className="card hover:scale-105 transition-all duration-200 block"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            <div className="card-section text-center">
+              <div className="text-4xl mb-4">💼</div>
+              <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
+                資産確認
+              </h3>
+              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+                EmailWalletの残高を確認
               </p>
             </div>
           </Link>

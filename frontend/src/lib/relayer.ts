@@ -67,6 +67,21 @@ export async function getRelayerEmailAddr(): Promise<string> {
   }
 }
 
+// ウォレットアドレス取得
+export async function getWalletAddress(email: string, accountCode: string): Promise<string> {
+  return postJson<string>("/api/getWalletAddress", {
+    email_addr: email,
+    account_code: accountCode
+  });
+}
+
+// アカウントコード復旧メール送信
+export async function recoverAccountCode(email: string): Promise<string> {
+  return postJson<string>("/api/recoverAccountCode", {
+    email_addr: email
+  });
+}
+
 // mailto URLビルダー
 export function buildMailto(to: string, subject: string): string {
   const params = new URLSearchParams({ subject });
