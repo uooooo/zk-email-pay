@@ -246,33 +246,53 @@ function BalanceContent() {
             </h3>
             <div className="space-y-3">
               {balances.map((token, index) => (
-                <div key={index} className="flex items-center justify-between p-4 rounded-lg hover:opacity-80 transition-opacity cursor-pointer" 
-                  style={{ background: 'var(--accent-light)', border: '1px solid var(--border-soft)' }}
-                  onClick={() => {
-                    window.open(`https://sepolia.basescan.org/token/${token.address}`, '_blank');
-                  }}
-                  title={`View ${token.name} details`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
-                      style={{ background: 'var(--primary)', color: '#fff' }}>
-                      {token.symbol === 'USDC' ? '💰' : token.symbol === 'JPYC' ? '¥' : '🪙'}
+                <div key={index} className="flex items-stretch gap-3">
+                  {/* Token row card */}
+                  <div
+                    className="flex-1 flex items-center justify-between p-4 rounded-lg hover:opacity-80 transition-opacity cursor-pointer"
+                    style={{ background: 'var(--accent-light)', border: '1px solid var(--border-soft)' }}
+                    onClick={() => {
+                      window.open(`https://sepolia.basescan.org/token/${token.address}`, '_blank');
+                    }}
+                    title={`View ${token.name} details`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl" style={{ background: 'var(--primary)', color: '#fff' }}>
+                        {token.symbol === 'USDC' ? '💰' : token.symbol === 'JPYC' ? '¥' : '🪙'}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-base">{token.symbol}</div>
+                        <div className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.6 }}>
+                          {token.name}
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-semibold text-base">{token.symbol}</div>
+                    <div className="text-right">
+                      <div className="font-semibold text-lg">
+                        {parseFloat(token.balance) > 0 ? parseFloat(token.balance).toFixed(6) : '0.000000'}
+                      </div>
                       <div className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.6 }}>
-                        {token.name}
+                        {token.symbol}
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-semibold text-lg">
-                      {parseFloat(token.balance) > 0 ? parseFloat(token.balance).toFixed(6) : '0.000000'}
-                    </div>
-                    <div className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.6 }}>
-                      {token.symbol}
-                    </div>
-                  </div>
+
+                  {/* Side send button (only for non-zero) */}
+                  {parseFloat(token.balance) > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => router.push(`/send?token=${encodeURIComponent(token.symbol)}`)}
+                      aria-label={`Send ${token.symbol}`}
+                      className="px-6 inline-flex items-center justify-center rounded-lg border transition-opacity hover:opacity-80"
+                      style={{ background: 'var(--accent-light)', color: 'var(--foreground)', borderColor: 'var(--border-soft)' }}
+                      title={`Send ${token.symbol}`}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M22 2L11 13" />
+                        <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

@@ -1,17 +1,29 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createAccount, send } from "@/lib/relayer";
 import { saveEmail, getSavedEmail } from "@/lib/localStorage";
 
 export default function SendPage() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [amount, setAmount] = useState("10");
   const tokenOptions = [
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USD Coin" },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
   ] as const;
-  const [token, setToken] = useState<(typeof tokenOptions)[number]["symbol"]>("USDC");
+  
+  // Get token from query params, fallback to USDC
+  const getInitialToken = () => {
+    const tokenParam = searchParams.get("token");
+    if (tokenParam && tokenOptions.some(option => option.symbol === tokenParam)) {
+      return tokenParam as (typeof tokenOptions)[number]["symbol"];
+    }
+    return "USDC";
+  };
+  
+  const [token, setToken] = useState<(typeof tokenOptions)[number]["symbol"]>(getInitialToken());
   const [recipient, setRecipient] = useState("");
   const [isRecipientEmail, setIsRecipientEmail] = useState(true);
   const [status, setStatus] = useState<string>("");
