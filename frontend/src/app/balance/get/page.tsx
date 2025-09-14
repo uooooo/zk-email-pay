@@ -20,19 +20,19 @@ export default function BalanceGetPage() {
 
   const handleSendBalanceCheckEmail = useCallback(async () => {
     if (!email) {
-      setStatus("メールアドレスを入力してください");
+      setStatus("Please enter an email address");
       return;
     }
 
     setLoading(true);
-    setStatus("残高確認メール送信中...");
+    setStatus("Sending balance check email...");
 
     try {
       await recoverAccountCode(email);
-      setStatus(`✅ ${email} に残高確認メールを送信しました。メールのリンクから残高を確認できます。`);
+      setStatus(`✅ Balance check email sent to ${email}. You can check your balance from the link in the email.`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      setStatus(`❌ エラー: ${message}`);
+      setStatus(`❌ Error: ${message}`);
     } finally {
       setLoading(false);
     }
@@ -44,10 +44,10 @@ export default function BalanceGetPage() {
       <section className="text-white" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">📧 残高確認メール送信</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">📧 Send Balance Check Email</h1>
           </div>
           <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-            EmailWalletの残高確認メールを送信します。メール内のリンクから資産状況を確認できます。
+            Send a balance check email for EmailWallet. You can check your asset status from the link in the email.
           </p>
         </div>
       </section>
@@ -59,7 +59,7 @@ export default function BalanceGetPage() {
           <div className="card-section space-y-4">
             <div>
               <label className="block">
-                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>メールアドレス</span>
+                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>Email Address</span>
                 <input
                   className="input"
                   type="email"
@@ -86,14 +86,14 @@ export default function BalanceGetPage() {
                   <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin mr-2"
                     style={{ borderColor: '#fff', borderTopColor: 'transparent' }}>
                   </div>
-                  処理中...
+                  Processing...
                 </>
               ) : (
-                "📧 残高確認メールを送る"
+"📧 Send Balance Check Email"
               )}
             </button>
             <div className="text-xs mt-2 text-center" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-              メールに記載されたリンクから資産状況を確認できます
+              You can check your asset status from the link in the email
             </div>
           </div>
 

@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
+    <html lang="en">
       <body className={`antialiased`}>
         <main className="mx-auto max-w-3xl relative">
           <Navbar />

@@ -12,16 +12,16 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "ホーム", icon: "🏠" },
-  { href: "/send", label: "送金", icon: "💸" },
+  { href: "/", label: "Home", icon: "🏠" },
+  { href: "/send", label: "Send", icon: "💸" },
   { href: "/faucet", label: "USDC Faucet", icon: "💰" },
-  { href: "/balance/get", label: "残高メール", icon: "📧" },
-  { href: "/balance", label: "残高ビュー", icon: "💼" },
-  { href: "/other", label: "その他", icon: "🧰" },
+  { href: "/balance/get", label: "Balance Email", icon: "📧" },
+  { href: "/balance", label: "Balance View", icon: "💼" },
+  { href: "/other", label: "Other", icon: "🧰" },
 ];
 
 const NAV_DAPPS: NavItem[] = [
-  { href: "/address", label: "アドレス送金", icon: "🏦" },
+  { href: "/address", label: "Address Send", icon: "🏦" },
 ];
 
 export default function Navbar() {
@@ -63,12 +63,12 @@ export default function Navbar() {
         <div className="p-4">
           <button
             onClick={() => setOpen((v) => !v)}
-            aria-label="メニュー"
+            aria-label="Menu"
             aria-controls="global-drawer"
             aria-expanded={open}
             className="btn btn-ghost px-3 py-2 relative z-50"
           >
-            <span className="sr-only">メニュー</span>
+            <span className="sr-only">Menu</span>
             <svg
               width="24"
               height="24"
@@ -120,7 +120,7 @@ export default function Navbar() {
               ></div>
               <ul className="space-y-2">
                 {NAV_ITEMS.filter((item) => {
-                  // 残高メールと残高ビューの表示を条件分岐
+                  // Conditional display for balance email and balance view
                   if (item.href === "/balance/get" && savedWalletAddress)
                     return false;
                   if (item.href === "/balance" && !savedWalletAddress)
@@ -158,7 +158,7 @@ export default function Navbar() {
                 className="text-2xl font-bold mb-2"
                 style={{ color: "var(--foreground)" }}
               >
-                Dapps(wallet接続)
+Dapps (Wallet Connected)
               </h2>
               <div
                 className="w-16 h-1 mx-auto rounded-full mb-4"
@@ -213,7 +213,7 @@ export default function Navbar() {
                   >
                     <div className="font-medium">{savedEmail}</div>
                     <div className="text-xs opacity-60 mt-1">
-                      Base Sepoliaで確認
+                      View on Base Sepolia
                     </div>
                   </a>
                 ) : (
@@ -229,7 +229,7 @@ export default function Navbar() {
                 <button className="btn"
                 onClick={() => {
                   clearSavedData();
-                }}>接続削除</button>
+                }}>Clear Connection</button>
               </div>
             )}
             <div

@@ -18,7 +18,7 @@ export default function SendPage() {
   const [status, setStatus] = useState<string>("");
   const [checking, setChecking] = useState(false);
   const [created, setCreated] = useState<undefined | boolean>(undefined);
-  // Relayerメールへの明示誘導は廃止（メールアプリボタン非表示）
+  // Removed explicit guidance to relayer email (email app button hidden)
 
   // Load saved email on component mount
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function SendPage() {
     return Number.isFinite(n) && n > 0;
   }, [email, amount, recipient]);
 
-  // アカウント作成確認（リレイヤーAPIを使用）
+  // Account creation check (using relayer API)
   useEffect(() => {
     if (!email) {
       setCreated(undefined);
@@ -52,7 +52,7 @@ export default function SendPage() {
         })
         .catch((error) => {
           console.warn('Account check failed:', error);
-          // エラーの場合は作成済みとして扱う（フォールバック）
+          // Treat as created in case of error (fallback)
           setCreated(true);
           setChecking(false);
           setStatus("");
@@ -61,34 +61,34 @@ export default function SendPage() {
   }, [email]);
 
   const onCreate = useCallback(async () => {
-    setStatus("作成メール送信中...");
+    setStatus("Sending creation email...");
     try {
       await createAccount(email);
-      setStatus("招待メールが送信されました。そのまま返信してください。");
+      setStatus("Invitation email sent. Please reply to continue.");
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
-      setStatus(`作成エラー: ${message}`);
+      setStatus(`Creation error: ${message}`);
     }
   }, [email]);
 
   const onSend = useCallback(async () => {
-    setStatus("確認メール送信中...");
+    setStatus("Sending confirmation email...");
     try {
       const requestId = await send({ email, amount, token, recipient, isRecipientEmail });
-      // Send成功時にメールアドレスを保存
+      // Save email address on successful send
       saveEmail(email);
-      const recipientType = isRecipientEmail ? 'メールアドレス' : 'ウォレットアドレス';
-      setStatus(`✅ 確認メールを ${email} に送信しました。\n送金先: ${recipient} (${recipientType})\n金額: ${amount} ${token}\nリクエストID: ${requestId}\n\nメールに返信することでトランザクションを確定できます。`);
+      const recipientType = isRecipientEmail ? 'email address' : 'wallet address';
+      setStatus(`✅ Confirmation email sent to ${email}.\nRecipient: ${recipient} (${recipientType})\nAmount: ${amount} ${token}\nRequest ID: ${requestId}\n\nReply to the email to confirm the transaction.`);
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
-      setStatus(`❌ 送金エラー: ${message}`);
+      setStatus(`❌ Send error: ${message}`);
       console.error('Send error:', e);
     }
   }, [email, amount, token, recipient, isRecipientEmail]);
 
-  // メールアプリ誘導は不要にしたため削除
+  // Email app guidance removed as unnecessary
 
-  // 送付先がメールかEOAかを簡易自動判定
+  // Simple auto-detection of whether recipient is email or EOA
   useEffect(() => {
     if (!recipient) return;
     if (recipient.includes("@")) setIsRecipientEmail(true);
@@ -101,9 +101,9 @@ export default function SendPage() {
       <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">送金</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Send</h1>
           </div>
-          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>メールで送金。返信で確定。シンプル&スマート。</p>
+          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Send via email. Confirm by reply. Simple & smart.</p>
         </div>
       </section>
 
@@ -113,22 +113,22 @@ export default function SendPage() {
           {/* Email row */}
           <div className="card-section space-y-3">
             <label className="block">
-              <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>あなたのメール</span>
+              <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>Your Email</span>
               <input
                 className="input"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                aria-label="あなたのメールアドレス"
+                aria-label="Your email address"
               />
             </label>
             {checking && <div className="text-sm flex items-center gap-2" style={{ color: 'var(--primary)' }}>
               <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}></div>
-              確認中...
+              Checking...
             </div>}
-            {!checking && created === true && <div className="text-sm font-medium" style={{ color: '#059669' }}>✓ 作成済み</div>}
-            {!checking && created === false && <div className="text-sm font-medium" style={{ color: '#d97706' }}>! 未作成（作成メールを送れます）</div>}
+            {!checking && created === true && <div className="text-sm font-medium" style={{ color: '#059669' }}>✓ Already created</div>}
+            {!checking && created === false && <div className="text-sm font-medium" style={{ color: '#d97706' }}>! Not created (can send creation email)</div>}
           </div>
           <div className="divider"></div>
 
@@ -136,19 +136,19 @@ export default function SendPage() {
           <div className="card-section space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
               <label className="flex-1">
-                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>金額</span>
+                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>Amount</span>
                 <input
                   className="input text-2xl sm:text-3xl font-bold tracking-wide"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="10"
                   inputMode="decimal"
-                  aria-label="金額"
+                  aria-label="Amount"
                 />
               </label>
               <div className="sm:ml-4">
-                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>トークン</span>
-                <div className="flex gap-2" aria-label="トークン選択">
+                <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>Token</span>
+                <div className="flex gap-2" aria-label="Token selection">
                   {tokenOptions.map((t) => (
                     <button
                       key={t.symbol}
@@ -192,7 +192,7 @@ export default function SendPage() {
                       border: '1px solid var(--border-soft)',
                       color: 'var(--primary)'
                     }}
-                    title="BaseSepolia Scanで確認"
+                    title="View on BaseSepolia Scan"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
@@ -207,8 +207,8 @@ export default function SendPage() {
           {/* Recipient row */}
           <div className="card-section space-y-4">
             <div>
-              <span className="text-sm font-medium mb-3 block" style={{ color: 'var(--foreground)' }}>送付先</span>
-              <div className="inline-flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--border-soft)', background: 'var(--accent-light)' }} role="tablist" aria-label="送付先の種類">
+              <span className="text-sm font-medium mb-3 block" style={{ color: 'var(--foreground)' }}>Recipient</span>
+              <div className="inline-flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--border-soft)', background: 'var(--accent-light)' }} role="tablist" aria-label="Recipient type">
                 <button
                   type="button"
                   onClick={() => setIsRecipientEmail(true)}
@@ -224,7 +224,7 @@ export default function SendPage() {
                   role="tab"
                   aria-selected={isRecipientEmail}
                 >
-                  📧 メール
+                  📧 Email
                 </button>
                 <button
                   type="button"
@@ -241,7 +241,7 @@ export default function SendPage() {
                   role="tab"
                   aria-selected={!isRecipientEmail}
                 >
-                  🏦 0xアドレス
+                  🏦 0x Address
                 </button>
               </div>
             </div>
@@ -252,7 +252,7 @@ export default function SendPage() {
               value={recipient}
               onChange={(e) => setRecipient(e.target.value)}
               placeholder={isRecipientEmail ? "alice@example.com" : "0x1234...abcd"}
-              aria-label="送付先"
+              aria-label="Recipient"
             />
           </div>
           {status && (
@@ -290,7 +290,7 @@ export default function SendPage() {
                 className="btn btn-primary w-full py-4 text-base font-semibold" 
                 onClick={onCreate}
               >
-                🎯 招待メールを受け取る
+                🎯 Receive Invitation Email
               </button>
             ) : (
               <button 
@@ -298,7 +298,7 @@ export default function SendPage() {
                 onClick={onSend} 
                 disabled={!canSend}
               >
-                {canSend ? '💸 確定' : '入力を完了してください'}
+                {canSend ? '💸 Confirm' : 'Please complete the form'}
               </button>
             )}
           </div>

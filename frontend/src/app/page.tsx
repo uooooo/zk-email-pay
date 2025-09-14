@@ -18,25 +18,25 @@ export default function OtherPage() {
 
 
   async function onCheck() {
-    setStatus("確認中...");
+    setStatus("Checking...");
     try {
       const ok = await isAccountCreated(email);
-      setStatus(ok ? "このメールはウォレット作成済みです" : "未作成です（作成メールを送れます）");
+      setStatus(ok ? "This email has a wallet already created" : "Not created (can send creation email)");
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
-      setStatus(`確認エラー: ${message}`);
+      setStatus(`Check error: ${message}`);
     }
   }
 
   async function onInvite() {
-    setStatus("作成メール送信中...");
+    setStatus("Sending creation email...");
     try {
-      // 実際のリレイヤーのcreateAccountを呼び出し
+      // Call actual relayer's createAccount
       const requestId = await createAccount(email);
-      setStatus(`✅ アカウント作成要求を送信しました。${email} に招待メールが送信されます。リクエストID: ${requestId}`);
+      setStatus(`✅ Account creation request sent. Invitation email will be sent to ${email}. Request ID: ${requestId}`);
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
-      setStatus(`作成エラー: ${message}`);
+      setStatus(`Creation error: ${message}`);
     }
   }
 
@@ -46,9 +46,9 @@ export default function OtherPage() {
       <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">その他</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Other</h1>
           </div>
-          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>アカウント確認・招待メールの送信</p>
+          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Account verification & invitation email sending</p>
         </div>
       </section>
 
@@ -57,14 +57,14 @@ export default function OtherPage() {
         <div className="card shadow-xl" role="region" aria-label="other-actions">
           <div className="card-section space-y-3">
             <label className="block">
-              <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>メールアドレス</span>
+              <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>Email Address</span>
               <input
                 className="input"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                aria-label="メールアドレス"
+                aria-label="Email address"
               />
             </label>
           </div>
@@ -72,10 +72,10 @@ export default function OtherPage() {
           <div className="card-section">
             <div className="flex flex-col sm:flex-row gap-3">
               <button className="btn btn-ghost flex-1" onClick={onCheck}>
-                🔍 アカウント確認
+                🔍 Check Account
               </button>
               <button className="btn btn-primary flex-1" onClick={onInvite}>
-                🎯 招待メールを受け取る
+                🎯 Receive Invitation Email
               </button>
             </div>
           </div>
@@ -84,11 +84,11 @@ export default function OtherPage() {
               <div className="divider"></div>
               <div className="card-section">
                 <div className={`p-4 rounded-lg border text-sm font-medium`}
-                  style={status.includes('エラー') ? {
+                  style={status.includes('error') || status.includes('Error') ? {
                     background: 'rgba(239, 68, 68, 0.1)',
                     borderColor: 'rgba(239, 68, 68, 0.3)',
                     color: '#dc2626'
-                  } : status.includes('送信されました') || status.includes('作成済みです') ? {
+                  } : status.includes('sent') || status.includes('created') ? {
                     background: 'rgba(34, 197, 94, 0.1)',
                     borderColor: 'rgba(34, 197, 94, 0.3)',
                     color: '#059669'
@@ -99,7 +99,7 @@ export default function OtherPage() {
                   }}>
                   <div className="flex items-start gap-2">
                     <span className="text-lg">
-                      {status.includes('エラー') ? '❌' : status.includes('送信されました') || status.includes('作成済みです') ? '✅' : '⏳'}
+                      {status.includes('error') || status.includes('Error') ? '❌' : status.includes('sent') || status.includes('created') ? '✅' : '⏳'}
                     </span>
                     <span>{status}</span>
                   </div>

@@ -6,7 +6,7 @@ import { getWalletAddress } from "@/lib/relayer";
 import { ethers } from "ethers";
 import { saveEmail, saveWalletAddress, getSavedWalletAddress } from "@/lib/localStorage";
 
-// ERC20 ABI (最小限)
+// ERC20 ABI (minimal)
 const ERC20_ABI = [
   "function balanceOf(address owner) view returns (uint256)",
   "function decimals() view returns (uint8)",
@@ -30,7 +30,7 @@ function BalanceContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Base Sepoliaで確認するトークン一覧
+  // List of tokens to check on Base Sepolia
   const tokenAddresses = useMemo(() => [
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USD Coin" },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
@@ -41,7 +41,7 @@ function BalanceContent() {
     const newBalances: TokenBalance[] = [];
 
     try {
-      // ETH残高チェック
+      // ETH balance check
       const ethBalance = await provider.getBalance(address);
       newBalances.push({
         symbol: "ETH",
@@ -51,7 +51,7 @@ function BalanceContent() {
         address: "native"
       });
 
-      // ERC20トークン残高チェック
+      // ERC20 token balance check
       for (const token of tokenAddresses) {
         try {
           const tokenContract = new ethers.Contract(token.address, ERC20_ABI, provider);
@@ -84,11 +84,11 @@ function BalanceContent() {
       setBalances(newBalances);
     } catch (error) {
       console.error("Balance check failed:", error);
-      setError("残高の取得に失敗しました");
+      setError("Failed to get balance");
     }
   }, [tokenAddresses]);
 
-  // ウォレットアドレス取得と残高確認
+  // Get wallet address and check balance
   const handleGetWalletAddress = useCallback(async (emailParam: string, accountCodeParam: string) => {
     setLoading(true);
     setError("");
@@ -97,39 +97,39 @@ function BalanceContent() {
       const address = await getWalletAddress(emailParam, accountCodeParam);
       setWalletAddress(address);
       
-      // 取得成功時にメールアドレスとウォレットアドレスを保存
+      // Save email address and wallet address on successful fetch
       saveEmail(emailParam);
       saveWalletAddress(address);
       
-      // 資産チェック開始
+      // Start asset check
       await checkBalances(address);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      setError(`ウォレット情報の取得に失敗しました: ${message}`);
+      setError(`Failed to get wallet information: ${message}`);
     } finally {
       setLoading(false);
     }
   }, [checkBalances]);
 
-  // URLパラメータから email と accountCode を取得してウォレット確認を自動実行
+  // Get email and accountCode from URL parameters and auto-execute wallet check
   useEffect(() => {
     const emailParam = searchParams.get('email');
     const accountCodeParam = searchParams.get('accountCode');
 
-    // 保存されたウォレットアドレスがある場合は直接残高確認
+    // If there's a saved wallet address, check balance directly
     const savedAddress = getSavedWalletAddress();
     if (savedAddress) {
       setWalletAddress(savedAddress);
-      setLoading(false); // ロード状態を解除
+      setLoading(false); // Release loading state
       checkBalances(savedAddress);
       return;
     }
 
-    // 両方のパラメータが設定されている場合は自動で残高確認を実行
+    // If both parameters are set, automatically execute balance check
     if (emailParam && accountCodeParam) {
       handleGetWalletAddress(emailParam, accountCodeParam);
     } else {
-      // パラメータがない場合はメール送信ページにリダイレクト
+      // Redirect to email sending page if no parameters
       router.push('/balance/get');
     }
   }, [searchParams, router, handleGetWalletAddress, checkBalances]);
@@ -140,7 +140,7 @@ function BalanceContent() {
         <section className="text-white" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
           <div className="container-narrow px-4 py-8 sm:py-12">
             <div className="flex items-center gap-8 mb-4">
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 ウォレット</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 Wallet</h1>
             </div>
           </div>
         </section>
@@ -153,7 +153,7 @@ function BalanceContent() {
                     style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}>
                   </div>
                   <p style={{ color: 'var(--foreground)' }}>
-                    ウォレット情報を読み込んでいます...
+                    Loading wallet information...
                   </p>
                 </div>
               </div>
@@ -170,7 +170,7 @@ function BalanceContent() {
         <section className="text-white" style={{ background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)' }}>
           <div className="container-narrow px-4 py-8 sm:py-12">
             <div className="flex items-center gap-8 mb-4">
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">❌ エラー</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">❌ Error</h1>
             </div>
           </div>
         </section>
@@ -190,7 +190,7 @@ function BalanceContent() {
                   onClick={() => router.push('/balance/get')}
                   className="btn btn-primary"
                 >
-                  残高確認メールを送る
+                  Send Balance Check Email
                 </button>
               </div>
             </div>
@@ -206,7 +206,7 @@ function BalanceContent() {
       <section className="text-white" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 ウォレット</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 Wallet</h1>
           </div>
         </div>
       </section>
@@ -218,7 +218,7 @@ function BalanceContent() {
           <div className="card-section">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>
-                ウォレットアドレス
+                Wallet Address
               </h3>
               <button
                 onClick={() => window.open(`https://sepolia.basescan.org/address/${walletAddress}`, '_blank')}
@@ -228,7 +228,7 @@ function BalanceContent() {
                   color: '#fff',
                   border: 'none'
                 }}
-                title="BaseSepolia Scanで確認"
+                title="View on BaseSepolia Scan"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
@@ -239,7 +239,7 @@ function BalanceContent() {
             <div className="p-3 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
               style={{ background: 'var(--accent-light)', border: '1px solid var(--border-soft)' }}
               onClick={() => navigator.clipboard.writeText(walletAddress)}
-              title="クリックしてコピー"
+              title="Click to copy"
             >
               <code className="text-sm font-mono break-all" style={{ color: 'var(--foreground)' }}>
                 {walletAddress}
@@ -252,7 +252,7 @@ function BalanceContent() {
           {/* Token Balances */}
           <div className="card-section">
             <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
-              トークン残高
+              Token Balance
             </h3>
             <div className="space-y-3">
               {balances.map((token, index) => (
@@ -265,7 +265,7 @@ function BalanceContent() {
                       window.open(`https://sepolia.basescan.org/address/${walletAddress}`, '_blank');
                     }
                   }}
-                  title={`${token.name} の詳細を確認`}
+                  title={`View ${token.name} details`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
@@ -306,10 +306,10 @@ export default function BalancePage() {
         <section className="text-white" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
           <div className="container-narrow px-4 py-8 sm:py-12">
             <div className="flex items-center gap-8 mb-4">
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 ウォレット残高</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 Wallet Balance</h1>
             </div>
             <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-              読み込み中...
+              Loading...
             </p>
           </div>
         </section>
@@ -322,7 +322,7 @@ export default function BalancePage() {
                     style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}>
                   </div>
                   <p style={{ color: 'var(--foreground)' }}>
-                    ページを読み込んでいます...
+                    Loading page...
                   </p>
                 </div>
               </div>

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { saveEmail, getSavedEmail, saveWalletAddress, getSavedWalletAddress } from "@/lib/localStorage";
 
-// ERC20 ABI (最小限)
+// ERC20 ABI (minimal)
 const ERC20_ABI = [
   "function transfer(address to, uint256 amount) returns (bool)",
   "function balanceOf(address owner) view returns (uint256)",
@@ -25,7 +25,7 @@ export default function AddressWalletPage() {
   const [token, setToken] = useState<"ETH" | "USDC" | "JPYC">("USDC");
   const [status, setStatus] = useState<string>("");
   
-  // ウォレット関連状態
+  // Wallet related state
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [isConnected, setIsConnected] = useState(false);
 
@@ -57,7 +57,7 @@ export default function AddressWalletPage() {
     return Number.isFinite(n) && n > 0;
   }, [isConnected, recipientEmail, amount]);
 
-  // Base Sepoliaネットワークに切り替える
+  // Switch to Base Sepolia network
   const switchToBaseSepolia = useCallback(async () => {
     if (typeof window === 'undefined' || !window.ethereum) return;
 
@@ -67,7 +67,7 @@ export default function AddressWalletPage() {
         params: [{ chainId: '0x14a34' }], // 84532 in hex
       });
     } catch (switchError: unknown) {
-      // ネットワークが存在しない場合は追加
+      // Add network if it doesn't exist
       if (switchError && typeof switchError === 'object' && 'code' in switchError && switchError.code === 4902) {
         try {
           await window.ethereum.request({
@@ -96,10 +96,10 @@ export default function AddressWalletPage() {
     }
   }, []);
 
-  // ウォレット接続
+  // Wallet connection
   const connectWallet = useCallback(async () => {
     if (typeof window === 'undefined' || !window.ethereum) {
-      setStatus('❌ MetaMaskがインストールされていません');
+      setStatus('❌ MetaMask is not installed');
       return;
     }
 
@@ -112,38 +112,38 @@ export default function AddressWalletPage() {
         const address = accounts[0];
         setWalletAddress(address);
         setIsConnected(true);
-        // ウォレット接続成功時にアドレスを保存
+        // Save address on successful wallet connection
         saveWalletAddress(address);
         
-        // ネットワークがBase Sepoliaかチェック
+        // Check if network is Base Sepolia
         const network = await provider.getNetwork();
         if (network.chainId !== BigInt(84532)) {
-          setStatus('⚠️ Base Sepoliaに切り替えています...');
+          setStatus('⚠️ Switching to Base Sepolia...');
           await switchToBaseSepolia();
-          setStatus('✅ Base Sepoliaに接続されました');
+          setStatus('✅ Connected to Base Sepolia');
         } else {
-          setStatus('✅ ウォレットが接続されました');
+          setStatus('✅ Wallet connected');
         }
       }
     } catch (error: unknown) {
       console.error('Wallet connection error:', error);
       if (error && typeof error === 'object' && 'code' in error) {
         if (error.code === 4001) {
-          setStatus('❌ ユーザーによってウォレット接続がキャンセルされました');
+          setStatus('❌ Wallet connection cancelled by user');
         } else if (error.code === -32002) {
-          setStatus('❌ MetaMaskですでにリクエストが処理中です');
+          setStatus('❌ Request already being processed in MetaMask');
         } else {
-          setStatus('❌ ウォレット接続エラーが発生しました');
+          setStatus('❌ Wallet connection error occurred');
         }
       } else {
-        setStatus('❌ ウォレット接続エラーが発生しました');
+        setStatus('❌ Wallet connection error occurred');
       }
     } finally {
       setIsLoading(false);
     }
   }, [switchToBaseSepolia]);
 
-  // 残高取得
+  // Get balance
   const fetchBalance = useCallback(async () => {
     if (!isConnected || !walletAddress || !selectedToken) return;
 
@@ -164,20 +164,20 @@ export default function AddressWalletPage() {
     }
   }, [isConnected, walletAddress, selectedToken]);
 
-  // トークン変更時または接続時に残高を取得
+  // Get balance when token changes or when connected
   useEffect(() => {
     fetchBalance();
   }, [fetchBalance]);
 
-  // 送金処理
+  // Send processing
   const onSendToEmail = useCallback(async () => {
     if (!canSend || !selectedToken) return;
 
     setIsLoading(true);
-    setStatus('処理中...');
+    setStatus('Processing...');
 
     try {
-      // リレイヤーAPIに送金依頼
+      // Request transfer to relayer API
       const response = await fetch('/api/registerUnclaimedFund', {
         method: 'POST',
         headers: {
@@ -188,22 +188,22 @@ export default function AddressWalletPage() {
           amount: parseFloat(amount),
           tokenAddress: selectedToken.symbol === 'ETH' ? 'native' : selectedToken.address,
           recipientEmail: recipientEmail,
-          expiryTime: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30日後
+          expiryTime: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30 days later
         }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        setStatus(`✅ ${recipientEmail} に送金要求を送信しました。メールでクレーム通知が送信されます。`);
-        // 残高を再取得
+        setStatus(`✅ Transfer request sent to ${recipientEmail}. Claim notification will be sent via email.`);
+        // Re-fetch balance
         setTimeout(() => fetchBalance(), 2000);
       } else {
-        setStatus(`❌ エラー: ${result.error || '不明なエラーが発生しました'}`);
+        setStatus(`❌ Error: ${result.error || 'An unknown error occurred'}`);
       }
     } catch (error) {
       console.error('Send error:', error);
-      setStatus(`❌ 送金処理中にエラーが発生しました: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setStatus(`❌ Error occurred during transfer processing: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
     }
@@ -215,10 +215,10 @@ export default function AddressWalletPage() {
       <section className="text-white" style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">🏦 AddressWallet送金</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">🏦 AddressWallet Transfer</h1>
           </div>
           <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-            ウォレットを接続してEmailWalletユーザーにERC20トークンを送金
+            Connect your wallet to send ERC20 tokens to EmailWallet users
           </p>
         </div>
       </section>
@@ -231,13 +231,13 @@ export default function AddressWalletPage() {
           <div className="card-section space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
-                ウォレット接続
+                Wallet Connection
               </span>
               {isConnected && (
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <span className="text-xs" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                    接続済み
+                    Connected
                   </span>
                 </div>
               )}
@@ -252,16 +252,16 @@ export default function AddressWalletPage() {
                 {isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin mr-2" style={{ borderColor: '#fff', borderTopColor: 'transparent' }}></div>
-                    接続中...
+                    Connecting...
                   </>
                 ) : (
-                  '🦊 MetaMaskを接続'
+                  '🦊 Connect MetaMask'
                 )}
               </button>
             ) : (
               <div className="p-3 rounded-lg" style={{ background: 'var(--accent-light)', border: '1px solid var(--border-soft)' }}>
                 <div className="text-sm font-medium mb-1" style={{ color: 'var(--foreground)' }}>
-                  接続されたアドレス
+                  Connected Address
                 </div>
                 <code className="text-xs font-mono" style={{ color: 'var(--foreground)' }}>
                   {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
@@ -278,7 +278,7 @@ export default function AddressWalletPage() {
               <div className="card-section space-y-3">
                 <label className="block">
                   <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>
-                    送付先メールアドレス
+                    Recipient Email Address
                   </span>
                   <input
                     className="input"
@@ -286,7 +286,7 @@ export default function AddressWalletPage() {
                     value={recipientEmail}
                     onChange={(e) => setRecipientEmail(e.target.value)}
                     placeholder="recipient@example.com"
-                    aria-label="送付先メールアドレス"
+                    aria-label="Recipient email address"
                   />
                 </label>
               </div>
@@ -295,19 +295,19 @@ export default function AddressWalletPage() {
               <div className="card-section space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-end gap-4">
                   <label className="flex-1">
-                    <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>金額</span>
+                    <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>Amount</span>
                     <input
                       className="input text-2xl sm:text-3xl font-bold tracking-wide"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="10"
                       inputMode="decimal"
-                      aria-label="金額"
+                      aria-label="Amount"
                     />
                   </label>
                   <div className="sm:ml-4">
-                    <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>トークン</span>
-                    <div className="flex gap-2" aria-label="トークン選択">
+                    <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>Token</span>
+                    <div className="flex gap-2" aria-label="Token selection">
                       {tokenOptions.map((t) => (
                         <button
                           key={t.symbol}
@@ -329,7 +329,7 @@ export default function AddressWalletPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-xs font-medium mb-1" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                        {selectedToken?.name} 残高
+                        {selectedToken?.name} Balance
                       </div>
                       <div className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>
                         {parseFloat(balance).toFixed(6)} {selectedToken?.symbol}
@@ -343,7 +343,7 @@ export default function AddressWalletPage() {
                         border: '1px solid var(--border-soft)',
                         color: 'var(--primary)'
                       }}
-                      title="残高を更新"
+                      title="Refresh balance"
                     >
                       🔄
                     </button>
@@ -376,7 +376,7 @@ export default function AddressWalletPage() {
                           border: '1px solid var(--border-soft)',
                           color: 'var(--primary)'
                         }}
-                        title="BaseSepolia Scanで確認"
+                        title="View on BaseSepolia Scan"
                       >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
@@ -393,11 +393,11 @@ export default function AddressWalletPage() {
                   <div className="divider"></div>
                   <div className="card-section">
                     <div className={`p-4 rounded-lg border text-sm font-medium`}
-                      style={status.includes('❌') || status.includes('エラー') ? {
+                      style={status.includes('❌') || status.includes('Error') || status.includes('エラー') ? {
                         background: 'rgba(239, 68, 68, 0.1)',
                         borderColor: 'rgba(239, 68, 68, 0.3)',
                         color: '#dc2626'
-                      } : status.includes('✅') || status.includes('送信') ? {
+                      } : status.includes('✅') || status.includes('sent') || status.includes('送信') ? {
                         background: 'rgba(34, 197, 94, 0.1)',
                         borderColor: 'rgba(34, 197, 94, 0.3)',
                         color: '#059669'
@@ -424,12 +424,12 @@ export default function AddressWalletPage() {
                   {isLoading ? (
                     <>
                       <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin mr-2" style={{ borderColor: '#fff', borderTopColor: 'transparent' }}></div>
-                      送金処理中...
+                      Processing transfer...
                     </>
                   ) : !canSend ? (
-                    '入力を完了してください'
+                    'Please complete the form'
                   ) : (
-                    `💸 ${recipientEmail} に ${amount} ${token} を送金`
+                    `💸 Send ${amount} ${token} to ${recipientEmail}`
                   )}
                 </button>
               </div>
@@ -444,14 +444,14 @@ export default function AddressWalletPage() {
           <div className="card">
             <div className="card-section">
               <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
-                🔄 送金フロー
+                🔄 Transfer Flow
               </h3>
               <div className="space-y-2 text-sm" style={{ color: 'var(--foreground)', opacity: 0.8 }}>
-                <div>1. ウォレットからリレイヤーにトークンを転送</div>
-                <div>2. リレイヤーがUnclaimedFundとして登録</div>
-                <div>3. 受信者にクレーム通知メールを送信</div>
-                <div>4. 受信者がメールに返信してクレーム</div>
-                <div>5. リレイヤーが受信者のEmailWalletにトークン転送</div>
+                <div>1. Transfer tokens from wallet to relayer</div>
+                <div>2. Relayer registers as UnclaimedFund</div>
+                <div>3. Send claim notification email to recipient</div>
+                <div>4. Recipient replies to email to claim</div>
+                <div>5. Relayer transfers tokens to recipient's EmailWallet</div>
               </div>
             </div>
           </div>
