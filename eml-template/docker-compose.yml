@@ -1,0 +1,24 @@
+services:
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"   # Web UI
+      - "1025:1025"   # SMTP
+    environment:
+      MP_UI_AUTH: ""
+  test-mail:
+    build:
+      context: ..
+      dockerfile: test-mail/Dockerfile
+    image: test-mail:latest
+    depends_on:
+      - mailpit
+    environment:
+      EMAIL_TEMPLATES_PATH: /app/eml_templates
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_FROM: test-mail@example.com
+    # 開発時はローカルのテンプレートを優先（ホットリロード）
+    volumes:
+      - ../email-wallet/packages/relayer/eml_templates:/app/eml_templates:ro
+    command: ["--help"]
