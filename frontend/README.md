@@ -1,42 +1,81 @@
-Email Wallet Frontend — 超シンプル実装計画
+# フロントエンド ページ一覧（App Router）
 
-目的
-- mailto文法を活用し、ユーザーがメールアプリで「送信」を押すだけで完了するUXを最終目標にする。
-- 初期スコープでは以下のRelayer APIをフロントから呼び出せる状態にする。
+本ドキュメントは `frontend/src/app` 配下のページ構成と各ページの役割をまとめたものです。API ルート（`app/api/*`）の説明は含めません。
 
-対象エンドポイント（Relayer）
-- POST `/api/createAccount`（招待メールを送付→ユーザーはそのまま返信して確定）
-- POST `/api/isAccountCreated`（メールアドレス入力→作成済み確認）
-- POST `/api/send`（送金フロー開始：確認メール送付→ユーザーは返信で確定）
+## 共通
+- `layout.tsx`（ルートレイアウト）
+  - HTML 言語を `ja` に設定し、Geist フォントと `globals.css` を適用。
+  - すべてのページを `max-w-3xl` のメインコンテナで中央表示。
+  - `metadata.title = "zk-email-pay"`、`metadata.description = "Send to email, claim, and withdraw via ZK"`。
 
-構成（最小）
-- env
-  - `NEXT_PUBLIC_RELAYER_BASE_URL`（例: `http://127.0.0.1:4500`）
-- ライブラリ
-  - `src/lib/relayer.ts`
-    - `createAccount(email: string): Promise<string /*requestId*/>`
-    - `isAccountCreated(email: string): Promise<boolean>`
-    - `send(params: { email: string; amount: string; token: string; recipient: string; isRecipientEmail: boolean }): Promise<string /*requestId*/>`
-- ページ/コンポーネント（仮）
-  - `src/app/send/page.tsx`
-    - フォーム: `email`, `amount`, `token`, `recipient`, `isRecipientEmail`
-    - ボタン:
-      - 「アカウント確認」→ `/isAccountCreated`
-      - 「アカウント作成メールを受け取る」→ `/createAccount` 実行→ 成功時に「招待メールが送信されました。そのまま返信してください」を表示
-      - 「送金メールを受け取る」→ `/send` 実行→ 成功時に「確認メールを送信しました」表示
+## ページ一覧
 
-mailto方針（段階導入）
-- Phase 1: 上記API実装優先。`/send`でRelayerから確認メールを送る（返信で確定）。
-- Phase 2: 直接メール作成の導線を追加（例: `mailto:user@example.com?subject=Send%2010%20TEST%20to%20alice@example.com`）。
-  - 併せて `GET /api/relayerEmailAddr` を使い、起点をRelayerアドレスに変更する案も検討。
-  - 詳細仕様は `docs-konaito/mailto.md` に集約（別途）
+### `/` ホーム（`app/page.tsx`）
+- 目的: Email Wallet の概要表示と主要機能への導線。
+- 主なUI:
+  - ヒーロー: キャッチコピー「メールで送金、返信で確定」。
+  - 機能カード: `USDC Faucet`（/faucet）、`メール送金`（/send）、`資産確認`（/balance/get）、`アドレス送金`（/address）。
+  - 特徴セクション: メール送金、ゼロ知識証明、簡単操作、Base Sepolia 対応の説明。
 
-エラーハンドリング（最小）
-- API失敗時はトースト/バナーで文言統一（ネットワーク/バリデーション）。
-- 送金開始後は「メール返信が必要」である旨を明示。
+### `/send` メール送金（`app/send/page.tsx`）
+- 目的: 送信者が自分のメール、金額・トークン、送付先（メール or 0xアドレス）を入力し、確認メールを受け取って返信で確定するフローを開始。
+- 主なUI/挙動:
+  - 送信者メール入力とアカウント作成済みチェック表示（作成済み/未作成/確認中）。
+  - 金額入力、トークン選択（ETH/USDC/JPYC）。USDC/JPYC 選択時はコントラクトアドレスの簡易表示と Explorer へのリンク。
+  - 送付先タイプ切替（📧 メール / 🏦 0xアドレス）。入力内容からの簡易自動判定あり（`@`→メール、`0x`→アドレス）。
+  - アクションボタン:
+    - 未作成時: 「🎯 招待メールを受け取る」
+    - 作成済み時: 「💸 確定」→ 確認メールを送信（返信で最終確定）。
+  - ステータス表示: 送信成功/エラー/処理中をカード内に表示。
+  - 補助リンク: アドレス送金ページ（/address）への導線、その他ページ（/other）へのナビゲーション。
 
-タスク分割（初回）
-1. env/ユーティリティ作成（`src/lib/relayer.ts`）
-2. `send`ページのフォームとAPI連携
-3. UX文言/バリデーション最小実装
-4. mailto導線の試験実装（Phase 2）
+### `/faucet` USDC Faucet（`app/faucet/page.tsx`）
+- 目的: Email Wallet ユーザー向けにテスト用 USDC を配布する申請ページ。
+- 主なUI/挙動:
+  - メール入力欄と送信ボタン「💰 USDCをクレームする」。
+  - 配布量表示（固定 10 USDC）と Base Sepolia の USDC コントラクト表示＋Explorer リンク。
+  - ステータス表示: 送信成功/エラー/処理中。
+  - 利用方法ガイド（手順 1〜4）と関連ページリンク（送金/アドレス送金）。
+
+### `/balance/get` 残高確認メール送信（`app/balance/get/page.tsx`）
+- 目的: Email Wallet の残高を確認するリンク付きメールを送る入口。
+- 主なUI/挙動:
+  - メール入力欄と「📧 残高確認メールを送る」ボタン。
+  - ステータス表示（送信成功/エラー/処理中）。
+  - 関連ページリンク（送金/アドレス送金）。
+
+### `/balance` 残高ビュー（`app/balance/page.tsx`）
+- 目的: メールに記載された `email` と `accountCode` の URL パラメータからウォレットアドレスを取得し、ETH/USDC/JPYC 残高を一覧表示。
+- 主なUI/挙動:
+  - パラメータが揃っていない場合は `/balance/get` へリダイレクト。
+  - アドレスセクション: アドレス表示（コピー可）、Explorer リンク。
+  - トークン残高: ETH（native）と USDC/JPYC の残高をカードで表示し、各トークンの Explorer へ遷移可能。
+  - 読み込み/エラー時の専用ビューと、関連ページリンク（メール送信/アドレス送金/残高メール送付）。
+  - `app/balance/loading.tsx` によるローディング UI を併用。
+
+### `/other` その他ユーティリティ（`app/other/page.tsx`）
+- 目的: アカウント作成済み判定と招待メール送信を行う補助ページ。
+- 主なUI/挙動:
+  - メール入力欄、アクションボタン「🔍 アカウント確認」「🎯 招待メールを受け取る」。
+  - ステータス表示（確認結果/送信成功/エラー）。
+  - 送金ページ（/send）やアドレス送金（/address）への導線。
+
+## スタイル/コンポーネント補足
+- 共通クラス（例: `card`, `card-section`, `btn`, `pill`, `divider`, `container-narrow` 等）は `globals.css` で定義。
+- 主要セクションはグラデーションのヒーロー＋カード型フォームの二段構成で統一。
+
+## ナビゲーションの流れ（例）
+- テスト資産取得 → `/faucet`
+- メール送金開始 → `/send`（未作成なら招待→返信、作成済みなら確認メール→返信で確定）
+- EOA からメール宛送金 → `/address`
+- 残高をメール経由で確認 → `/balance/get` → メールのリンクで `/balance`
+
+### `/address` アドレスウォレット送金 → Email（`app/address/page.tsx`）
+- 目的: ブラウザウォレット（MetaMask）を接続し、選択トークンを「受信者のメールアドレス宛て」に送る要求を登録する UI。
+- 主なUI/挙動:
+  - ウォレット接続（MetaMask）。未接続時は接続ボタン、接続後はアドレス表示。
+  - ネットワーク切替: Base Sepolia（84532）への自動スイッチ/追加をガイド。
+  - 送付先メール入力、金額入力、トークン選択（ETH/USDC/JPYC）。トークン選択時はアドレスの簡易表示と Explorer へのリンク。
+  - 「送金」ボタンで送金要求を登録し、受信者へクレーム通知メールが送られる想定。
+  - 下部に「送金フロー」の説明（送付→登録→通知→返信クレーム→最終転送）。
+  - 関連ページへのリンク: Faucet（/faucet）、メール送金（/send）。

@@ -4,7 +4,6 @@ import { useCallback, useState, useEffect, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getWalletAddress } from "@/lib/relayer";
 import { ethers } from "ethers";
-import Link from "next/link";
 
 // ERC20 ABI (最小限)
 const ERC20_ABI = [
@@ -128,13 +127,6 @@ function BalanceContent() {
           <div className="container-narrow px-4 py-8 sm:py-12">
             <div className="flex items-center gap-8 mb-4">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 ウォレット</h1>
-              <button
-                onClick={() => router.push('/')}
-                className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
-                style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-              >
-                ホーム
-              </button>
             </div>
           </div>
         </section>
@@ -165,13 +157,6 @@ function BalanceContent() {
           <div className="container-narrow px-4 py-8 sm:py-12">
             <div className="flex items-center gap-8 mb-4">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">❌ エラー</h1>
-              <button
-                onClick={() => router.push('/')}
-                className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
-                style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-              >
-                ホーム
-              </button>
             </div>
           </div>
         </section>
@@ -208,13 +193,6 @@ function BalanceContent() {
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 ウォレット</h1>
-            <button
-              onClick={() => router.push('/')}
-              className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
-              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-            >
-              ホーム
-            </button>
           </div>
         </div>
       </section>
@@ -302,47 +280,7 @@ function BalanceContent() {
         </div>
       </section>
       
-      {/* Links */}
-      <section className="container-narrow px-4 mt-6">
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link 
-            href="/balance/get"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'var(--card-bg)',
-              border: '2px solid var(--border-soft)',
-              color: 'var(--foreground)',
-              textDecoration: 'none'
-            }}
-          >
-            📧 残高確認メールを送る
-          </Link>
-          <Link 
-            href="/send"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'var(--card-bg)',
-              border: '2px solid var(--border-soft)',
-              color: 'var(--foreground)',
-              textDecoration: 'none'
-            }}
-          >
-            💸 送金ページ
-          </Link>
-          <Link 
-            href="/address"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'var(--card-bg)',
-              border: '2px solid var(--border-soft)',
-              color: 'var(--foreground)',
-              textDecoration: 'none'
-            }}
-          >
-            🏦 アドレス送金ページ
-          </Link>
-        </div>
-      </section>
+      {/* navigation links are centralized in the hamburger menu */}
     </main>
   );
 }
