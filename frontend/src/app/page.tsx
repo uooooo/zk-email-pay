@@ -1,168 +1,116 @@
 "use client";
 
-import Link from "next/link";
+import { useState, useEffect, useCallback } from "react";
+import { createAccount, isAccountCreated } from "@/lib/relayer";
+import { saveEmail, getSavedEmail } from "@/lib/localStorage";
 
-export default function Home() {
+export default function OtherPage() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<string>("");
+
+  // Load saved email on component mount
+  useEffect(() => {
+    const savedEmail = getSavedEmail();
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
+  }, []);
+
+
+  async function onCheck() {
+    setStatus("確認中...");
+    try {
+      const ok = await isAccountCreated(email);
+      setStatus(ok ? "このメールはウォレット作成済みです" : "未作成です（作成メールを送れます）");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e);
+      setStatus(`確認エラー: ${message}`);
+    }
+  }
+
+  async function onInvite() {
+    setStatus("作成メール送信中...");
+    try {
+      // 実際のリレイヤーのcreateAccountを呼び出し
+      const requestId = await createAccount(email);
+      setStatus(`✅ アカウント作成要求を送信しました。${email} に招待メールが送信されます。リクエストID: ${requestId}`);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e);
+      setStatus(`作成エラー: ${message}`);
+    }
+  }
+
   return (
     <main className="min-h-screen" style={{ background: 'var(--background)' }}>
       {/* Hero */}
       <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
-        <div className="container-narrow px-4 py-12 sm:py-20">
-          <div className="text-center">
-            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-6">
-              Email Wallet
-            </h1>
-            <p className="text-xl max-w-2xl mx-auto mb-8" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-              メールで送金、返信で確定。Web3の新しい体験をシンプルに。
-            </p>
+        <div className="container-narrow px-4 py-8 sm:py-12">
+          <div className="flex items-center gap-8 mb-4">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">その他</h1>
           </div>
+          <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>アカウント確認・招待メールの送信</p>
         </div>
       </section>
 
-      {/* Services */}
-      <section className="container-narrow px-4 -mt-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Faucet Card */}
-          <Link 
-            href="/faucet"
-            className="card hover:scale-105 transition-all duration-200 block"
-            style={{ textDecoration: 'none', color: 'inherit' }}
-          >
-            <div className="card-section text-center">
-              <div className="text-4xl mb-4">💰</div>
-              <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
-                USDC Faucet
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                テスト用USDCを無料で受け取れます
-              </p>
+      {/* Form card */}
+      <section className="container-narrow px-4 -mt-6 relative z-10">
+        <div className="card shadow-xl" role="region" aria-label="other-actions">
+          <div className="card-section space-y-3">
+            <label className="block">
+              <span className="text-sm font-medium mb-2 block" style={{ color: 'var(--foreground)' }}>メールアドレス</span>
+              <input
+                className="input"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                aria-label="メールアドレス"
+              />
+            </label>
+          </div>
+          <div className="divider"></div>
+          <div className="card-section">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button className="btn btn-ghost flex-1" onClick={onCheck}>
+                🔍 アカウント確認
+              </button>
+              <button className="btn btn-primary flex-1" onClick={onInvite}>
+                🎯 招待メールを受け取る
+              </button>
             </div>
-          </Link>
-
-          {/* Send Card */}
-          <Link 
-            href="/send"
-            className="card hover:scale-105 transition-all duration-200 block"
-            style={{ textDecoration: 'none', color: 'inherit' }}
-          >
-            <div className="card-section text-center">
-              <div className="text-4xl mb-4">💸</div>
-              <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
-                メール送金
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                メールアドレスで暗号通貨を送金
-              </p>
-            </div>
-          </Link>
-
-          {/* Wallet Check Card */}
-          <Link 
-            href="/balance/get"
-            className="card hover:scale-105 transition-all duration-200 block"
-            style={{ textDecoration: 'none', color: 'inherit' }}
-          >
-            <div className="card-section text-center">
-              <div className="text-4xl mb-4">💼</div>
-              <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
-                資産確認
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                EmailWalletの残高を確認
-              </p>
-            </div>
-          </Link>
-
-          {/* Address Send Card */}
-          <Link 
-            href="/address"
-            className="card hover:scale-105 transition-all duration-200 block"
-            style={{ textDecoration: 'none', color: 'inherit' }}
-          >
-            <div className="card-section text-center">
-              <div className="text-4xl mb-4">🏦</div>
-              <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
-                アドレス送金
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                ウォレットアドレスで暗号通貨を送金
-              </p>
-            </div>
-          </Link>
+          </div>
+          {status && (
+            <>
+              <div className="divider"></div>
+              <div className="card-section">
+                <div className={`p-4 rounded-lg border text-sm font-medium`}
+                  style={status.includes('エラー') ? {
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    borderColor: 'rgba(239, 68, 68, 0.3)',
+                    color: '#dc2626'
+                  } : status.includes('送信されました') || status.includes('作成済みです') ? {
+                    background: 'rgba(34, 197, 94, 0.1)',
+                    borderColor: 'rgba(34, 197, 94, 0.3)',
+                    color: '#059669'
+                  } : {
+                    background: 'var(--accent-light)',
+                    borderColor: 'var(--primary)',
+                    color: 'var(--foreground)'
+                  }}>
+                  <div className="flex items-start gap-2">
+                    <span className="text-lg">
+                      {status.includes('エラー') ? '❌' : status.includes('送信されました') || status.includes('作成済みです') ? '✅' : '⏳'}
+                    </span>
+                    <span>{status}</span>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </section>
-
-      {/* Features */}
-      <section className="container-narrow px-4 mt-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--foreground)' }}>
-            特徴
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex gap-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--primary)', color: '#fff' }}>
-              📧
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
-                メールで送金
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                複雑なウォレットアドレスは不要。メールアドレスだけで暗号通貨を送受信できます。
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--primary)', color: '#fff' }}>
-              🔒
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
-                ゼロ知識証明
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                ZK技術により、プライバシーを保護しながら安全な取引を実現します。
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--primary)', color: '#fff' }}>
-              ⚡
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
-                簡単操作
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                メールを送るだけ。複雑な設定や専門知識は必要ありません。
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--primary)', color: '#fff' }}>
-              🌐
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
-                Base Sepolia対応
-              </h3>
-              <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
-                高速・低コストのBase Sepoliaネットワークを使用しています。
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <section className="container-narrow px-4 mt-20 pb-12">
-        <div className="text-center">
-          <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.5 }}>
-            Email Wallet - Web3の新しい送金体験
-          </p>
-        </div>
-      </section>
+      
+      {/* navigation links are centralized in the hamburger menu */}
     </main>
   );
 }

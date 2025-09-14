@@ -4,6 +4,7 @@ import { useCallback, useState, useEffect, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getWalletAddress } from "@/lib/relayer";
 import { ethers } from "ethers";
+import { saveEmail, saveWalletAddress, getSavedWalletAddress } from "@/lib/localStorage";
 
 // ERC20 ABI (最小限)
 const ERC20_ABI = [
@@ -96,6 +97,10 @@ function BalanceContent() {
       const address = await getWalletAddress(emailParam, accountCodeParam);
       setWalletAddress(address);
       
+      // 取得成功時にメールアドレスとウォレットアドレスを保存
+      saveEmail(emailParam);
+      saveWalletAddress(address);
+      
       // 資産チェック開始
       await checkBalances(address);
     } catch (error) {
@@ -111,6 +116,15 @@ function BalanceContent() {
     const emailParam = searchParams.get('email');
     const accountCodeParam = searchParams.get('accountCode');
 
+    // 保存されたウォレットアドレスがある場合は直接残高確認
+    const savedAddress = getSavedWalletAddress();
+    if (savedAddress) {
+      setWalletAddress(savedAddress);
+      setLoading(false); // ロード状態を解除
+      checkBalances(savedAddress);
+      return;
+    }
+
     // 両方のパラメータが設定されている場合は自動で残高確認を実行
     if (emailParam && accountCodeParam) {
       handleGetWalletAddress(emailParam, accountCodeParam);
@@ -118,7 +132,7 @@ function BalanceContent() {
       // パラメータがない場合はメール送信ページにリダイレクト
       router.push('/balance/get');
     }
-  }, [searchParams, router, handleGetWalletAddress]);
+  }, [searchParams, router, handleGetWalletAddress, checkBalances]);
 
   if (loading) {
     return (

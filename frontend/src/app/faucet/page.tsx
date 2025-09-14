@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { saveEmail, getSavedEmail } from "@/lib/localStorage";
 
 export default function FaucetPage() {
   const [email, setEmail] = useState("");
@@ -10,10 +11,19 @@ export default function FaucetPage() {
   const USDC_AMOUNT = "10"; // 運営から配布するUSDC量（固定）
   const USDC_ADDRESS = "0x3CA50b9B421646D0B485852A14168Aa8494D2877"; // Base Sepolia USDC
 
+  // Load saved email on component mount
+  useEffect(() => {
+    const savedEmail = getSavedEmail();
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
+  }, []);
+
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
+
 
   const onClaimFaucet = useCallback(async () => {
     if (!email || !isValidEmail(email)) {

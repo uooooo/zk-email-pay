@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createAccount, send } from "@/lib/relayer";
+import { saveEmail, getSavedEmail } from "@/lib/localStorage";
 
 export default function SendPage() {
   const [email, setEmail] = useState("");
@@ -18,6 +19,15 @@ export default function SendPage() {
   const [checking, setChecking] = useState(false);
   const [created, setCreated] = useState<undefined | boolean>(undefined);
   // Relayerメールへの明示誘導は廃止（メールアプリボタン非表示）
+
+  // Load saved email on component mount
+  useEffect(() => {
+    const savedEmail = getSavedEmail();
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
+  }, []);
+
 
   const canSend = useMemo(() => {
     if (!email || !amount || !recipient) return false;
@@ -65,6 +75,8 @@ export default function SendPage() {
     setStatus("確認メール送信中...");
     try {
       const requestId = await send({ email, amount, token, recipient, isRecipientEmail });
+      // Send成功時にメールアドレスを保存
+      saveEmail(email);
       const recipientType = isRecipientEmail ? 'メールアドレス' : 'ウォレットアドレス';
       setStatus(`✅ 確認メールを ${email} に送信しました。\n送金先: ${recipient} (${recipientType})\n金額: ${amount} ${token}\nリクエストID: ${requestId}\n\nメールに返信することでトランザクションを確定できます。`);
     } catch (e: unknown) {
