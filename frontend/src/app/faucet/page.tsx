@@ -1,11 +1,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 export default function FaucetPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -63,13 +60,6 @@ export default function FaucetPage() {
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">💰 USDC Faucet</h1>
-            <button
-              onClick={() => router.push('/')}
-              className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
-              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-            >
-              ホーム
-            </button>
           </div>
           <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
             EmailWalletユーザー向けのUSDC配布システム。メールアドレスを入力してテスト用USDCを受け取りましょう。
@@ -214,35 +204,7 @@ export default function FaucetPage() {
         </div>
       </section>
 
-      {/* Link to other pages */}
-      <section className="container-narrow px-4 mt-6">
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link 
-            href="/send"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'var(--card-bg)',
-              border: '2px solid var(--border-soft)',
-              color: 'var(--foreground)',
-              textDecoration: 'none'
-            }}
-          >
-            💸 送金ページ
-          </Link>
-          <Link 
-            href="/address"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'var(--card-bg)',
-              border: '2px solid var(--border-soft)',
-              color: 'var(--foreground)',
-              textDecoration: 'none'
-            }}
-          >
-            🏦 アドレス送金ページ
-          </Link>
-        </div>
-      </section>
+      {/* navigation links are centralized in the hamburger menu */}
     </main>
   );
 }

@@ -1,12 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { createAccount, send } from "@/lib/relayer";
-import Link from "next/link";
 
 export default function SendPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [amount, setAmount] = useState("10");
   const tokenOptions = [
@@ -93,13 +90,6 @@ export default function SendPage() {
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">送金</h1>
-            <button
-              onClick={() => router.push('/other')}
-              className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
-              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-            >
-              その他
-            </button>
           </div>
           <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>メールで送金。返信で確定。シンプル&スマート。</p>
         </div>
@@ -303,23 +293,7 @@ export default function SendPage() {
         </div>
       </section>
       
-      {/* Link to home */}
-      <section className="container-narrow px-4 mt-6">
-        <div className="text-center">
-          <Link 
-            href="/address"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'var(--card-bg)',
-              border: '2px solid var(--border-soft)',
-              color: 'var(--foreground)',
-              textDecoration: 'none'
-            }}
-          >
-            アドレスをお持ちの方はこちらへ
-          </Link>
-        </div>
-      </section>
+      {/* navigation links are centralized in the hamburger menu */}
     </main>
   );
 }

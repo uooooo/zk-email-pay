@@ -1,12 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createAccount, isAccountCreated } from "@/lib/relayer";
-import Link from "next/link";
 
 export default function OtherPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<string>("");
 
@@ -39,13 +36,6 @@ export default function OtherPage() {
       <section className="text-white" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}>
         <div className="container-narrow px-4 py-8 sm:py-12">
           <div className="flex items-center gap-8 mb-4">
-            <button
-              onClick={() => router.push('/send')}
-              className="hover:text-white transition-colors duration-200 text-lg font-medium opacity-60 hover:opacity-100"
-              style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-            >
-              送金
-            </button>
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">その他</h1>
           </div>
           <p className="text-lg max-w-md" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>アカウント確認・招待メールの送信</p>
@@ -110,23 +100,7 @@ export default function OtherPage() {
         </div>
       </section>
       
-      {/* Link to home */}
-      <section className="container-narrow px-4 mt-6">
-        <div className="text-center">
-          <Link 
-            href="/address"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'var(--card-bg)',
-              border: '2px solid var(--border-soft)',
-              color: 'var(--foreground)',
-              textDecoration: 'none'
-            }}
-          >
-            アドレスをお持ちの方はこちらへ
-          </Link>
-        </div>
-      </section>
+      {/* navigation links are centralized in the hamburger menu */}
     </main>
   );
 }
