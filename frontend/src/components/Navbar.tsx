@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { getSavedEmail, getSavedWalletAddress, clearSavedData } from "@/lib/localStorage";
 
 type NavItem = {
   href: string;
@@ -26,6 +27,26 @@ const NAV_DAPPS: NavItem[] = [
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [savedEmail, setSavedEmail] = useState("");
+  const [savedWalletAddress, setSavedWalletAddress] = useState("");
+
+  // Load saved email and wallet address
+  useEffect(() => {
+    const email = getSavedEmail();
+    const walletAddress = getSavedWalletAddress();
+    setSavedEmail(email);
+    setSavedWalletAddress(walletAddress);
+  }, []);
+
+  // Update saved data when navbar opens
+  useEffect(() => {
+    if (open) {
+      const email = getSavedEmail();
+      const walletAddress = getSavedWalletAddress();
+      setSavedEmail(email);
+      setSavedWalletAddress(walletAddress);
+    }
+  }, [open]);
 
   // Close menu on route change
   useEffect(() => {
@@ -91,14 +112,21 @@ export default function Navbar() {
                 className="text-2xl font-bold mb-2"
                 style={{ color: "var(--foreground)" }}
               >
-                ナビゲーション
+                Mail Wallet
               </h2>
               <div
                 className="w-16 h-1 mx-auto rounded-full mb-4"
                 style={{ background: "var(--primary)" }}
               ></div>
               <ul className="space-y-2">
-                {NAV_ITEMS.map((item) => {
+                {NAV_ITEMS.filter((item) => {
+                  // 残高メールと残高ビューの表示を条件分岐
+                  if (item.href === "/balance/get" && savedWalletAddress)
+                    return false;
+                  if (item.href === "/balance" && !savedWalletAddress)
+                    return false;
+                  return true;
+                }).map((item) => {
                   const active =
                     current === item.href ||
                     (item.href !== "/" && current.startsWith(item.href));
@@ -116,7 +144,9 @@ export default function Navbar() {
                         <span className="text-2xl w-8 text-center" aria-hidden>
                           {item.icon ?? "•"}
                         </span>
-                        <span className="font-medium text-lg">{item.label}</span>
+                        <span className="font-medium text-lg">
+                          {item.label}
+                        </span>
                       </Link>
                     </li>
                   );
@@ -135,32 +165,73 @@ export default function Navbar() {
                 style={{ background: "var(--primary)" }}
               ></div>
 
-            <ul className="space-y-2">
-              {NAV_DAPPS.map((item) => {
-                const active =
-                  current === item.href ||
-                  (item.href !== "/" && current.startsWith(item.href));
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={`flex items-center gap-4 px-6 py-4 rounded-lg transition-all duration-200 hover:scale-105 ${
-                        active ? "pill-active" : "pill"
-                      }`}
-                      style={
-                        active ? {} : { borderColor: "var(--border-soft)" }
-                      }
-                    >
-                      <span className="text-2xl w-8 text-center" aria-hidden>
-                        {item.icon ?? "•"}
-                      </span>
-                      <span className="font-medium text-lg">{item.label}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+              <ul className="space-y-2">
+                {NAV_DAPPS.map((item) => {
+                  const active =
+                    current === item.href ||
+                    (item.href !== "/" && current.startsWith(item.href));
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={`flex items-center gap-4 px-6 py-4 rounded-lg transition-all duration-200 hover:scale-105 ${
+                          active ? "pill-active" : "pill"
+                        }`}
+                        style={
+                          active ? {} : { borderColor: "var(--border-soft)" }
+                        }
+                      >
+                        <span className="text-2xl w-8 text-center" aria-hidden>
+                          {item.icon ?? "•"}
+                        </span>
+                        <span className="font-medium text-lg">
+                          {item.label}
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
+
+            {/* Email Display / Wallet Link */}
+            {savedEmail && (
+              <div
+                className="text-center mb-6 p-3 rounded-lg justify-around flex"
+                style={{
+                  background: "var(--card-bg)",
+                  border: "2px solid var(--border-soft)",
+                }}
+              >
+                <div />
+                {savedWalletAddress ? (
+                  <a
+                    href={`https://sepolia.basescan.org/address/${savedWalletAddress}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block transition-all duration-200 hover:scale-105 justify-center flex-col"
+                  >
+                    <div className="font-medium">{savedEmail}</div>
+                    <div className="text-xs opacity-60 mt-1">
+                      Base Sepoliaで確認
+                    </div>
+                  </a>
+                ) : (
+                  <div>
+                    <div
+                      className="font-medium text-sm"
+                      style={{ color: "var(--foreground)" }}
+                    >
+                      {savedEmail}
+                    </div>
+                  </div>
+                )}
+                <button className="btn"
+                onClick={() => {
+                  clearSavedData();
+                }}>接続削除</button>
+              </div>
+            )}
             <div
               className="text-center mt-8 pt-6 border-t"
               style={{ borderColor: "var(--border-soft)" }}

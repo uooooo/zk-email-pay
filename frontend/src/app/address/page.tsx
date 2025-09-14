@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
+import { saveEmail, getSavedEmail, saveWalletAddress, getSavedWalletAddress } from "@/lib/localStorage";
 
 // ERC20 ABI (最小限)
 const ERC20_ABI = [
@@ -27,6 +28,15 @@ export default function AddressWalletPage() {
   // ウォレット関連状態
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [isConnected, setIsConnected] = useState(false);
+
+  // Load saved email on component mount
+  useEffect(() => {
+    const savedEmail = getSavedEmail();
+    if (savedEmail) {
+      setRecipientEmail(savedEmail);
+    }
+  }, []);
+
   const [balance, setBalance] = useState<string>("0");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -99,8 +109,11 @@ export default function AddressWalletPage() {
       const accounts = await provider.send('eth_requestAccounts', []);
       
       if (accounts.length > 0) {
-        setWalletAddress(accounts[0]);
+        const address = accounts[0];
+        setWalletAddress(address);
         setIsConnected(true);
+        // ウォレット接続成功時にアドレスを保存
+        saveWalletAddress(address);
         
         // ネットワークがBase Sepoliaかチェック
         const network = await provider.getNetwork();

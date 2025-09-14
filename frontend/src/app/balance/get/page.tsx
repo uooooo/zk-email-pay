@@ -1,12 +1,22 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { recoverAccountCode } from "@/lib/relayer";
+import { saveEmail, getSavedEmail } from "@/lib/localStorage";
 
 export default function BalanceGetPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Load saved email on component mount
+  useEffect(() => {
+    const savedEmail = getSavedEmail();
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
+  }, []);
+
 
   const handleSendBalanceCheckEmail = useCallback(async () => {
     if (!email) {
