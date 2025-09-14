@@ -17,7 +17,6 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/faucet", label: "USDC Faucet", icon: "💰" },
   { href: "/balance/get", label: "Balance Email", icon: "📧" },
   { href: "/balance", label: "Balance View", icon: "💼" },
-  { href: "/other", label: "Other", icon: "🧰" },
 ];
 
 const NAV_DAPPS: NavItem[] = [

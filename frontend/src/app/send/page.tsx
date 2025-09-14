@@ -8,11 +8,10 @@ export default function SendPage() {
   const [email, setEmail] = useState("");
   const [amount, setAmount] = useState("10");
   const tokenOptions = [
-    { symbol: "ETH", address: "native", name: "Ethereum" },
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USD Coin" },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
   ] as const;
-  const [token, setToken] = useState<(typeof tokenOptions)[number]["symbol"]>("ETH");
+  const [token, setToken] = useState<(typeof tokenOptions)[number]["symbol"]>("USDC");
   const [recipient, setRecipient] = useState("");
   const [isRecipientEmail, setIsRecipientEmail] = useState(true);
   const [status, setStatus] = useState<string>("");
@@ -166,7 +165,7 @@ export default function SendPage() {
             </div>
             
             {/* Token Address Display */}
-            {token !== "ETH" && (
+            {tokenOptions.find(t => t.symbol === token) && (
               <div className="mt-4 p-3 rounded-lg" style={{ background: 'var(--accent-light)', border: '1px solid var(--border-soft)' }}>
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
