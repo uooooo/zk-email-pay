@@ -48,15 +48,12 @@ export async function isAccountCreated(email: string): Promise<boolean> {
 
 // EmailWallet送金（リレイヤー経由）
 export async function send(params: SendParams): Promise<string> {
-  if (!params.isRecipientEmail) {
-    throw new Error('現在はメールアドレス宛ての送金のみサポートしています');
-  }
-
   return postJson<string>("/api/send", {
     email_addr: params.email,
-    amount: params.amount,
-    token: params.token,
-    recipient: params.recipient
+    amount: parseFloat(params.amount),
+    token_id: params.token,
+    recipient_addr: params.recipient,
+    is_recipient_email: params.isRecipientEmail
   });
 }
 

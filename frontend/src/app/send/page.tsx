@@ -18,7 +18,7 @@ export default function SendPage() {
   const [recipient, setRecipient] = useState("");
   const [isRecipientEmail, setIsRecipientEmail] = useState(true);
   const [status, setStatus] = useState<string>("");
-  const [, setChecking] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [created, setCreated] = useState<undefined | boolean>(undefined);
   // Relayerメールへの明示誘導は廃止（メールアプリボタン非表示）
 
@@ -28,16 +28,29 @@ export default function SendPage() {
     return Number.isFinite(n) && n > 0;
   }, [email, amount, recipient]);
 
-  // アカウント作成確認は無効化（リレイヤーサーバー未実装のため）
+  // アカウント作成確認（リレイヤーAPIを使用）
   useEffect(() => {
     if (!email) {
       setCreated(undefined);
       return;
     }
-    // モック実装：常にアカウント作成済みとして扱う
-    setCreated(true);
-    setChecking(false);
-    setStatus("");
+    
+    setChecking(true);
+    import('@/lib/relayer').then(({ isAccountCreated }) => {
+      isAccountCreated(email)
+        .then((exists) => {
+          setCreated(exists);
+          setChecking(false);
+          setStatus("");
+        })
+        .catch((error) => {
+          console.warn('Account check failed:', error);
+          // エラーの場合は作成済みとして扱う（フォールバック）
+          setCreated(true);
+          setChecking(false);
+          setStatus("");
+        });
+    });
   }, [email]);
 
   const onCreate = useCallback(async () => {
@@ -54,11 +67,13 @@ export default function SendPage() {
   const onSend = useCallback(async () => {
     setStatus("確認メール送信中...");
     try {
-      await send({ email, amount, token, recipient, isRecipientEmail });
-      setStatus(`確認メールを ${email} に送信しました。返信することでトランザクションを確定できます。`);
+      const requestId = await send({ email, amount, token, recipient, isRecipientEmail });
+      const recipientType = isRecipientEmail ? 'メールアドレス' : 'ウォレットアドレス';
+      setStatus(`✅ 確認メールを ${email} に送信しました。\n送金先: ${recipient} (${recipientType})\n金額: ${amount} ${token}\nリクエストID: ${requestId}\n\nメールに返信することでトランザクションを確定できます。`);
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
-      setStatus(`送金エラー: ${message}`);
+      setStatus(`❌ 送金エラー: ${message}`);
+      console.error('Send error:', e);
     }
   }, [email, amount, token, recipient, isRecipientEmail]);
 
@@ -106,12 +121,12 @@ export default function SendPage() {
                 aria-label="あなたのメールアドレス"
               />
             </label>
-            {/* {checking && <div className="text-sm flex items-center gap-2" style={{ color: 'var(--primary)' }}>
+            {checking && <div className="text-sm flex items-center gap-2" style={{ color: 'var(--primary)' }}>
               <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}></div>
               確認中...
             </div>}
             {!checking && created === true && <div className="text-sm font-medium" style={{ color: '#059669' }}>✓ 作成済み</div>}
-            {!checking && created === false && <div className="text-sm font-medium" style={{ color: '#d97706' }}>! 未作成（作成メールを送れます）</div>} */}
+            {!checking && created === false && <div className="text-sm font-medium" style={{ color: '#d97706' }}>! 未作成（作成メールを送れます）</div>}
           </div>
           <div className="divider"></div>
 
@@ -257,10 +272,10 @@ export default function SendPage() {
                     color: 'var(--foreground)'
                   }}>
                   <div className="flex items-start gap-2">
-                    <span className="text-lg">
-                      {status.includes('エラー') ? '❌' : status.includes('送信') ? '✅' : '⏳'}
+                    <span className="text-lg flex-shrink-0 mt-1">
+                      {status.includes('❌') ? '❌' : status.includes('✅') ? '✅' : status.includes('送信') ? '✅' : '⏳'}
                     </span>
-                    <span>{status}</span>
+                    <div className="whitespace-pre-line">{status}</div>
                   </div>
                 </div>
               </div>
