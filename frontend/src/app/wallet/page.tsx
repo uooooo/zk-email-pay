@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getWalletAddress, recoverAccountCode } from "@/lib/relayer";
 import { ethers } from "ethers";
 import Link from "next/link";
@@ -24,6 +24,7 @@ interface TokenBalance {
 
 export default function WalletPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [accountCode, setAccountCode] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
@@ -31,11 +32,55 @@ export default function WalletPage() {
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // URLパラメータから email と accountCode を取得して自動入力
+  useEffect(() => {
+    const emailParam = searchParams.get('email');
+    const accountCodeParam = searchParams.get('accountCode');
+    
+    if (emailParam) {
+      setEmail(emailParam);
+    }
+    if (accountCodeParam) {
+      setAccountCode(accountCodeParam);
+    }
+
+    // 両方のパラメータが設定されている場合は自動で残高確認を実行
+    if (emailParam && accountCodeParam) {
+      setStatus("URLパラメータからアカウント情報を取得しました。残高を確認中...");
+      // 少し遅延を入れて自動実行
+      const timer = setTimeout(() => {
+        handleGetWalletAddressAuto(emailParam, accountCodeParam);
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
+
   // Base Sepoliaで確認するトークン一覧
   const tokenAddresses = [
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USD Coin" },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
   ];
+
+  // URLパラメータからの自動実行用関数
+  const handleGetWalletAddressAuto = useCallback(async (emailParam: string, accountCodeParam: string) => {
+    setLoading(true);
+    setStatus("ウォレットアドレス取得中...");
+
+    try {
+      const address = await getWalletAddress(emailParam, accountCodeParam);
+      setWalletAddress(address);
+      setStatus(`✅ ウォレットアドレス: ${address}`);
+      
+      // 資産チェック開始
+      await checkBalances(address);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setStatus(`❌ エラー: ${message}`);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const handleGetWalletAddress = useCallback(async () => {
     if (!email || !accountCode) {
@@ -172,6 +217,11 @@ export default function WalletPage() {
                   placeholder="you@example.com"
                   disabled={loading}
                 />
+                {searchParams.get('email') && (
+                  <div className="text-xs mt-1" style={{ color: 'var(--foreground)', opacity: 0.6 }}>
+                    復旧メールのリンクからメールアドレスが自動入力されました
+                  </div>
+                )}
               </label>
             </div>
             
@@ -187,7 +237,10 @@ export default function WalletPage() {
                   disabled={loading}
                 />
                 <div className="text-xs mt-1" style={{ color: 'var(--foreground)', opacity: 0.6 }}>
-                  アカウント作成時に受信したメールに記載されています
+                  {searchParams.get('accountCode') ? 
+                    "復旧メールのリンクからアカウントコードが自動入力されました" : 
+                    "アカウント作成時に受信したメールに記載されています"
+                  }
                 </div>
               </label>
             </div>
