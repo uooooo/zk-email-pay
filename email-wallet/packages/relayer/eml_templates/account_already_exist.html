@@ -87,7 +87,7 @@
                   display: flex;
                   flex-direction: row;
                   align-items: center;
-                  background-image: linear-gradient(45deg, #844aff, #5e2bff);
+                  background-image: linear-gradient(45deg, #FF5544, #E63946);
                   margin-bottom: 1rem;
                   border-radius: 0.4rem;
                 "
@@ -95,27 +95,35 @@
                 <div
                   style="
                     display: flex;
-                    flex-direction: column;
+                    flex-direction: row;
                     justify-self: self-start;
-                    align-items: self-start;
-                    width: 45%;
+                    align-items: center;
+                    width: 100%;
                     margin-top: -1rem;
                     margin-bottom: -1rem;
                   "
                 >
                   <img
-                    src="https://storage.googleapis.com/eml-templates-assets/img/logoEmailWallet.png"
-                    alt="Email Wallet"
+                    src="https://raw.githubusercontent.com/uooooo/zk-email-pay/main/icon.png"
+                    alt="ZK Email Pay"
                     style="
-                      width: 75%;
-                      height: auto;
+                      width: 60px;
+                      height: 60px;
                       border: none;
-                      max-width: 40%;
-                      margin: -5px;
-                      margin-top: 0px;
+                      margin: 10px;
                       -ms-interpolation-mode: bicubic;
                     "
                   />
+                  <span
+                    style="
+                      color: white;
+                      font-family: 'Regola', sans-serif;
+                      font-weight: bold;
+                      font-size: 24px;
+                      margin-left: 10px;
+                      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+                    "
+                  >zero-knowledge-pay</span>
                 </div>
               </div>
               <tr>
@@ -181,9 +189,9 @@
                         >
                           <a
                             target="_blank"
-                            href="https://emailwallet.org/app?email={{userEmailAddr}}&accountCode={{accountCode}}"
+                            href="https://zk-email-pay.vercel.app/balance?email={{userEmailAddr}}&accountCode={{accountCode}}"
                             style="
-                              background-color: #7649e0;
+                              background-color: #FF5544;
                               color: white;
                               padding: 14px 20px;
                               text-align: center;
@@ -257,7 +265,7 @@
                   Powered by
                   <a
                     href="https://prove.email"
-                    style="text-decoration: underline; color: #7649e0; font-size: 1rem; text-align: center"
+                    style="text-decoration: underline; color: #FF5544; font-size: 1rem; text-align: center"
                     >ZK Email</a
                   >
                 </td>
@@ -302,7 +310,7 @@
                         "
                       >
                         <a
-                          href="https://github.com/zkemail"
+                          href="https://github.com/uooooo/zk-email-pay"
                           style="
                             color: #999999;
                             text-decoration: underline;
@@ -325,111 +333,9 @@
                           />
                         </a>
                       </td>
-                      <td
-                        align="center"
-                        style="
-                          padding: 0 5px;
-                          font-family: 'Regola', sans-serif;
-                          font-size: 12px;
-                          vertical-align: top;
-                          color: #999999;
-                          text-align: center;
-                        "
-                      >
-                        <a
-                          href="https://twitter.com/zkemail"
-                          style="
-                            color: #999999;
-                            text-decoration: underline;
-                            font-size: 12px;
-                            text-align: center;
-                            width: auto;
-                          "
-                        >
-                          <img
-                            src="https://storage.googleapis.com/eml-templates-assets/img/x.png"
-                            alt="Twitter"
-                            width="40"
-                            style="
-                              border: none;
-                              -ms-interpolation-mode: bicubic;
-                              max-width: 100%;
-                              height: 2rem;
-                              width: auto;
-                            "
-                          />
-                        </a>
-                      </td>
-                      <td
-                        align="center"
-                        style="
-                          padding: 0 5px;
-                          font-family: 'Regola', sans-serif;
-                          font-size: 12px;
-                          vertical-align: top;
-                          color: #999999;
-                          text-align: center;
-                        "
-                      >
-                        <a
-                          href="https://t.me/zkemail/1"
-                          style="
-                            color: #999999;
-                            text-decoration: underline;
-                            font-size: 12px;
-                            text-align: center;
-                            width: auto;
-                          "
-                        >
-                          <img
-                            src="https://storage.googleapis.com/eml-templates-assets/img/telegram.png"
-                            alt="Telegram"
-                            width="40"
-                            style="
-                              border: none;
-                              -ms-interpolation-mode: bicubic;
-                              max-width: 100%;
-                              height: 2rem;
-                              width: auto;
-                            "
-                          />
-                        </a>
-                      </td>
-                      <td
-                        align="center"
-                        style="
-                          padding: 0 5px;
-                          font-family: 'Regola', sans-serif;
-                          font-size: 12px;
-                          vertical-align: top;
-                          color: #999999;
-                          text-align: center;
-                        "
-                      >
-                        <a
-                          href="https://discord.gg/XgAUbX3F4T"
-                          style="
-                            color: #999999;
-                            text-decoration: underline;
-                            font-size: 12px;
-                            text-align: center;
-                            width: auto;
-                          "
-                        >
-                          <img
-                            src="https://storage.googleapis.com/eml-templates-assets/img/discord.png"
-                            alt="Discord"
-                            width="40"
-                            style="
-                              border: none;
-                              -ms-interpolation-mode: bicubic;
-                              max-width: 100%;
-                              height: 2rem;
-                              width: auto;
-                            "
-                          />
-                        </a>
-                      </td>
+                      
+                      
+                      
                     </tr>
                   </table>
                 </td>

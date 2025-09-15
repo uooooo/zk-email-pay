@@ -105,7 +105,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        background-image: linear-gradient(45deg, #844aff, #5e2bff);
+        background-image: linear-gradient(45deg, #FF5544, #E63946);
         margin-bottom: 1rem;
         border-radius: 0.4rem;
         padding: 10px;
@@ -211,7 +211,7 @@
       }
 
       a {
-        color: #3498db;
+        color: #FF5544;
         text-decoration: underline;
       }
 
@@ -245,10 +245,10 @@
 
       .btn a {
         background-color: #ffffff;
-        border: solid 1px #3498db;
+        border: solid 1px #FF5544;
         border-radius: 5px;
         box-sizing: border-box;
-        color: #3498db;
+        color: #FF5544;
         cursor: pointer;
         display: inline-block;
         font-size: 14px;
@@ -260,12 +260,12 @@
       }
 
       .btn-primary table td {
-        background-color: #3498db;
+        background-color: #FF5544;
       }
 
       .btn-primary a {
-        background-color: #3498db;
-        border-color: #3498db;
+        background-color: #FF5544;
+        border-color: #FF5544;
         color: #ffffff;
       }
 
@@ -418,12 +418,12 @@
         }
 
         .btn-primary table td:hover {
-          background-color: #34495e !important;
+          background-color: #E63946 !important;
         }
 
         .btn-primary a:hover {
-          background-color: #34495e !important;
-          border-color: #34495e !important;
+          background-color: #E63946 !important;
+          border-color: #E63946 !important;
         }
       }
 
@@ -446,7 +446,7 @@
   }
 
   .banner {
-    background-image: linear-gradient(45deg, #844aff, #5e2bff);
+    background-image: linear-gradient(45deg, #FF5544, #E63946);
     border-radius: 0.4rem;
     border: 1px solid #ffffff;
     padding: 10px;
