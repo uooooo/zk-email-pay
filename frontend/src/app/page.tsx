@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createAccount, isAccountCreated } from "@/lib/relayer";
+import { createAccount } from "@/lib/relayer";
 import { saveEmail, getSavedEmail } from "@/lib/localStorage";
 
 export default function WelcomePage() {

@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createAccount, send } from "@/lib/relayer";
 import { saveEmail, getSavedEmail } from "@/lib/localStorage";
 
-export default function SendPage() {
+function SendPageContent() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [amount, setAmount] = useState("10");
@@ -318,5 +318,13 @@ export default function SendPage() {
       
       {/* navigation links are centralized in the hamburger menu */}
     </main>
+  );
+}
+
+export default function SendPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SendPageContent />
+    </Suspense>
   );
 }
