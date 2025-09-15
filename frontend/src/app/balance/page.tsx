@@ -32,6 +32,7 @@ function BalanceContent() {
 
   // List of tokens to check on Base Sepolia
   const tokenAddresses = useMemo(() => [
+    { symbol: "Pizza", address: "0xE5F23878762193dc4d785Bce8Bda98d744b251dE", name: "Pizza" },
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USD Coin" },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC" },
   ], []);

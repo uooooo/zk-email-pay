@@ -18,6 +18,7 @@ export default function AddressWalletPage() {
   const [recipientEmail, setRecipientEmail] = useState("");
   const [amount, setAmount] = useState("10");
   const tokenOptions = useMemo(() => [
+    {symbol: "Pizza", address: "0xE5F23878762193dc4d785Bce8Bda98d744b251dE", name: "Pizza", decimals: 18},
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USDC", decimals: 6 },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC", decimals: 18 },
   ] as const, []);
