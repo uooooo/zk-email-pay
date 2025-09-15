@@ -22,7 +22,7 @@ export default function AddressWalletPage() {
     { symbol: "USDC", address: "0x3CA50b9B421646D0B485852A14168Aa8494D2877", name: "USDC", decimals: 6 },
     { symbol: "JPYC", address: "0x36e3495B2AeC55647bEF00968507366f1f7572C6", name: "JPYC", decimals: 18 },
   ] as const, []);
-  const [token, setToken] = useState<"USDC" | "JPYC">("USDC");
+  const [token, setToken] = useState<"Pizza" | "USDC" | "JPYC">("USDC");
   const [status, setStatus] = useState<string>("");
   
   // Wallet related state
